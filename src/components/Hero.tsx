@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
+import Lenis from 'lenis'
 import ContentContainer, { type Project } from './ContentContainer'
 
 // 임시 플레이스홀더 — 카드별 실제 데이터로 교체 예정
@@ -41,6 +42,7 @@ function DesktopHero() {
 
   const [selectedCard, setSelectedCard] = useState<SelectedCard | null>(null)
   const selectedCardRef = useRef<SelectedCard | null>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const selectCard = (card: SelectedCard | null) => {
     selectedCardRef.current = card
@@ -83,14 +85,38 @@ function DesktopHero() {
     }
   })
 
+  // 통합 닫기
+  const handleClose = () => selectCard(null)
+
   // ESC 키로 닫기
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') selectCard(null)
+      if (e.key === 'Escape') handleClose()
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [])
+
+  // 모달 스크롤 Lenis
+  useEffect(() => {
+    if (!selectedCard || !scrollContainerRef.current) return
+    const lenis = new Lenis({
+      wrapper: scrollContainerRef.current,
+      duration: 1.4,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      overscroll: false,
+    })
+    let rafId: number
+    const raf = (time: number) => {
+      lenis.raf(time)
+      rafId = requestAnimationFrame(raf)
+    }
+    rafId = requestAnimationFrame(raf)
+    return () => {
+      cancelAnimationFrame(rafId)
+      lenis.destroy()
+    }
+  }, [selectedCard])
 
   return (
     <section
@@ -132,7 +158,6 @@ function DesktopHero() {
             return (
               <motion.div
                 key={i}
-                layoutId={`card-${i}`}
                 className="relative flex-shrink-0 flex items-center justify-center"
                 style={{
                   width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
@@ -149,12 +174,9 @@ function DesktopHero() {
                 }}
               >
                 {/* 임시 넘버링 */}
-                <motion.span
-                  layoutId={`card-num-${i}`}
-                  className="text-[80px] font-bold text-black/20 select-none"
-                >
+                <span className="text-[80px] font-bold text-black/20 select-none">
                   {n}
-                </motion.span>
+                </span>
               </motion.div>
             )
           })}
@@ -212,33 +234,54 @@ function DesktopHero() {
         </p>
       </div>
 
-      {/* 확장 오버레이 — body에 portal로 렌더링 (transform 컨텍스트 탈출) */}
+      {/* FakeBackground — body에 portal로 렌더링 */}
       {createPortal(
         <AnimatePresence>
           {selectedCard !== null && (
             <>
-              {/* 배경 딤 */}
+              {/* FakeBackground: backdrop-blur + 반투명 배경 */}
               <motion.div
                 key="backdrop"
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.2 }}
-                className="fixed inset-0 z-40 bg-black/20"
-                onClick={() => selectCard(null)}
+                transition={{ duration: 0.3 }}
+                className="fixed inset-0 z-40"
+                style={{
+                  backdropFilter: 'blur(8px)',
+                  WebkitBackdropFilter: 'blur(8px)',
+                  backgroundColor: 'rgba(169,169,169,0.15)',
+                }}
               />
-              {/* 확장 카드 → ContentContainer */}
-              <motion.div
-                key={`expanded-${selectedCard.index}`}
-                layoutId={`card-${selectedCard.index}`}
-                className="fixed inset-0 z-50"
-                transition={{ type: 'tween', ease: [0.4, 0, 0.2, 1], duration: 0.35 }}
+              {/* 스크롤 컨테이너 — 바깥 클릭 시 닫힘 */}
+              <div
+                ref={scrollContainerRef}
+                key="scroll-overlay"
+                className="fixed inset-0 z-50 overflow-y-auto"
+                onClick={handleClose}
               >
-                <ContentContainer
-                  project={PLACEHOLDER_PROJECT}
-                  onClose={() => selectCard(null)}
-                />
-              </motion.div>
+                {/* Content 패널: 954px 중앙, top 100px, rounded-[48px] */}
+                <motion.div
+                  initial={{ opacity: 0, y: 24 }}
+                  animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] } }}
+                  exit={{ opacity: 0, y: -60, transition: { duration: 0.4, ease: [0.4, 0, 0.6, 1] } }}
+                  className="relative mx-auto rounded-[48px] overflow-hidden"
+                  style={{
+                    width: 954,
+                    marginTop: 100,
+                    marginBottom: 641,
+                    backgroundColor: '#141414',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ContentContainer
+                    project={PLACEHOLDER_PROJECT}
+                    onClose={handleClose}
+                    onScrollClose={handleClose}
+                    scrollContainerRef={scrollContainerRef}
+                  />
+                </motion.div>
+              </div>
             </>
           )}
         </AnimatePresence>,
