@@ -236,31 +236,31 @@ function DesktopHero() {
 
       {/* FakeBackground — body에 portal로 렌더링 */}
       {createPortal(
-        <AnimatePresence>
-          {selectedCard !== null && (
-            <>
-              {/* FakeBackground: backdrop-blur + 반투명 배경 */}
-              <motion.div
-                key="backdrop"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-                className="fixed inset-0 z-40"
-                style={{
-                  backdropFilter: 'blur(8px)',
-                  WebkitBackdropFilter: 'blur(8px)',
-                  backgroundColor: 'rgba(169,169,169,0.15)',
-                }}
-              />
-              {/* 스크롤 컨테이너 — 바깥 클릭 시 닫힘 */}
+        <>
+          {/* Backdrop: 항상 DOM에 존재 → blur GPU 레이어 미리 확보, opacity만 전환 */}
+          <motion.div
+            className="fixed inset-0 z-40"
+            initial={false}
+            animate={{ opacity: selectedCard ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              backgroundColor: 'rgba(169,169,169,0.15)',
+              pointerEvents: selectedCard ? 'auto' : 'none',
+              willChange: 'opacity',
+            }}
+            onClick={handleClose}
+          />
+          {/* 스크롤 컨테이너 + Content 패널 */}
+          <AnimatePresence>
+            {selectedCard !== null && (
               <div
                 ref={scrollContainerRef}
                 key="scroll-overlay"
                 className="fixed inset-0 z-50 overflow-y-auto"
                 onClick={handleClose}
               >
-                {/* Content 패널: 954px 중앙, top 100px, rounded-[48px] */}
                 <motion.div
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0, transition: { duration: 0.35, ease: [0.4, 0, 0.2, 1] } }}
@@ -271,6 +271,7 @@ function DesktopHero() {
                     marginTop: 100,
                     marginBottom: 641,
                     backgroundColor: '#141414',
+                    willChange: 'transform, opacity',
                   }}
                   onClick={(e) => e.stopPropagation()}
                 >
@@ -282,9 +283,9 @@ function DesktopHero() {
                   />
                 </motion.div>
               </div>
-            </>
-          )}
-        </AnimatePresence>,
+            )}
+          </AnimatePresence>
+        </>,
         document.body
       )}
     </section>
