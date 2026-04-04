@@ -102,7 +102,7 @@ function DesktopHero() {
     if (!selectedCard || !scrollContainerRef.current) return
     const lenis = new Lenis({
       wrapper: scrollContainerRef.current,
-      duration: 1.4,
+      duration: 0.8,
       easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       overscroll: false,
     })

@@ -15,7 +15,7 @@ interface Props {
   project: Project
   onClose: () => void
   onScrollClose?: () => void
-  scrollContainerRef?: React.RefObject<HTMLDivElement>
+  scrollContainerRef?: React.RefObject<HTMLDivElement | null>
 }
 
 const fadeIn = {
