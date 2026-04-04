@@ -1,13 +1,14 @@
 import { useEffect, useRef } from 'react'
-import { motion, useMotionValue } from 'framer-motion'
+import { motion, useMotionValue, useAnimationFrame } from 'framer-motion'
 
 // ─── 공통 상수 ───────────────────────────────────────────────────────────────
 const ITEM_COUNT = 8
 const ITEMS = Array.from({ length: ITEM_COUNT }, (_, i) => i + 1)
 
 // ─── Desktop 무한 슬라이더 ────────────────────────────────────────────────────
-const DESKTOP_ITEM_WIDTH_VW = 40
+const DESKTOP_ITEM_WIDTH_VW = 45.6
 const DESKTOP_ITEM_GAP = 0
+const AUTO_SCROLL_SPEED = 0.5 // px per frame (~30px/s at 60fps)
 
 // 3벌 복제로 무한 루프
 const DESKTOP_ITEMS = [...ITEMS, ...ITEMS, ...ITEMS]
@@ -15,6 +16,7 @@ const DESKTOP_ITEMS = [...ITEMS, ...ITEMS, ...ITEMS]
 function DesktopHero() {
   const x = useMotionValue(0)
   const oneSetWidthRef = useRef(0)
+  const isDragging = useRef(false)
 
   useEffect(() => {
     const init = () => {
@@ -29,6 +31,7 @@ function DesktopHero() {
     return () => window.removeEventListener('resize', init)
   }, [x])
 
+  // 무한 루프: 경계 도달 시 순간이동
   useEffect(() => {
     return x.on('change', (latest) => {
       const w = oneSetWidthRef.current
@@ -37,6 +40,13 @@ function DesktopHero() {
       else if (latest >= 0) x.set(latest - w)
     })
   }, [x])
+
+  // 자동 스크롤: 드래그 중엔 멈춤
+  useAnimationFrame(() => {
+    if (!isDragging.current) {
+      x.set(x.get() - AUTO_SCROLL_SPEED)
+    }
+  })
 
   return (
     <section
@@ -56,10 +66,12 @@ function DesktopHero() {
           drag="x"
           dragConstraints={{ left: -999999, right: 999999 }}
           dragElastic={0}
-          dragTransition={{ power: 0.3, timeConstant: 220 }}
-          style={{ x, gap: `${DESKTOP_ITEM_GAP}px`, cursor: 'grab' }}
+          dragTransition={{ power: 0, timeConstant: 0 }}
+          style={{ x, cursor: 'grab' }}
           className="absolute top-0 left-0 h-full flex items-start select-none"
           whileDrag={{ cursor: 'grabbing' }}
+          onDragStart={() => { isDragging.current = true }}
+          onDragEnd={() => { isDragging.current = false }}
         >
           {DESKTOP_ITEMS.map((n, i) => {
             const isEven = n % 2 === 0
@@ -69,8 +81,8 @@ function DesktopHero() {
                 className="relative flex-shrink-0 flex items-center justify-center"
                 style={{
                   width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
-                  marginTop: isEven ? '25.3vh' : '44.2vh',
-                  height: isEven ? '56.1vh' : '37.2vh',
+                  marginTop: isEven ? '17.7vh' : '30.2vh',
+                  height: isEven ? '63.7vh' : '51.1vh',
                   backgroundColor: isEven ? '#efefef' : '#e3e3e3',
                 }}
               >
