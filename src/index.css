@@ -68,6 +68,11 @@ body {
   margin: 0;
 }
 
+::selection {
+  background-color: #006FFF;
+  color: #ffffff;
+}
+
 h1,
 h2 {
   font-family: var(--heading);

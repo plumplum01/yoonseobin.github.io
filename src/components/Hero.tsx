@@ -1,5 +1,19 @@
-import { useEffect, useRef } from 'react'
-import { motion, useMotionValue, useAnimationFrame } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
+import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
+import ContentContainer, { type Project } from './ContentContainer'
+
+// 임시 플레이스홀더 — 카드별 실제 데이터로 교체 예정
+const PLACEHOLDER_PROJECT: Project = {
+  title: 'WATT A LOT',
+  subtitle: 'EV Curation Platform',
+  period: '2025년 6월 – 12월',
+  role: 'UI/UX Designer',
+  client: 'Self Initiated',
+  tools: 'Figma, Midjourney, Protopie',
+  description:
+    '와트어랏은 여러 브랜드의 전기차를 한 곳에서 비교하고 계약까지 할 수 있는 EV 큐레이션 플랫폼입니다. 단계별 개인화로 나에게 맞는 차를 쉽게 찾고, 차량 자체에 몰입하는 프리미엄 경험을 설계했습니다.',
+}
 
 // ─── 공통 상수 ───────────────────────────────────────────────────────────────
 const ITEM_COUNT = 8
@@ -13,10 +27,31 @@ const AUTO_SCROLL_SPEED = 0.5 // px per frame (~30px/s at 60fps)
 // 3벌 복제로 무한 루프
 const DESKTOP_ITEMS = [...ITEMS, ...ITEMS, ...ITEMS]
 
+interface SelectedCard {
+  index: number // DESKTOP_ITEMS 내 고유 인덱스 (0~23)
+  n: number     // 아이템 번호 (1~8)
+  bg: string
+}
+
 function DesktopHero() {
   const x = useMotionValue(0)
   const oneSetWidthRef = useRef(0)
   const isDragging = useRef(false)
+  const hasDragged = useRef(false)
+
+  const [selectedCard, setSelectedCard] = useState<SelectedCard | null>(null)
+  const selectedCardRef = useRef<SelectedCard | null>(null)
+
+  const selectCard = (card: SelectedCard | null) => {
+    selectedCardRef.current = card
+    if (card) {
+      // 스크롤을 먼저 멈추고 한 프레임 뒤에 포털 렌더링
+      // → framer-motion이 velocity 없는 안정된 위치를 측정
+      requestAnimationFrame(() => setSelectedCard(card))
+    } else {
+      setSelectedCard(null)
+    }
+  }
 
   useEffect(() => {
     const init = () => {
@@ -24,7 +59,7 @@ function DesktopHero() {
         ITEM_COUNT *
         (window.innerWidth * (DESKTOP_ITEM_WIDTH_VW / 100) + DESKTOP_ITEM_GAP)
       oneSetWidthRef.current = w
-      x.set(-w) // 가운데 세트에서 시작
+      x.set(-w)
     }
     init()
     window.addEventListener('resize', init)
@@ -41,12 +76,21 @@ function DesktopHero() {
     })
   }, [x])
 
-  // 자동 스크롤: 드래그 중엔 멈춤
+  // 자동 스크롤: 드래그 중이거나 카드가 열려 있으면 멈춤
   useAnimationFrame(() => {
-    if (!isDragging.current) {
+    if (!isDragging.current && !selectedCardRef.current) {
       x.set(x.get() - AUTO_SCROLL_SPEED)
     }
   })
+
+  // ESC 키로 닫기
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') selectCard(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
 
   return (
     <section
@@ -70,27 +114,48 @@ function DesktopHero() {
           style={{ x, cursor: 'grab' }}
           className="absolute top-0 left-0 h-full flex items-start select-none"
           whileDrag={{ cursor: 'grabbing' }}
-          onDragStart={() => { isDragging.current = true }}
-          onDragEnd={() => { isDragging.current = false }}
+          onDragStart={() => {
+            isDragging.current = true
+            hasDragged.current = true
+          }}
+          onDragEnd={() => {
+            isDragging.current = false
+            // onClick보다 뒤에 리셋되도록 한 프레임 지연
+            setTimeout(() => { hasDragged.current = false }, 0)
+          }}
         >
           {DESKTOP_ITEMS.map((n, i) => {
             const isEven = n % 2 === 0
+            const bg = isEven ? '#efefef' : '#e3e3e3'
+            const isSelected = selectedCard?.index === i
+
             return (
-              <div
+              <motion.div
                 key={i}
+                layoutId={`card-${i}`}
                 className="relative flex-shrink-0 flex items-center justify-center"
                 style={{
                   width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
                   marginTop: isEven ? '17.7vh' : '30.2vh',
                   height: isEven ? '63.7vh' : '51.1vh',
-                  backgroundColor: isEven ? '#efefef' : '#e3e3e3',
+                  backgroundColor: bg,
+                  cursor: 'pointer',
+                  opacity: isSelected ? 0 : 1,
+                }}
+                onClick={() => {
+                  if (!hasDragged.current) {
+                    selectCard({ index: i, n, bg })
+                  }
                 }}
               >
                 {/* 임시 넘버링 */}
-                <span className="text-[80px] font-bold text-black/20 select-none">
+                <motion.span
+                  layoutId={`card-num-${i}`}
+                  className="text-[80px] font-bold text-black/20 select-none"
+                >
                   {n}
-                </span>
-              </div>
+                </motion.span>
+              </motion.div>
             )
           })}
         </motion.div>
@@ -146,16 +211,44 @@ function DesktopHero() {
           UI to create products that go beyond simply working.
         </p>
       </div>
+
+      {/* 확장 오버레이 — body에 portal로 렌더링 (transform 컨텍스트 탈출) */}
+      {createPortal(
+        <AnimatePresence>
+          {selectedCard !== null && (
+            <>
+              {/* 배경 딤 */}
+              <motion.div
+                key="backdrop"
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2 }}
+                className="fixed inset-0 z-40 bg-black/20"
+                onClick={() => selectCard(null)}
+              />
+              {/* 확장 카드 → ContentContainer */}
+              <motion.div
+                key={`expanded-${selectedCard.index}`}
+                layoutId={`card-${selectedCard.index}`}
+                className="fixed inset-0 z-50"
+                transition={{ type: 'tween', ease: [0.4, 0, 0.2, 1], duration: 0.35 }}
+              >
+                <ContentContainer
+                  project={PLACEHOLDER_PROJECT}
+                  onClose={() => selectCard(null)}
+                />
+              </motion.div>
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
     </section>
   )
 }
 
 // ─── Mobile 스택 레이아웃 ─────────────────────────────────────────────────────
-// Figma Mobile_Main (375×812) 기준
-// Profile: top=85, left=12
-// KR: top=211, left=12
-// Container: top=406, left=12, 컨텐츠 351×351, gap=2px
-
 function MobileHero() {
   return (
     <section className="bg-white text-left relative" style={{ paddingBottom: '40px' }}>
@@ -192,12 +285,8 @@ function MobileHero() {
       </div>
 
       {/* Stacked content grid */}
-      {/* spacer: container starts at y=406 */}
       <div style={{ height: '406px' }} />
-      <div
-        className="flex flex-col"
-        style={{ marginLeft: '12px', gap: '2px' }}
-      >
+      <div className="flex flex-col" style={{ marginLeft: '12px', gap: '2px' }}>
         {ITEMS.map((n) => (
           <div
             key={n}
@@ -209,14 +298,12 @@ function MobileHero() {
               backgroundColor: '#e3e3e3',
             }}
           >
-            {/* 임시 넘버링 */}
             <span className="text-[60px] font-bold text-black/20 select-none">
               {n}
             </span>
           </div>
         ))}
       </div>
-      {/* bottom padding */}
       <div style={{ height: '40px' }} />
     </section>
   )
@@ -226,11 +313,9 @@ function MobileHero() {
 export default function Hero() {
   return (
     <>
-      {/* Desktop: md(768px) 이상 */}
       <div className="hidden md:block">
         <DesktopHero />
       </div>
-      {/* Mobile: md 미만 */}
       <div className="md:hidden">
         <MobileHero />
       </div>
