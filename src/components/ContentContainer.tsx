@@ -36,10 +36,10 @@ export default function ContentContainer({ project, onClose }: Props) {
         close
       </button>
 
-      {/* Content 1 — 메인 이미지 영역 */}
+      {/* Content 1 — 썸네일 (16:9) */}
       <div
         className="w-full bg-[#000003]"
-        style={{ aspectRatio: '1920 / 1098' }}
+        style={{ aspectRatio: '16 / 8' }}
       />
 
       {/* Info strip */}
@@ -49,7 +49,7 @@ export default function ContentContainer({ project, onClose }: Props) {
       >
         {/* Title — 좌측 */}
         <div
-          className="absolute flex flex-col leading-[1.4]"
+          className="absolute flex flex-col leading-[1.4] whitespace-nowrap"
           style={{ left: '1.56%', top: '30px' }}
         >
           <p className="text-white font-semibold text-[32px]">
@@ -62,8 +62,8 @@ export default function ContentContainer({ project, onClose }: Props) {
 
         {/* Detail — 50% */}
         <div
-          className="absolute flex flex-col gap-[7px]"
-          style={{ left: '50.3%', top: '28px', width: '24%' }}
+          className="absolute flex flex-col gap-[7px] whitespace-nowrap"
+          style={{ left: '50.3%', top: '28px' }}
         >
           <p className="text-[#696969] text-[14px] font-medium leading-[1.4]">
             상세
@@ -71,11 +71,11 @@ export default function ContentContainer({ project, onClose }: Props) {
           <div className="flex gap-[12px] text-[12px] font-medium leading-[1.4]">
             {/* 기간 / 역할 */}
             <div className="flex flex-col gap-[8px]">
-              <div className="flex gap-[8px] whitespace-nowrap">
+              <div className="flex gap-[8px]">
                 <span className="text-white">기간</span>
                 <span className="text-[#a9a9a9]">{project.period}</span>
               </div>
-              <div className="flex gap-[8px] whitespace-nowrap">
+              <div className="flex gap-[8px]">
                 <span className="text-white">역할</span>
                 <span className="text-[#a9a9a9]">{project.role}</span>
               </div>
@@ -83,12 +83,12 @@ export default function ContentContainer({ project, onClose }: Props) {
             {/* 클라이언트 / 사용 도구 */}
             <div className="flex flex-col gap-[8px]">
               <div className="flex gap-[8px]">
-                <span className="text-white w-[52px]">클라이언트</span>
-                <span className="text-[#a9a9a9] whitespace-nowrap">{project.client}</span>
+                <span className="text-white">클라이언트</span>
+                <span className="text-[#a9a9a9]">{project.client}</span>
               </div>
               <div className="flex gap-[8px]">
-                <span className="text-white w-[52px]">사용 도구</span>
-                <span className="text-[#a9a9a9] whitespace-nowrap">{project.tools}</span>
+                <span className="text-white">사용 도구</span>
+                <span className="text-[#a9a9a9]">{project.tools}</span>
               </div>
             </div>
           </div>
@@ -99,7 +99,7 @@ export default function ContentContainer({ project, onClose }: Props) {
           className="absolute flex flex-col gap-[7px]"
           style={{ left: '75.2%', top: '28px', width: '22.8%' }}
         >
-          <p className="text-[#696969] text-[14px] font-medium leading-[1.4]">
+          <p className="text-[#696969] text-[14px] font-medium leading-[1.4] whitespace-nowrap">
             설명
           </p>
           <p className="text-white text-[14px] leading-[1.45] tracking-[0.28px]">
@@ -111,23 +111,54 @@ export default function ContentContainer({ project, onClose }: Props) {
         <div style={{ height: '90px' }} />
       </div>
 
-      {/* Content 2 */}
+      {/* Content 2~11 */}
+      <div className="flex flex-col gap-[4px] mx-[10px]">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <div
+            key={i}
+            className="w-full bg-[#000003]"
+            style={{ aspectRatio: '1900 / 992' }}
+          />
+        ))}
+      </div>
+
+      {/* Footer */}
       <div
-        className="mx-[10px] bg-[#000003]"
-        style={{ aspectRatio: '1900 / 992' }}
-      />
+        className="relative w-full overflow-hidden"
+        style={{ height: '62.2vw' }}
+      >
+        {/* YSB 대형 배경 텍스트 */}
+        <p
+          className="absolute font-semibold whitespace-nowrap text-white/80 leading-[1.45] select-none"
+          style={{
+            fontSize: '50.97vw',
+            letterSpacing: '-2.04vw',
+            left: '36px',
+            top: '-0.76vw',
+          }}
+        >
+          YSB
+        </p>
 
-      {/* Content 2~3 사이 간격 */}
-      <div style={{ height: '4px' }} />
-
-      {/* Content 3 */}
-      <div
-        className="mx-[10px] bg-[#000003]"
-        style={{ aspectRatio: '1900 / 992' }}
-      />
-
-      {/* 하단 여백 */}
-      <div style={{ height: '80px' }} />
+        {/* Back / Next Project 버튼 */}
+        <div
+          className="absolute flex items-center justify-between"
+          style={{ left: '36px', top: '145px', right: '36px' }}
+        >
+          <a
+            href="#"
+            className="flex items-center gap-[12px] px-[24px] py-[14px] border border-white/20 rounded-full text-[20px] font-semibold text-white/50 leading-none tracking-[-0.4px] whitespace-nowrap hover:border-white/50 hover:text-white/80 transition-colors"
+          >
+            ← Back
+          </a>
+          <a
+            href="#"
+            className="flex items-center gap-[12px] px-[24px] py-[14px] border border-white/20 rounded-full text-[20px] font-semibold text-white/50 leading-none tracking-[-0.4px] whitespace-nowrap hover:border-white/50 hover:text-white/80 transition-colors"
+          >
+            Next Project →
+          </a>
+        </div>
+      </div>
     </motion.div>
   )
 }
