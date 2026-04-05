@@ -113,7 +113,11 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
             key={i}
             ref={i === 9 ? lastItemRef : undefined}
             className="w-full bg-[#000003] rounded-[32px]"
-            style={{ aspectRatio: '1900 / 992' }}
+            style={{
+              aspectRatio: '1900 / 992',
+              contentVisibility: 'auto',
+              containIntrinsicSize: 'auto 477px',
+            }}
           />
         ))}
       </div>
