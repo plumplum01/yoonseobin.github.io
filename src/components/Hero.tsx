@@ -284,6 +284,39 @@ function DesktopHero() {
 
 // ─── Mobile 스택 레이아웃 ─────────────────────────────────────────────────────
 function MobileHero() {
+  const [selectedN, setSelectedN] = useState<number | null>(null)
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const handleClose = () => setSelectedN(null)
+
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setSelectedN(null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
+  useEffect(() => {
+    if (selectedN === null || !scrollContainerRef.current) return
+    const lenis = new Lenis({
+      wrapper: scrollContainerRef.current,
+      duration: 0.8,
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      overscroll: false,
+    })
+    let rafId: number
+    const raf = (time: number) => {
+      lenis.raf(time)
+      rafId = requestAnimationFrame(raf)
+    }
+    rafId = requestAnimationFrame(raf)
+    return () => {
+      cancelAnimationFrame(rafId)
+      lenis.destroy()
+    }
+  }, [selectedN])
+
   return (
     <section className="bg-white text-left relative" style={{ paddingBottom: '40px' }}>
       {/* Profile */}
@@ -330,7 +363,10 @@ function MobileHero() {
               minWidth: '351px',
               aspectRatio: '1 / 1',
               backgroundColor: '#e3e3e3',
+              cursor: 'pointer',
+              opacity: selectedN === n ? 0 : 1,
             }}
+            onClick={() => setSelectedN(n)}
           >
             <span className="text-[60px] font-bold text-black/20 select-none">
               {n}
@@ -339,6 +375,60 @@ function MobileHero() {
         ))}
       </div>
       <div style={{ height: '40px' }} />
+
+      {/* Mobile FakeBackground Portal */}
+      {createPortal(
+        <>
+          <motion.div
+            className="fixed inset-0 z-40"
+            initial={false}
+            animate={{ opacity: selectedN !== null ? 1 : 0 }}
+            transition={{ duration: 0.3 }}
+            style={{
+              backdropFilter: 'blur(8px)',
+              WebkitBackdropFilter: 'blur(8px)',
+              backgroundColor: 'rgba(169,169,169,0.15)',
+              pointerEvents: selectedN !== null ? 'auto' : 'none',
+              willChange: 'opacity',
+            }}
+            onClick={handleClose}
+          />
+          <AnimatePresence>
+            {selectedN !== null && (
+              <div
+                ref={scrollContainerRef}
+                key="mobile-scroll-overlay"
+                className="fixed inset-0 z-50 overflow-y-auto"
+                onClick={handleClose}
+              >
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
+                  exit={{ opacity: 0, y: -40, transition: { duration: 0.4, ease: [0.4, 0, 0.6, 1] } }}
+                  className="relative mx-auto rounded-[20px] overflow-hidden"
+                  style={{
+                    width: 'calc(100vw - 24px)',
+                    marginTop: 40,
+                    marginBottom: 300,
+                    backgroundColor: '#141414',
+                    willChange: 'transform, opacity',
+                  }}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  <ContentContainer
+                    project={projects[(selectedN - 1) % projects.length]}
+                    onClose={handleClose}
+                    onScrollClose={handleClose}
+                    scrollContainerRef={scrollContainerRef}
+                    isMobile
+                  />
+                </motion.div>
+              </div>
+            )}
+          </AnimatePresence>
+        </>,
+        document.body
+      )}
     </section>
   )
 }

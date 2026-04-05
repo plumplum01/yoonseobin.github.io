@@ -9,6 +9,7 @@ interface Props {
   onClose: () => void
   onScrollClose?: () => void
   scrollContainerRef?: React.RefObject<HTMLDivElement | null>
+  isMobile?: boolean
 }
 
 const fadeIn = {
@@ -16,7 +17,7 @@ const fadeIn = {
   animate: { opacity: 1, transition: { duration: 0.3, delay: 0.25 } },
 }
 
-export default function ContentContainer({ project, onClose, onScrollClose, scrollContainerRef }: Props) {
+export default function ContentContainer({ project, onClose, onScrollClose, scrollContainerRef, isMobile }: Props) {
   const lastItemRef = useRef<HTMLDivElement>(null)
 
   // 마지막 콘텐츠가 화면 중앙에 도달하면 스크롤로 닫기 트리거
@@ -60,7 +61,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
       />
 
       {/* Info 영역 — 수직 스택, left 51px */}
-      <div style={{ paddingLeft: '51px', paddingTop: '19px' }}>
+      <div style={{ paddingLeft: isMobile ? '16px' : '51px', paddingTop: '19px' }}>
         {/* Title */}
         <div className="flex flex-col leading-[1.4]" style={{ paddingBottom: '45px' }}>
           <p className="text-white font-semibold text-[32px]">{project.title}</p>
@@ -99,7 +100,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
           <p className="text-[#696969] text-[14px] font-medium leading-[1.4] whitespace-nowrap">설명</p>
           <p
             className="text-white text-[14px] leading-[1.45] tracking-[0.28px]"
-            style={{ width: '438px' }}
+            style={{ width: isMobile ? 'auto' : '438px', paddingRight: isMobile ? '16px' : undefined }}
           >
             {project.description}
           </p>
