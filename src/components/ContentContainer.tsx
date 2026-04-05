@@ -1,15 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
+import type { Project } from '../data/projects'
 
-export interface Project {
-  title: string
-  subtitle: string
-  period: string
-  role: string
-  client: string
-  tools: string
-  description: string
-}
+export type { Project }
 
 interface Props {
   project: Project
