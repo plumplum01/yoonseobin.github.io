@@ -19,7 +19,7 @@ function Home() {
 
 export default function App() {
   return (
-    <BrowserRouter basename="/yoonseobin.github.io">
+    <BrowserRouter basename="/">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
