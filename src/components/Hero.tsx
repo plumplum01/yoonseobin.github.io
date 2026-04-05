@@ -2,19 +2,8 @@ import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
 import Lenis from 'lenis'
-import ContentContainer, { type Project } from './ContentContainer'
-
-// 임시 플레이스홀더 — 카드별 실제 데이터로 교체 예정
-const PLACEHOLDER_PROJECT: Project = {
-  title: 'WATT A LOT',
-  subtitle: 'EV Curation Platform',
-  period: '2025년 6월 – 12월',
-  role: 'UI/UX Designer',
-  client: 'Self Initiated',
-  tools: 'Figma, Midjourney, Protopie',
-  description:
-    '와트어랏은 여러 브랜드의 전기차를 한 곳에서 비교하고 계약까지 할 수 있는 EV 큐레이션 플랫폼입니다. 단계별 개인화로 나에게 맞는 차를 쉽게 찾고, 차량 자체에 몰입하는 프리미엄 경험을 설계했습니다.',
-}
+import ContentContainer from './ContentContainer'
+import { projects } from '../data/projects'
 
 // ─── 공통 상수 ───────────────────────────────────────────────────────────────
 const ITEM_COUNT = 8
@@ -22,7 +11,7 @@ const ITEMS = Array.from({ length: ITEM_COUNT }, (_, i) => i + 1)
 
 // ─── Desktop 무한 슬라이더 ────────────────────────────────────────────────────
 const DESKTOP_ITEM_WIDTH_VW = 45.6
-const DESKTOP_ITEM_GAP = 0
+const DESKTOP_ITEM_GAP = 12
 const AUTO_SCROLL_SPEED = 0.5 // px per frame (~30px/s at 60fps)
 
 // 3벌 복제로 무한 루프
@@ -137,7 +126,7 @@ function DesktopHero() {
           dragConstraints={{ left: -999999, right: 999999 }}
           dragElastic={0}
           dragTransition={{ power: 0, timeConstant: 0 }}
-          style={{ x, cursor: 'grab' }}
+          style={{ x, cursor: 'grab', gap: DESKTOP_ITEM_GAP }}
           className="absolute top-0 left-0 h-full flex items-start select-none"
           whileDrag={{ cursor: 'grabbing' }}
           onDragStart={() => {
@@ -164,6 +153,7 @@ function DesktopHero() {
                   marginTop: isEven ? '17.7vh' : '30.2vh',
                   height: isEven ? '63.7vh' : '51.1vh',
                   backgroundColor: bg,
+                  borderRadius: '32px',
                   cursor: 'pointer',
                   opacity: isSelected ? 0 : 1,
                 }}
@@ -276,7 +266,7 @@ function DesktopHero() {
                   onClick={(e) => e.stopPropagation()}
                 >
                   <ContentContainer
-                    project={PLACEHOLDER_PROJECT}
+                    project={projects[(selectedCard.n - 1) % projects.length]}
                     onClose={handleClose}
                     onScrollClose={handleClose}
                     scrollContainerRef={scrollContainerRef}
