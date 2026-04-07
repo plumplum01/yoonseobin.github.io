@@ -1,5 +1,11 @@
 import { useTheme } from '../context/ThemeContext'
 
+const education = [
+  { title: '부산대학교 디자인전공 시각디자인학과 졸업', date: '20. 03 – 25. 02' },
+  { title: '토스 인터랙션 디자인 캠프 수료', date: '25. 09 – 25. 10' },
+  { title: 'KAKAO X Goorm 프로덕트 디자이너 교육 과정 수료', date: '24. 11 – 25. 06' },
+]
+
 const awards = [
   {
     title: '한국디자인학회 봄 국제학술대회',
@@ -60,6 +66,31 @@ export default function AboutPage() {
           <p style={{ fontSize: 13, color: text, lineHeight: 1.7, letterSpacing: '-0.13px', fontWeight: 500 }}>
             지금은 함께할 팀을 찾고 있습니다. 비주얼과 인터랙션을 타협하지 않는 팀을 만나고 싶습니다. 만들고 싶은 것이 있다면 편하게 이야기 걸어주세요.
           </p>
+        </div>
+
+        {/* Divider */}
+        <hr style={{ border: 'none', borderTop: `1px solid ${divider}`, marginBottom: 103 }} />
+
+        {/* Education */}
+        <div style={{ marginBottom: 103 }}>
+          <h2
+            className="font-semibold"
+            style={{ fontSize: 24, color: heading, letterSpacing: '-0.24px', marginBottom: 9 }}
+          >
+            Education
+          </h2>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+            {education.map((e) => (
+              <div key={e.title} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
+                <span style={{ fontSize: 13, fontWeight: 600, color: heading, letterSpacing: '-0.13px', lineHeight: 1.35 }}>
+                  {e.title}
+                </span>
+                <span style={{ fontSize: 13, fontWeight: 500, color: text, letterSpacing: '-0.13px', flexShrink: 0, lineHeight: 1.35 }}>
+                  {e.date}
+                </span>
+              </div>
+            ))}
+          </div>
         </div>
 
         {/* Divider */}
