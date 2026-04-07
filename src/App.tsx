@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import { ThemeProvider } from './context/ThemeContext'
 import Navbar from './components/Navbar'
-import Hero from './components/Hero'
+import Hero from './components/hero'
 import ProjectGrid from './components/ProjectGrid'
 import About from './components/About'
 import Contact from './components/Contact'

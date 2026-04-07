@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useTheme } from '../context/ThemeContext'
+import { type } from '../styles/typography'
+import { colors, useColors } from '../styles/colors'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
@@ -14,12 +16,14 @@ export default function Navbar() {
     return () => window.removeEventListener('resize', handler)
   }, [])
 
-  const navWidth = isMobile ? 280 : 359
+  const c           = useColors()
+  const navWidth    = isMobile ? 280 : 359
   const contentWidth = navWidth - 32
-  const navigate = useNavigate()
-  const location = useLocation()
-  const isHome = location.pathname === '/'
+  const navigate    = useNavigate()
+  const location    = useLocation()
+  const isHome      = location.pathname === '/'
 
+  // 메뉴 열릴 때 배경 스크롤 잠금
   useEffect(() => {
     if (isOpen) {
       document.body.style.overflow = 'hidden'
@@ -31,7 +35,7 @@ export default function Navbar() {
 
   return (
     <>
-      {/* Backdrop */}
+      {/* 배경 블러 오버레이 */}
       <motion.div
         className="fixed inset-0 z-20"
         initial={false}
@@ -40,7 +44,7 @@ export default function Navbar() {
         style={{
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
-          backgroundColor: 'rgba(0,0,0,0.25)',
+          backgroundColor: colors.backdropNav,
           pointerEvents: isOpen ? 'auto' : 'none',
           willChange: 'opacity',
         }}
@@ -54,9 +58,7 @@ export default function Navbar() {
         <motion.div
           animate={{
             height: isOpen ? 186 : 47,
-            backgroundColor: isOpen
-              ? (isDark ? 'rgba(70,70,70,1)' : 'rgba(32,32,32,1)')
-              : (isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.4)'),
+            backgroundColor: isOpen ? c.navOpen : c.navClosed,
           }}
           transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
           style={{
@@ -69,7 +71,7 @@ export default function Navbar() {
             WebkitBackdropFilter: 'blur(12px)',
           }}
         >
-          {/* Title row */}
+          {/* 상단 타이틀 + 메뉴 버튼 */}
           <div
             style={{
               position: 'absolute',
@@ -83,14 +85,13 @@ export default function Navbar() {
             }}
           >
             <div />
+
+            {/* 이름 (홈으로 이동) */}
             <span
               onClick={() => { navigate('/'); setIsOpen(false) }}
               style={{
-                color: 'rgba(250,250,250,1)',
-                fontSize: 15,
-                fontWeight: 500,
-                letterSpacing: '-0.15px',
-                lineHeight: 1,
+                ...type.nav,
+                color: colors.white,
                 userSelect: 'none',
                 cursor: 'pointer',
               }}
@@ -98,6 +99,7 @@ export default function Navbar() {
               Seobin yoon
             </span>
 
+            {/* 메뉴 열기/닫기 버튼 */}
             <button
               onClick={() => setIsOpen((o) => !o)}
               style={{
@@ -122,7 +124,7 @@ export default function Navbar() {
             </button>
           </div>
 
-          {/* Open 상태 콘텐츠 */}
+          {/* 메뉴 콘텐츠 (열렸을 때) */}
           <AnimatePresence>
             {isOpen && (
               <motion.div
@@ -132,7 +134,7 @@ export default function Navbar() {
                 transition={{ duration: 0.18, delay: 0.12 }}
                 style={{ position: 'absolute', inset: 0 }}
               >
-                {/* About / Home + Email 버튼 */}
+                {/* 페이지 이동 버튼 */}
                 <div
                   style={{
                     position: 'absolute',
@@ -144,17 +146,16 @@ export default function Navbar() {
                     gap: 7,
                   }}
                 >
+                  {/* Home에선 About, About에선 Home 버튼 표시 */}
                   {isHome ? (
                     <button
                       className="bg-[#2c2c2c] hover:bg-[#3c3c3c] transition-colors duration-150"
                       style={{
+                        ...type.nav,
                         height: 39,
                         borderRadius: 8,
                         border: 'none',
-                        color: 'rgba(250,250,250,1)',
-                        fontSize: 15,
-                        fontWeight: 500,
-                        letterSpacing: '-0.15px',
+                        color: colors.white,
                         cursor: 'pointer',
                       }}
                       onClick={() => { navigate('/about'); setIsOpen(false) }}
@@ -165,13 +166,11 @@ export default function Navbar() {
                     <button
                       className="bg-[#2c2c2c] hover:bg-[#3c3c3c] transition-colors duration-150"
                       style={{
+                        ...type.nav,
                         height: 39,
                         borderRadius: 8,
                         border: 'none',
-                        color: 'rgba(250,250,250,1)',
-                        fontSize: 15,
-                        fontWeight: 500,
-                        letterSpacing: '-0.15px',
+                        color: colors.white,
                         cursor: 'pointer',
                       }}
                       onClick={() => { navigate('/'); setIsOpen(false) }}
@@ -179,17 +178,17 @@ export default function Navbar() {
                       Home
                     </button>
                   )}
+
+                  {/* 이메일 링크 */}
                   <a
                     href="mailto:plumplum01@naver.com"
                     className="bg-[#2c2c2c] hover:bg-[#3c3c3c] transition-colors duration-150"
                     style={{
+                      ...type.nav,
                       height: 39,
                       borderRadius: 8,
                       border: 'none',
-                      color: 'rgba(250,250,250,1)',
-                      fontSize: 15,
-                      fontWeight: 500,
-                      letterSpacing: '-0.15px',
+                      color: colors.white,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
@@ -201,7 +200,7 @@ export default function Navbar() {
                   </a>
                 </div>
 
-                {/* Vibe Coded + Mode Switch */}
+                {/* 하단: 크레딧 + 다크모드 토글 */}
                 <div
                   style={{
                     position: 'absolute',
@@ -213,18 +212,12 @@ export default function Navbar() {
                     justifyContent: 'space-between',
                   }}
                 >
-                  <span
-                    style={{
-                      fontSize: 10,
-                      color: 'rgba(153,153,153,1)',
-                      letterSpacing: '-0.1px',
-                      userSelect: 'none',
-                      lineHeight: 1,
-                    }}
-                  >
+                  {/* 크레딧 텍스트 */}
+                  <span style={{ ...type.caption, color: colors.captionGray, userSelect: 'none' }}>
                     Vibe Coded in Claude Code
                   </span>
 
+                  {/* 다크/라이트 모드 토글 */}
                   <button
                     style={{
                       width: 18,

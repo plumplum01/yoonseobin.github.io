@@ -1,6 +1,8 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import type { Project } from '../data/projects'
+import { type } from '../styles/typography'
+import { colors } from '../styles/colors'
 
 export type { Project }
 
@@ -20,7 +22,7 @@ const fadeIn = {
 export default function ContentContainer({ project, onClose, onScrollClose, scrollContainerRef, isMobile }: Props) {
   const lastItemRef = useRef<HTMLDivElement>(null)
 
-  // 마지막 콘텐츠가 화면 중앙에 도달하면 스크롤로 닫기 트리거
+  // 마지막 이미지가 화면 하단 65% 지점에 도달하면 오버레이 닫기
   useEffect(() => {
     const container = scrollContainerRef?.current
     const lastEl = lastItemRef.current
@@ -44,7 +46,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
     <motion.div
       {...fadeIn}
       className="w-full text-left"
-      style={{ backgroundColor: '#141414' }}
+      style={{ backgroundColor: colors.panel }}
     >
       {/* 닫기 버튼 */}
       <button
@@ -54,11 +56,8 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
         close
       </button>
 
-      {/* Content 1 — 썸네일 */}
-      <div
-        className="w-full bg-[#000003]"
-        style={{ aspectRatio: '954 / 546' }}
-      >
+      {/* 썸네일 이미지 */}
+      <div className="w-full" style={{ aspectRatio: '954 / 546', backgroundColor: colors.panelImageBg }}>
         {project.thumbnail && (
           <img
             src={project.thumbnail}
@@ -69,60 +68,66 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
         )}
       </div>
 
-      {/* Info 영역 — 수직 스택, left 51px */}
+      {/* 프로젝트 정보 영역 */}
       <div style={{ paddingLeft: isMobile ? '16px' : '51px', paddingTop: '19px' }}>
-        {/* Title */}
+
+        {/* 프로젝트 제목 + 서브타이틀 */}
         <div className="flex flex-col leading-[1.4]" style={{ paddingBottom: '45px' }}>
-          <p className="text-white font-semibold text-[32px]">{project.title}</p>
-          <p className="text-[#696969] text-[14px] font-medium">{project.subtitle}</p>
+          <p style={{ ...type.contentTitle, color: colors.panelText }}>{project.title}</p>
+          <p style={{ ...type.contentLabel, color: colors.panelMuted }}>{project.subtitle}</p>
         </div>
 
-        {/* Detail */}
+        {/* 상세 메타 정보 (기간 / 역할 / 클라이언트 / 도구) */}
         <div className="flex flex-col gap-[7px]" style={{ paddingBottom: '79px' }}>
-          <p className="text-[#696969] text-[14px] font-medium leading-[1.4]">상세</p>
-          <div className="flex gap-[12px] text-[12px] font-medium leading-[1.4]">
+          <p style={{ ...type.contentLabel, color: colors.panelMuted }}>상세</p>
+          <div className="flex gap-[12px]" style={{ ...type.contentMeta }}>
             <div className="flex flex-col gap-[8px]">
               <div className="flex gap-[8px]">
                 <span className="text-white whitespace-nowrap">기간</span>
-                <span className="text-[#a9a9a9] whitespace-nowrap">{project.period}</span>
+                <span style={{ color: colors.panelDetail }} className="whitespace-nowrap">{project.period}</span>
               </div>
               <div className="flex gap-[8px]">
                 <span className="text-white whitespace-nowrap">역할</span>
-                <span className="text-[#a9a9a9] whitespace-nowrap">{project.role}</span>
+                <span style={{ color: colors.panelDetail }} className="whitespace-nowrap">{project.role}</span>
               </div>
             </div>
             <div className="flex flex-col gap-[8px]">
               <div className="flex gap-[8px]">
                 <span className="text-white whitespace-nowrap">클라이언트</span>
-                <span className="text-[#a9a9a9] whitespace-nowrap">{project.client}</span>
+                <span style={{ color: colors.panelDetail }} className="whitespace-nowrap">{project.client}</span>
               </div>
               <div className="flex gap-[8px]">
                 <span className="text-white whitespace-nowrap">사용 도구</span>
-                <span className="text-[#a9a9a9] whitespace-nowrap">{project.tools}</span>
+                <span style={{ color: colors.panelDetail }} className="whitespace-nowrap">{project.tools}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Description */}
+        {/* 프로젝트 설명 */}
         <div className="flex flex-col gap-[7px]" style={{ paddingBottom: '100px' }}>
-          <p className="text-[#696969] text-[14px] font-medium leading-[1.4] whitespace-nowrap">설명</p>
+          <p style={{ ...type.contentLabel, color: colors.panelMuted }} className="whitespace-nowrap">설명</p>
           <p
-            className="text-white text-[14px] leading-[1.45] tracking-[0.28px]"
-            style={{ width: isMobile ? 'auto' : '438px', paddingRight: isMobile ? '16px' : undefined }}
+            style={{
+              ...type.contentBody,
+              color: colors.panelText,
+              width: isMobile ? 'auto' : '438px',
+              paddingRight: isMobile ? '16px' : undefined,
+            }}
           >
             {project.description}
           </p>
         </div>
       </div>
 
-      {/* Content 2~ */}
+      {/* 프로젝트 이미지 목록 (썸네일 이후) */}
       <div className="flex flex-col gap-[20px] mx-[20px] pb-[20px]">
         {project.images.slice(1).map((src, i, arr) => (
           <div
             key={i}
             ref={i === arr.length - 1 ? lastItemRef : undefined}
-            className="w-full bg-[#000003] rounded-[20px] overflow-hidden"
+            className="w-full rounded-[20px] overflow-hidden"
+            style={{ backgroundColor: colors.panelImageBg }}
             style={{
               contentVisibility: 'auto',
               containIntrinsicSize: 'auto 477px',
