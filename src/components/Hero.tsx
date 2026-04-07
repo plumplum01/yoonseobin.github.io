@@ -4,6 +4,7 @@ import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'fram
 import Lenis from 'lenis'
 import ContentContainer from './ContentContainer'
 import { projects } from '../data/projects'
+import { useTheme } from '../context/ThemeContext'
 
 // ─── 공통 상수 ───────────────────────────────────────────────────────────────
 const ITEM_COUNT = 8
@@ -24,6 +25,7 @@ interface SelectedCard {
 }
 
 function DesktopHero() {
+  const { isDark } = useTheme()
   const x = useMotionValue(0)
   const oneSetWidthRef = useRef(0)
   const isDragging = useRef(false)
@@ -141,19 +143,16 @@ function DesktopHero() {
         >
           {DESKTOP_ITEMS.map((n, i) => {
             const isEven = n % 2 === 0
-            const bg = isEven ? '#efefef' : '#e3e3e3'
+            const bg = isEven ? 'var(--card-even)' : 'var(--card-odd)'
             const isSelected = selectedCard?.index === i
 
             return (
-              <motion.div
+              <div
                 key={i}
-                className="relative flex-shrink-0 flex items-center justify-center"
+                className="relative flex-shrink-0 flex flex-col"
                 style={{
                   width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
                   marginTop: isEven ? '17.7vh' : '30.2vh',
-                  height: isEven ? '63.7vh' : '51.1vh',
-                  backgroundColor: bg,
-                  borderRadius: '32px',
                   cursor: 'pointer',
                   opacity: isSelected ? 0 : 1,
                 }}
@@ -163,65 +162,56 @@ function DesktopHero() {
                   }
                 }}
               >
-                {/* 임시 넘버링 */}
-                <span className="text-[80px] font-bold text-black/20 select-none">
-                  {n}
-                </span>
-              </motion.div>
+                {/* 카드 이미지 영역 */}
+                <div
+                  style={{
+                    height: isEven ? '63.7vh' : '51.1vh',
+                    backgroundColor: bg,
+                    borderRadius: '32px',
+                    flexShrink: 0,
+                  }}
+                />
+                {/* 타이틀 + 서브타이틀 */}
+                <div style={{ paddingLeft: '4px', paddingTop: '14px' }}>
+                  <p
+                    className="font-semibold text-[15px] leading-snug"
+                    style={{
+                      letterSpacing: '-0.01em',
+                      color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)',
+                    }}
+                  >
+                    {projects[(n - 1) % projects.length].title}
+                  </p>
+                  <p
+                    className="font-medium text-[15px] leading-snug"
+                    style={{
+                      letterSpacing: '-0.01em',
+                      color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)',
+                    }}
+                  >
+                    {projects[(n - 1) % projects.length].subtitle}
+                  </p>
+                </div>
+              </div>
             )
           })}
         </motion.div>
       </div>
 
-      {/* Profile info */}
+      {/* Footer */}
       <div
-        className="absolute flex flex-col gap-px font-semibold text-[15px] leading-snug tracking-[-0.15px] text-black/70"
-        style={{ left: '0.69%', top: '82.3vh' }}
+        className="absolute bottom-0 left-0 right-0 flex items-center justify-between font-medium"
+        style={{
+          height: '53px',
+          paddingLeft: '32px',
+          paddingRight: '32px',
+          fontSize: '13px',
+          letterSpacing: '-0.13px',
+          color: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.5)',
+        }}
       >
         <span>Seobin yoon</span>
         <span>plumplum01@naver.com</span>
-        <span>Instagram</span>
-      </div>
-
-      {/* KR description */}
-      <div
-        className="absolute flex flex-col"
-        style={{ left: '33.8%', top: '82.3vh', width: '24%' }}
-      >
-        <span
-          className="font-semibold text-[15px] tracking-[-0.15px] text-black/70 leading-snug"
-          style={{ paddingLeft: '52px' }}
-        >
-          KR
-        </span>
-        <p
-          className="text-[12px] text-black/70 leading-[1.5] tracking-[-0.12px] font-semibold"
-          style={{ fontVariationSettings: "'wght' 700" }}
-        >
-          인터페이스를 서로 다른 요소 간에 정보나 신호를 주고받는 접점, 또는
-          약속이라고 여기며 데이터를 바탕으로 정보의 흐름을 정리하고, 디자인
-          시스템으로 일관된 경험을 만듭니다. UI 하나하나에 브랜드의 가치를 담아,
-          그냥 작동하는 것 이상의 제품을 만듭니다.
-        </p>
-      </div>
-
-      {/* EN description */}
-      <div
-        className="absolute flex flex-col"
-        style={{ left: '58.7%', top: '82.3vh', width: '24%' }}
-      >
-        <span
-          className="font-semibold text-[15px] tracking-[-0.15px] text-black/70 leading-snug"
-          style={{ paddingLeft: '52px' }}
-        >
-          EN
-        </span>
-        <p className="text-[12px] text-black/70 leading-[1.3] tracking-[-0.12px] font-semibold">
-          I see interfaces as touchpoints — agreements between elements
-          exchanging information. I map data into clear information flows, build
-          consistency through design systems, and embed brand values into every
-          UI to create products that go beyond simply working.
-        </p>
       </div>
 
       {/* FakeBackground — body에 portal로 렌더링 */}
