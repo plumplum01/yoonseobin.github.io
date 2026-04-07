@@ -12,7 +12,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
-import { useTheme } from '../../context/ThemeContext'
 import { type } from '../../styles/typography'
 import { colors, useColors } from '../../styles/colors'
 import { projects } from '../../data/projects'
