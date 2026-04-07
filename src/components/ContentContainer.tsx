@@ -122,7 +122,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
           <div
             key={i}
             ref={i === arr.length - 1 ? lastItemRef : undefined}
-            className="w-full bg-[#000003] rounded-[32px] overflow-hidden"
+            className="w-full bg-[#000003] rounded-[20px] overflow-hidden"
             style={{
               contentVisibility: 'auto',
               containIntrinsicSize: 'auto 477px',

@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
-import Lenis from 'lenis'
 import ContentContainer from './ContentContainer'
 import { projects } from '../data/projects'
 import { useTheme } from '../context/ThemeContext'
@@ -88,25 +87,14 @@ function DesktopHero() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
-  // 모달 스크롤 Lenis
+  // 오버레이 열릴 때 body 스크롤 잠금
   useEffect(() => {
-    if (!selectedCard || !scrollContainerRef.current) return
-    const lenis = new Lenis({
-      wrapper: scrollContainerRef.current,
-      duration: 0.8,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      overscroll: false,
-    })
-    let rafId: number
-    const raf = (time: number) => {
-      lenis.raf(time)
-      rafId = requestAnimationFrame(raf)
+    if (selectedCard) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
     }
-    rafId = requestAnimationFrame(raf)
-    return () => {
-      cancelAnimationFrame(rafId)
-      lenis.destroy()
-    }
+    return () => { document.body.style.overflow = '' }
   }, [selectedCard])
 
   return (
@@ -257,7 +245,7 @@ function DesktopHero() {
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
                   exit={{ opacity: 0, y: -60, transition: { duration: 0.4, ease: [0.4, 0, 0.6, 1] } }}
-                  className="relative mx-auto rounded-[48px] overflow-hidden"
+                  className="relative mx-auto rounded-[40px] overflow-hidden"
                   style={{
                     width: '100%',
                     maxWidth: 1120,
@@ -301,24 +289,14 @@ function MobileHero() {
     return () => window.removeEventListener('keydown', onKey)
   }, [])
 
+  // 오버레이 열릴 때 body 스크롤 잠금
   useEffect(() => {
-    if (selectedN === null || !scrollContainerRef.current) return
-    const lenis = new Lenis({
-      wrapper: scrollContainerRef.current,
-      duration: 0.8,
-      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-      overscroll: false,
-    })
-    let rafId: number
-    const raf = (time: number) => {
-      lenis.raf(time)
-      rafId = requestAnimationFrame(raf)
+    if (selectedN !== null) {
+      document.body.style.overflow = 'hidden'
+    } else {
+      document.body.style.overflow = ''
     }
-    rafId = requestAnimationFrame(raf)
-    return () => {
-      cancelAnimationFrame(rafId)
-      lenis.destroy()
-    }
+    return () => { document.body.style.overflow = '' }
   }, [selectedN])
 
   return (
