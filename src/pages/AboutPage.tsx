@@ -46,7 +46,7 @@ export default function AboutPage() {
           className="font-semibold leading-[1.3]"
           style={{ fontSize: 24, color: heading, marginBottom: 24, letterSpacing: '-0.24px' }}
         >
-          모든 신호 사이 사람과 닿는 접점을 설계합니다.
+          모든 신호 사이<br />사람과 닿는 접점을 설계합니다.
         </h1>
 
         {/* Body */}
