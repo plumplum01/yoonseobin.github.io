@@ -248,7 +248,8 @@ function DesktopHero() {
                   exit={{ opacity: 0, y: -60, transition: { duration: 0.4, ease: [0.4, 0, 0.6, 1] } }}
                   className="relative mx-auto rounded-[48px] overflow-hidden"
                   style={{
-                    width: 954,
+                    width: '100%',
+                    maxWidth: 1120,
                     marginTop: 100,
                     marginBottom: 641,
                     backgroundColor: '#141414',
