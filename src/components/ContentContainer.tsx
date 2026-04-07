@@ -57,7 +57,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
       </button>
 
       {/* 썸네일 이미지 */}
-      <div className="w-full" style={{ aspectRatio: '954 / 546', backgroundColor: colors.panelImageBg }}>
+      <div data-section="thumbnail" className="w-full" style={{ aspectRatio: '954 / 546', backgroundColor: colors.panelImageBg }}>
         {project.thumbnail && (
           <img
             src={project.thumbnail}
@@ -69,16 +69,16 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
       </div>
 
       {/* 프로젝트 정보 영역 */}
-      <div style={{ paddingLeft: isMobile ? '16px' : '51px', paddingTop: '19px' }}>
+      <div data-section="info" style={{ paddingLeft: isMobile ? '16px' : '51px', paddingTop: '24px' }}>
 
-        {/* 프로젝트 제목 + 서브타이틀 */}
-        <div className="flex flex-col leading-[1.4]" style={{ paddingBottom: '45px' }}>
+        {/* 제목 + 서브타이틀 */}
+        <div data-section="title" className="flex flex-col leading-[1.4]" style={{ paddingBottom: '45px' }}>
           <p style={{ ...type.contentTitle, color: colors.panelText }}>{project.title}</p>
           <p style={{ ...type.contentLabel, color: colors.panelMuted }}>{project.subtitle}</p>
         </div>
 
         {/* 상세 메타 정보 (기간 / 역할 / 클라이언트 / 도구) */}
-        <div className="flex flex-col gap-[7px]" style={{ paddingBottom: '79px' }}>
+        <div data-section="meta" className="flex flex-col gap-[7px]" style={{ paddingBottom: '79px' }}>
           <p style={{ ...type.contentLabel, color: colors.panelMuted }}>상세</p>
           <div className="flex gap-[12px]" style={{ ...type.contentMeta }}>
             <div className="flex flex-col gap-[8px]">
@@ -104,8 +104,8 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
           </div>
         </div>
 
-        {/* 프로젝트 설명 */}
-        <div className="flex flex-col gap-[7px]" style={{ paddingBottom: '100px' }}>
+        {/* 설명 */}
+        <div data-section="description" className="flex flex-col gap-[7px]" style={{ paddingBottom: '100px' }}>
           <p style={{ ...type.contentLabel, color: colors.panelMuted }} className="whitespace-nowrap">설명</p>
           <p
             style={{
@@ -117,11 +117,27 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
           >
             {project.description}
           </p>
+
+          {/* 토스 캠프 프로젝트 한정 안내 */}
+          {project.client === 'TOSS 인터랙션 디자인 캠프' && (
+            <p
+              style={{
+                ...type.contentBody,
+                color: colors.panelText,
+                opacity: 0.5,
+                width: isMobile ? 'auto' : '438px',
+                paddingRight: isMobile ? '16px' : undefined,
+                marginTop: '16px',
+              }}
+            >
+              토스 인터랙션 디자인 캠프에서 지속적인 UI/모션 피드백을 받아가며 작업했습니다.
+            </p>
+          )}
         </div>
       </div>
 
       {/* 프로젝트 이미지 목록 (썸네일 이후) */}
-      <div className="flex flex-col gap-[20px] mx-[20px] pb-[20px]">
+      <div data-section="images" className="flex flex-col gap-[20px] mx-[20px] pb-[20px]">
         {project.images.slice(1).map((src, i, arr) => (
           <div
             key={i}
