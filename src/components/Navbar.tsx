@@ -15,7 +15,6 @@ export default function Navbar() {
   }, [])
 
   const navWidth = isMobile ? 280 : 359
-  const titleLeft = navWidth - 205 - 16
   const contentWidth = navWidth - 32
   const navigate = useNavigate()
   const location = useLocation()

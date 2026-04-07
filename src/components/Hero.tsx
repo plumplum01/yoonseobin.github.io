@@ -155,6 +155,7 @@ function DesktopHero() {
                   width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
                   marginTop: isEven ? '17.7vh' : '30.2vh',
                   cursor: 'pointer',
+                  opacity: isSelected ? 0 : 1,
                 }}
                 onClick={() => {
                   if (!hasDragged.current) {
