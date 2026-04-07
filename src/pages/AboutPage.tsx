@@ -21,6 +21,7 @@ export default function AboutPage() {
         paddingLeft: '32px',
         paddingRight: '32px',
         boxSizing: 'border-box',
+        textAlign: 'left',
       }}
     >
       <div style={{ maxWidth: '680px' }}>

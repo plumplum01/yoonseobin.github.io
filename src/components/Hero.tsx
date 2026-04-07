@@ -111,11 +111,12 @@ function DesktopHero() {
 
   return (
     <section
-      className="relative overflow-hidden bg-white text-left"
+      className="relative overflow-hidden text-left"
       style={{
         width: '100vw',
         height: '100vh',
         marginLeft: 'calc((100% - 100vw) / 2)',
+        backgroundColor: 'var(--bg)',
       }}
     >
       {/* Infinite draggable image grid */}
