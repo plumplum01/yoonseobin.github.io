@@ -75,18 +75,18 @@ export default function AboutPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
             {awards.map((a) => (
-              <div key={a.title} style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
-                <span style={{ fontSize: 13, fontWeight: 600, color: heading, letterSpacing: '-0.13px' }}>
-                  {a.title}
-                </span>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
-                  <span style={{ fontSize: 13, fontWeight: 500, color: text, letterSpacing: '-0.13px', whiteSpace: 'pre-line', flex: 1, lineHeight: 1.35 }}>
+              <div key={a.title} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: heading, letterSpacing: '-0.13px' }}>
+                    {a.title}
+                  </span>
+                  <span style={{ fontSize: 13, fontWeight: 500, color: text, letterSpacing: '-0.13px', whiteSpace: 'pre-line', lineHeight: 1.35 }}>
                     {a.desc}
                   </span>
-                  <span style={{ fontSize: 13, fontWeight: 500, color: text, letterSpacing: '-0.13px', flexShrink: 0, marginLeft: 16 }}>
-                    {a.date}
-                  </span>
                 </div>
+                <span style={{ fontSize: 13, fontWeight: 500, color: text, letterSpacing: '-0.13px', flexShrink: 0, lineHeight: 1.35 }}>
+                  {a.date}
+                </span>
               </div>
             ))}
           </div>

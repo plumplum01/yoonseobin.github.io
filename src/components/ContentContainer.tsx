@@ -117,7 +117,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
       </div>
 
       {/* Content 2~ */}
-      <div className="flex flex-col gap-[4px] mx-[20px] pb-[20px]">
+      <div className="flex flex-col gap-[20px] mx-[20px] pb-[20px]">
         {project.images.slice(1).map((src, i, arr) => (
           <div
             key={i}

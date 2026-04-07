@@ -55,7 +55,9 @@ export default function Navbar() {
         <motion.div
           animate={{
             height: isOpen ? 186 : 47,
-            backgroundColor: isOpen ? 'rgba(32,32,32,1)' : 'rgba(0,0,0,0.4)',
+            backgroundColor: isOpen
+              ? (isDark ? 'rgba(70,70,70,1)' : 'rgba(32,32,32,1)')
+              : (isDark ? 'rgba(255,255,255,0.18)' : 'rgba(0,0,0,0.4)'),
           }}
           transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
           style={{
@@ -162,19 +164,17 @@ export default function Navbar() {
                     </button>
                   ) : (
                     <button
+                      className="bg-[#2c2c2c] hover:bg-[#3c3c3c] transition-colors duration-150"
                       style={{
                         height: 39,
                         borderRadius: 8,
                         border: 'none',
-                        backgroundColor: 'rgba(153,149,149,1)',
                         color: 'rgba(250,250,250,1)',
                         fontSize: 15,
-                        fontWeight: 400,
+                        fontWeight: 500,
                         letterSpacing: '-0.15px',
                         cursor: 'pointer',
                       }}
-                      onMouseEnter={e => (e.currentTarget.style.backgroundColor = 'rgba(120,116,116,1)')}
-                      onMouseLeave={e => (e.currentTarget.style.backgroundColor = 'rgba(153,149,149,1)')}
                       onClick={() => { navigate('/'); setIsOpen(false) }}
                     >
                       Home
