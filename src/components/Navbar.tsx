@@ -5,7 +5,18 @@ import { useTheme } from '../context/ThemeContext'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 768)
   const { isDark, toggleTheme } = useTheme()
+
+  useEffect(() => {
+    const handler = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', handler)
+    return () => window.removeEventListener('resize', handler)
+  }, [])
+
+  const navWidth = isMobile ? 280 : 359
+  const titleLeft = navWidth - 205 - 16
+  const contentWidth = navWidth - 32
   const navigate = useNavigate()
   const location = useLocation()
   const isHome = location.pathname === '/'
@@ -48,7 +59,7 @@ export default function Navbar() {
           }}
           transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
           style={{
-            width: 359,
+            width: navWidth,
             borderRadius: 12,
             overflow: 'hidden',
             pointerEvents: 'auto',
@@ -62,15 +73,17 @@ export default function Navbar() {
             style={{
               position: 'absolute',
               top: 14,
-              left: 138,
-              width: 205,
-              display: 'flex',
-              justifyContent: 'space-between',
+              left: 16,
+              right: 16,
+              display: 'grid',
+              gridTemplateColumns: '1fr auto 1fr',
               alignItems: 'center',
               zIndex: 1,
             }}
           >
+            <div />
             <span
+              onClick={() => { navigate('/'); setIsOpen(false) }}
               style={{
                 color: 'rgba(250,250,250,1)',
                 fontSize: 15,
@@ -78,6 +91,7 @@ export default function Navbar() {
                 letterSpacing: '-0.15px',
                 lineHeight: 1,
                 userSelect: 'none',
+                cursor: 'pointer',
               }}
             >
               Seobin yoon
@@ -95,10 +109,11 @@ export default function Navbar() {
                 lineHeight: 1,
                 display: 'flex',
                 alignItems: 'center',
-                justifyContent: 'center',
+                justifyContent: 'flex-end',
                 width: 20,
                 height: 20,
                 opacity: 0.9,
+                marginLeft: 'auto',
               }}
               aria-label={isOpen ? '메뉴 닫기' : '메뉴 열기'}
             >
@@ -122,7 +137,7 @@ export default function Navbar() {
                     position: 'absolute',
                     top: 54,
                     left: 16,
-                    width: 327,
+                    width: contentWidth,
                     display: 'flex',
                     flexDirection: 'column',
                     gap: 7,

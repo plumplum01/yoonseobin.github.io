@@ -289,6 +289,7 @@ function DesktopHero() {
 function MobileHero() {
   const [selectedN, setSelectedN] = useState<number | null>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+  const { isDark } = useTheme()
 
   const handleClose = () => setSelectedN(null)
 
@@ -321,61 +322,77 @@ function MobileHero() {
   }, [selectedN])
 
   return (
-    <section className="bg-white text-left relative" style={{ paddingBottom: '40px' }}>
-      {/* Profile */}
+    <section
+      className="text-left relative"
+      style={{ paddingBottom: '40px', backgroundColor: isDark ? '#141414' : 'white' }}
+    >
+      {/* Footer info — 상단 */}
       <div
-        className="absolute flex flex-col gap-px font-semibold text-[15px] leading-snug tracking-[-0.15px] text-black/70"
-        style={{ top: '85px', left: '12px' }}
+        className="flex flex-col font-medium text-[13px] tracking-[-0.13px]"
+        style={{
+          marginLeft: '12px',
+          paddingTop: '112px',
+          marginBottom: '24px',
+          color: isDark ? 'rgba(255,255,255,0.3)' : 'rgba(0,0,0,0.5)',
+        }}
       >
         <span>Seobin yoon</span>
         <span>plumplum01@naver.com</span>
-        <span>Instagram</span>
-      </div>
-
-      {/* KR description */}
-      <div
-        className="absolute flex flex-col"
-        style={{ top: '211px', left: '12px', width: '292px' }}
-      >
-        <span
-          className="font-semibold text-[15px] tracking-[-0.15px] text-black/70 leading-snug"
-          style={{ paddingLeft: '52px' }}
-        >
-          KR
-        </span>
-        <p
-          className="text-[12px] text-black/70 leading-[1.5] tracking-[-0.12px] font-semibold"
-          style={{ fontVariationSettings: "'wght' 700" }}
-        >
-          인터페이스를 서로 다른 요소 간에 정보나 신호를 주고받는 접점, 또는
-          약속이라고 여기며 데이터를 바탕으로 정보의 흐름을 정리하고, 디자인
-          시스템으로 일관된 경험을 만듭니다. UI 하나하나에 브랜드의 가치를 담아,
-          그냥 작동하는 것 이상의 제품을 만듭니다.
-        </p>
       </div>
 
       {/* Stacked content grid */}
-      <div style={{ height: '406px' }} />
-      <div className="flex flex-col" style={{ marginLeft: '12px', gap: '2px' }}>
-        {ITEMS.map((n) => (
-          <div
-            key={n}
-            className="flex items-center justify-center flex-shrink-0"
-            style={{
-              width: 'calc(100vw - 24px)',
-              minWidth: '351px',
-              aspectRatio: '1 / 1',
-              backgroundColor: '#e3e3e3',
-              cursor: 'pointer',
-              opacity: selectedN === n ? 0 : 1,
-            }}
-            onClick={() => setSelectedN(n)}
-          >
-            <span className="text-[60px] font-bold text-black/20 select-none">
-              {n}
-            </span>
-          </div>
-        ))}
+      <div className="flex flex-col" style={{ marginLeft: '12px', gap: '18px' }}>
+        {ITEMS.map((n) => {
+          const project = projects[(n - 1) % projects.length]
+          return (
+            <div
+              key={n}
+              className="flex flex-col flex-shrink-0"
+              style={{
+                width: 'calc(100vw - 24px)',
+                minWidth: '351px',
+                cursor: 'pointer',
+                opacity: selectedN === n ? 0 : 1,
+              }}
+              onClick={() => setSelectedN(n)}
+            >
+              {/* 카드 이미지 */}
+              <div
+                style={{
+                  aspectRatio: '1 / 1',
+                  backgroundColor: isDark ? 'var(--card-odd)' : '#e3e3e3',
+                  borderRadius: '18px',
+                  overflow: 'hidden',
+                }}
+              >
+                {project.thumbnail && (
+                  <img
+                    src={project.thumbnail}
+                    alt={project.title}
+                    loading="lazy"
+                    draggable={false}
+                    className="w-full h-full object-cover select-none pointer-events-none"
+                  />
+                )}
+              </div>
+              {/* 타이틀 + 서브타이틀 */}
+              <div style={{ paddingLeft: '4px', paddingTop: '8px', paddingBottom: '8px' }}>
+                <p
+                  className="font-semibold text-[15px] leading-snug tracking-[-0.01em]"
+                  style={{ color: isDark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.7)' }}
+                >
+                  {project.title}
+                </p>
+                <p
+                  className="font-medium text-[15px] leading-snug tracking-[-0.01em]"
+                  style={{ color: isDark ? 'rgba(255,255,255,0.4)' : 'rgba(0,0,0,0.4)' }}
+                >
+                  {project.subtitle}
+                </p>
+              </div>
+            </div>
+          )
+        })}
       </div>
       <div style={{ height: '40px' }} />
 
