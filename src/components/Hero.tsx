@@ -122,7 +122,7 @@ function DesktopHero() {
       {/* Infinite draggable image grid */}
       <div
         className="absolute inset-x-0 top-0 overflow-hidden"
-        style={{ height: '81.4vh' }}
+        style={{ height: '90vh' }}
       >
         <motion.div
           drag="x"
