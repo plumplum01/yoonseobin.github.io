@@ -178,7 +178,8 @@ function DesktopHero() {
                       src={projects[(n - 1) % projects.length].thumbnail}
                       alt={projects[(n - 1) % projects.length].title}
                       loading="lazy"
-                      className="w-full h-full object-cover"
+                      draggable={false}
+                      className="w-full h-full object-cover select-none pointer-events-none"
                     />
                   )}
                 </div>
