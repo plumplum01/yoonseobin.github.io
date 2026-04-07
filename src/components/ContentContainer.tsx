@@ -58,7 +58,16 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
       <div
         className="w-full bg-[#000003]"
         style={{ aspectRatio: '954 / 546' }}
-      />
+      >
+        {project.thumbnail && (
+          <img
+            src={project.thumbnail}
+            alt={project.title}
+            loading="lazy"
+            className="w-full h-full object-cover"
+          />
+        )}
+      </div>
 
       {/* Info 영역 — 수직 스택, left 51px */}
       <div style={{ paddingLeft: isMobile ? '16px' : '51px', paddingTop: '19px' }}>
@@ -107,19 +116,25 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
         </div>
       </div>
 
-      {/* Content 2~11 */}
+      {/* Content 2~ */}
       <div className="flex flex-col gap-[4px] mx-[20px] pb-[20px]">
-        {Array.from({ length: 10 }).map((_, i) => (
+        {project.images.slice(1).map((src, i, arr) => (
           <div
             key={i}
-            ref={i === 9 ? lastItemRef : undefined}
-            className="w-full bg-[#000003] rounded-[32px]"
+            ref={i === arr.length - 1 ? lastItemRef : undefined}
+            className="w-full bg-[#000003] rounded-[32px] overflow-hidden"
             style={{
-              aspectRatio: '1900 / 992',
               contentVisibility: 'auto',
               containIntrinsicSize: 'auto 477px',
             }}
-          />
+          >
+            <img
+              src={src}
+              alt={`${project.title} ${i + 2}`}
+              loading="lazy"
+              className="w-full h-auto"
+            />
+          </div>
         ))}
       </div>
     </motion.div>

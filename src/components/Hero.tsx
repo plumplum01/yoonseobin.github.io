@@ -170,8 +170,18 @@ function DesktopHero() {
                     backgroundColor: bg,
                     borderRadius: '32px',
                     flexShrink: 0,
+                    overflow: 'hidden',
                   }}
-                />
+                >
+                  {projects[(n - 1) % projects.length].thumbnail && (
+                    <img
+                      src={projects[(n - 1) % projects.length].thumbnail}
+                      alt={projects[(n - 1) % projects.length].title}
+                      loading="lazy"
+                      className="w-full h-full object-cover"
+                    />
+                  )}
+                </div>
                 {/* 타이틀 + 서브타이틀 */}
                 <div style={{ paddingLeft: '4px', paddingTop: '14px' }}>
                   <p
