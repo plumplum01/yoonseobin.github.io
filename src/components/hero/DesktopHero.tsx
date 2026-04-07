@@ -27,7 +27,6 @@ import {
 } from './constants'
 
 export default function DesktopHero() {
-  const { isDark } = useTheme()
   const c = useColors()
 
   // ─── 슬라이더 상태 ────────────────────────────────────────────────────────

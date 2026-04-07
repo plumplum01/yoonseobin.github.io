@@ -127,8 +127,8 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
             key={i}
             ref={i === arr.length - 1 ? lastItemRef : undefined}
             className="w-full rounded-[20px] overflow-hidden"
-            style={{ backgroundColor: colors.panelImageBg }}
             style={{
+              backgroundColor: colors.panelImageBg,
               contentVisibility: 'auto',
               containIntrinsicSize: 'auto 477px',
             }}
