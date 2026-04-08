@@ -22,10 +22,16 @@ const fadeIn = {
 type TabType = 'detail' | 'scene'
 
 export default function ContentContainer({ project, onClose, onScrollClose, scrollContainerRef, isMobile }: Props) {
-  const lastItemRef = useRef<HTMLDivElement>(null)
+  const skipScrollClose = useRef(false)
   const hasScenes = project.scenes && project.scenes.length > 0
   const [activeTab, setActiveTab] = useState<TabType>('detail')
   const [activeScene, setActiveScene] = useState(0)
+
+  const switchTab = (tab: TabType) => {
+    skipScrollClose.current = true
+    setActiveTab(tab)
+    setTimeout(() => { skipScrollClose.current = false }, 300)
+  }
 
   // 프로젝트가 변경되면 탭 초기화
   useEffect(() => {
@@ -36,14 +42,13 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
   // 마지막 콘텐츠의 하단이 뷰포트를 벗어나면 오버레이 닫기
   useEffect(() => {
     const container = scrollContainerRef?.current
-    const lastEl = lastItemRef.current
-    if (!container || !lastEl || !onScrollClose) return
+    if (!container || !onScrollClose) return
 
     let triggered = false
     const onScroll = () => {
-      if (triggered) return
-      const rect = lastEl.getBoundingClientRect()
-      if (rect.bottom <= 0) {
+      if (triggered || skipScrollClose.current) return
+      const { scrollTop, scrollHeight, clientHeight } = container
+      if (scrollTop + clientHeight >= scrollHeight - 400) {
         triggered = true
         onScrollClose()
       }
@@ -51,7 +56,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
 
     container.addEventListener('scroll', onScroll, { passive: true })
     return () => container.removeEventListener('scroll', onScroll)
-  }, [scrollContainerRef, onScrollClose, activeTab])
+  }, [scrollContainerRef, onScrollClose])
 
   return (
     <motion.div
@@ -156,7 +161,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
         >
           {/* Detail 탭 */}
           <button
-            onClick={() => setActiveTab('detail')}
+            onClick={() => switchTab('detail')}
             className="flex items-center justify-center transition-colors"
             style={{
               width: isMobile ? 'auto' : '120px',
@@ -188,7 +193,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
               opacity: activeTab === 'scene' ? 1 : 0.4,
               cursor: 'pointer',
             }}
-            onClick={() => { if (activeTab !== 'scene') setActiveTab('scene') }}
+            onClick={() => { if (activeTab !== 'scene') switchTab('scene') }}
           >
             <span
               style={{
@@ -259,7 +264,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
             {project.images.slice(1).map((src, i, arr) => (
               <div
                 key={i}
-                ref={i === arr.length - 1 ? lastItemRef : undefined}
+
                 className="w-full rounded-[20px] overflow-hidden"
                 style={{
                   backgroundColor: colors.panelImageBg,
@@ -287,7 +292,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
           >
             {project.scenes && project.scenes[activeScene] && (
               <div
-                ref={lastItemRef}
+
                 className="w-full rounded-[20px] overflow-hidden"
                 style={{ backgroundColor: colors.panelImageBg }}
               >
