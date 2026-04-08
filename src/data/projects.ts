@@ -47,12 +47,11 @@ const groundsScenes = ['Main', 'Explore', 'PIP', 'Shop List']
   .map(name => groundsScenesRaw.find(s => s.name === name))
   .filter((s): s is Scene => s !== undefined)
 const asterScenesRaw = loadScenes(import.meta.glob('../assets/projects/aster/full/*.webp', { eager: true, import: 'default' }))
-const asterScenes = (
-  [['typeA', 'Type A'], ['typeB', 'Type B'], ['PIP', 'PIP'], ['Login', 'Login'], ['Finish', 'Finish']] as const
-).map(([file, label]) => {
-  const found = asterScenesRaw.find(s => s.name === file)
-  return found ? { ...found, name: label } : undefined
-}).filter((s): s is Scene => s !== undefined)
+const asterScenes: Scene[] = [['typeA', 'Type A'], ['typeB', 'Type B'], ['PIP', 'PIP'], ['Login', 'Login'], ['Finish', 'Finish']]
+  .flatMap(([file, label]) => {
+    const found = asterScenesRaw.find(s => s.name === file)
+    return found ? [{ name: label, image: found.image }] : []
+  })
 
 export const projects: Project[] = [
   {
