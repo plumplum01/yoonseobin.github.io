@@ -154,7 +154,6 @@ export default function DesktopHero() {
           {DESKTOP_ITEMS.map((n, i) => {
             const isEven = n % 2 === 0
             const bg = isEven ? 'var(--card-even)' : 'var(--card-odd)'
-            const isSelected = selectedCard?.index === i
 
             return (
               <div
@@ -164,7 +163,6 @@ export default function DesktopHero() {
                   width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
                   marginTop: isEven ? '17.7vh' : '30.2vh',
                   cursor: 'pointer',
-                  opacity: isSelected ? 0 : 1,
                 }}
                 onClick={() => {
                   if (!hasDragged.current) selectCard({ index: i, n, bg })
