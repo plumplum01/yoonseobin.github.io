@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
+import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Project } from '../data/projects'
 import { type as typography } from '../styles/typography'
@@ -26,6 +27,13 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
   const hasScenes = project.scenes && project.scenes.length > 0
   const [activeTab, setActiveTab] = useState<TabType>('detail')
   const [activeScene, setActiveScene] = useState(0)
+  const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+
+  const lightboxImages = activeTab === 'detail'
+    ? project.images.slice(1)
+    : (project.scenes?.map(s => s.image) ?? [])
+
+  const closeLightbox = () => setLightboxIndex(null)
 
   const switchTab = (tab: TabType) => {
     skipScrollClose.current = true
@@ -38,6 +46,19 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
     setActiveTab('detail')
     setActiveScene(0)
   }, [project.id])
+
+  // 라이트박스 키보드 핸들러
+  useEffect(() => {
+    if (lightboxIndex === null) return
+    const total = lightboxImages.length
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') closeLightbox()
+      if (e.key === 'ArrowLeft') setLightboxIndex(i => i !== null ? (i - 1 + total) % total : null)
+      if (e.key === 'ArrowRight') setLightboxIndex(i => i !== null ? (i + 1) % total : null)
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [lightboxIndex, lightboxImages.length])
 
   // 마지막 콘텐츠의 하단이 뷰포트를 벗어나면 오버레이 닫기
   useEffect(() => {
@@ -59,6 +80,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
   }, [scrollContainerRef, onScrollClose])
 
   return (
+    <>
     <motion.div
       {...fadeIn}
       className="w-full text-left"
@@ -255,28 +277,28 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
         {activeTab === 'detail' ? (
           <motion.div
             key="detail"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.2 } }}
-            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } }}
+            exit={{ opacity: 0, y: -8, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
             data-section="images"
             className="flex flex-col gap-[20px] mx-[20px] pb-[20px]"
           >
             {project.images.slice(1).map((src, i) => (
               <div
                 key={i}
-
-                className="w-full rounded-[20px] overflow-hidden"
+                className="w-full rounded-[16px] overflow-hidden cursor-zoom-in"
                 style={{
                   backgroundColor: colors.panelImageBg,
                   contentVisibility: 'auto',
                   containIntrinsicSize: 'auto 477px',
                 }}
+                onClick={() => setLightboxIndex(i)}
               >
                 <img
                   src={src}
                   alt={`${project.title} ${i + 2}`}
                   loading="lazy"
-                  className="w-full h-auto"
+                  className="w-full h-auto pointer-events-none"
                 />
               </div>
             ))}
@@ -284,22 +306,22 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
         ) : (
           <motion.div
             key={`scene-${activeScene}`}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1, transition: { duration: 0.2 } }}
-            exit={{ opacity: 0, transition: { duration: 0.15 } }}
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } }}
+            exit={{ opacity: 0, y: -8, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
             data-section="scene-image"
             className="mx-[20px] pb-[20px]"
           >
             {project.scenes && project.scenes[activeScene] && (
               <div
-
-                className="w-full rounded-[20px] overflow-hidden"
+                className="w-full rounded-[16px] overflow-hidden cursor-zoom-in"
                 style={{ backgroundColor: colors.panelImageBg }}
+                onClick={() => setLightboxIndex(activeScene)}
               >
                 <img
                   src={project.scenes[activeScene].image}
                   alt={`${project.title} - ${project.scenes[activeScene].name}`}
-                  className="w-full h-auto"
+                  className="w-full h-auto pointer-events-none"
                 />
               </div>
             )}
@@ -307,5 +329,75 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
         )}
       </AnimatePresence>
     </motion.div>
+
+    {/* 라이트박스 */}
+    {createPortal(
+      <AnimatePresence>
+        {lightboxIndex !== null && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1, transition: { duration: 0.2 } }}
+            exit={{ opacity: 0, transition: { duration: 0.2 } }}
+            className="fixed inset-0 z-[200] flex items-center justify-center"
+            style={{ backgroundColor: 'rgba(0,0,0,0.92)' }}
+            onClick={closeLightbox}
+          >
+            {/* 이미지 */}
+            <AnimatePresence mode="wait">
+              <motion.img
+                key={lightboxIndex}
+                initial={{ opacity: 0, scale: 0.97 }}
+                animate={{ opacity: 1, scale: 1, transition: { duration: 0.2 } }}
+                exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.15 } }}
+                src={lightboxImages[lightboxIndex]}
+                alt=""
+                className="max-h-[90vh] max-w-[90vw] object-contain rounded-[12px]"
+                style={{ pointerEvents: 'none' }}
+              />
+            </AnimatePresence>
+
+            {/* 카운터 */}
+            {lightboxImages.length > 1 && (
+              <div
+                className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/50 text-[13px] tracking-widest"
+                style={{ pointerEvents: 'none' }}
+              >
+                {lightboxIndex + 1} / {lightboxImages.length}
+              </div>
+            )}
+
+            {/* 닫기 버튼 */}
+            <button
+              className="absolute top-6 right-8 text-white/50 hover:text-white transition-colors text-[13px] tracking-widest uppercase"
+              onClick={closeLightbox}
+            >
+              close
+            </button>
+
+            {/* 이전 버튼 */}
+            {lightboxImages.length > 1 && (
+              <button
+                className="absolute left-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all text-[32px]" style={{ lineHeight: 1 }}
+                onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => i !== null ? (i - 1 + lightboxImages.length) % lightboxImages.length : null) }}
+              >
+                <span style={{ display: 'inline-block', transform: 'translate(-1px, -2px)' }}>‹</span>
+              </button>
+            )}
+
+            {/* 다음 버튼 */}
+            {lightboxImages.length > 1 && (
+              <button
+                className="absolute right-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all text-[32px]" style={{ lineHeight: 1 }}
+                onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => i !== null ? (i + 1) % lightboxImages.length : null) }}
+              >
+                <span style={{ display: 'inline-block', transform: 'translate(1px, -2px)' }}>›</span>
+              </button>
+            )}
+          </motion.div>
+        )}
+      </AnimatePresence>,
+      document.body
+    )}
+    </>
   )
 }

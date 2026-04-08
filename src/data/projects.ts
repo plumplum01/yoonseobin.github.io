@@ -42,8 +42,17 @@ function loadScenes(glob: Record<string, unknown>): Scene[] {
 }
 
 const wattScenes = loadScenes(import.meta.glob('../assets/projects/watt-a-lot/full/*.webp', { eager: true, import: 'default' }))
-const groundsScenes = loadScenes(import.meta.glob('../assets/projects/grounds/full/*.webp', { eager: true, import: 'default' }))
-const asterScenes = loadScenes(import.meta.glob('../assets/projects/aster/full/*.webp', { eager: true, import: 'default' }))
+const groundsScenesRaw = loadScenes(import.meta.glob('../assets/projects/grounds/full/*.webp', { eager: true, import: 'default' }))
+const groundsScenes = ['Main', 'Explore', 'PIP', 'Shop List']
+  .map(name => groundsScenesRaw.find(s => s.name === name))
+  .filter((s): s is Scene => s !== undefined)
+const asterScenesRaw = loadScenes(import.meta.glob('../assets/projects/aster/full/*.webp', { eager: true, import: 'default' }))
+const asterScenes = (
+  [['typeA', 'Type A'], ['typeB', 'Type B'], ['PIP', 'PIP'], ['Login', 'Login'], ['Finish', 'Finish']] as const
+).map(([file, label]) => {
+  const found = asterScenesRaw.find(s => s.name === file)
+  return found ? { ...found, name: label } : undefined
+}).filter((s): s is Scene => s !== undefined)
 
 export const projects: Project[] = [
   {
