@@ -33,7 +33,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
     setActiveScene(0)
   }, [project.id])
 
-  // 마지막 이미지가 화면 하단 65% 지점에 도달하면 오버레이 닫기
+  // 마지막 콘텐츠의 하단이 뷰포트를 벗어나면 오버레이 닫기
   useEffect(() => {
     const container = scrollContainerRef?.current
     const lastEl = lastItemRef.current
@@ -43,7 +43,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
     const onScroll = () => {
       if (triggered) return
       const rect = lastEl.getBoundingClientRect()
-      if (rect.bottom <= window.innerHeight * 0.65) {
+      if (rect.bottom <= 0) {
         triggered = true
         onScrollClose()
       }

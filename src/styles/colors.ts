@@ -48,8 +48,8 @@ export const colors = {
 function makeColors(isDark: boolean) {
   return {
     // 페이지 배경
-    pageBg:       isDark ? '#141414'              : '#F4F4F4',
-    aboutBg:      isDark ? '#141414'              : '#fafafa',   // About 페이지 배경
+    pageBg:       isDark ? '#181818'              : '#F4F4F4',
+    aboutBg:      isDark ? '#181818'              : '#fafafa',   // About 페이지 배경
 
     // 텍스트
     heading:      isDark ? '#ffffff'              : '#000000',   // 섹션 헤딩
