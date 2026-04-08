@@ -1,3 +1,8 @@
+export interface Scene {
+  name: string
+  image: string
+}
+
 export interface Project {
   id: string
   title: string
@@ -9,6 +14,7 @@ export interface Project {
   description: string
   thumbnail: string
   images: string[]
+  scenes?: Scene[]
 }
 
 function sorted(glob: Record<string, unknown>): string[] {
@@ -26,6 +32,19 @@ const preLoanImages = sorted(import.meta.glob('../assets/projects/pre-loan-onboa
 const earningsVote1Images = sorted(import.meta.glob('../assets/projects/earnings-vote-1/*.webp', { eager: true, import: 'default' }))
 const earningsVote2Images = sorted(import.meta.glob('../assets/projects/earnings-vote-2/*.webp', { eager: true, import: 'default' }))
 
+function loadScenes(glob: Record<string, unknown>): Scene[] {
+  return Object.entries(glob)
+    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+    .map(([path, v]) => {
+      const filename = path.split('/').pop()?.replace('.webp', '') ?? ''
+      return { name: filename, image: v as string }
+    })
+}
+
+const wattScenes = loadScenes(import.meta.glob('../assets/projects/watt-a-lot/full/*.webp', { eager: true, import: 'default' }))
+const groundsScenes = loadScenes(import.meta.glob('../assets/projects/grounds/full/*.webp', { eager: true, import: 'default' }))
+const asterScenes = loadScenes(import.meta.glob('../assets/projects/aster/full/*.webp', { eager: true, import: 'default' }))
+
 export const projects: Project[] = [
   {
     id: 'watt-a-lot',
@@ -39,6 +58,7 @@ export const projects: Project[] = [
       '와트어랏은 여러 브랜드의 전기차를 한 곳에서 비교하고 계약까지 할 수 있는 EV 큐레이션 플랫폼입니다. 단계별 개인화로 나에게 맞는 차를 쉽게 찾고, 차량 자체에 몰입하는 프리미엄 경험을 설계했습니다.',
     thumbnail: wattImages[0],
     images: wattImages,
+    scenes: wattScenes,
   },
   {
     id: 'grounds',
@@ -52,6 +72,7 @@ export const projects: Project[] = [
       '그라운즈는 \'중력을 거스르는 부유감\'을 실루엣으로 구현하는 슈즈 브랜드입니다. 자사몰의 획일화된 탐색 구조를 개선한 웹사이트 리디자인으로, 브랜드 철학을 담은 내비게이션과 유영하는 2D 탐색 경험을 설계했습니다.',
     thumbnail: groundsImages[0],
     images: groundsImages,
+    scenes: groundsScenes,
   },
   {
     id: 'aster',
@@ -65,6 +86,7 @@ export const projects: Project[] = [
       '아스터(ASTER)는 정해진 틀을 깨고, 자기다움을 패션으로 드러내는 고프코어 브랜드입니다. 자사몰 UX를 새로 설계한 콘셉트 작업으로, 쇼핑하는 과정에서 브랜드에 자연스럽게 몰입할 수 있도록 구성했습니다.',
     thumbnail: asterImages[0],
     images: asterImages,
+    scenes: asterScenes,
   },
   {
     id: 'catchtable',
