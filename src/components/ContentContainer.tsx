@@ -159,7 +159,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
             onClick={() => setActiveTab('detail')}
             className="flex items-center justify-center transition-colors"
             style={{
-              width: isMobile ? 'auto' : '165px',
+              width: isMobile ? 'auto' : '120px',
               padding: '10px',
               borderRadius: '10px',
               fontSize: '16px',
