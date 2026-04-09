@@ -87,9 +87,23 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
       {/* 닫기 버튼 */}
       <button
         onClick={onClose}
-        className="absolute top-6 right-8 z-50 text-white/50 hover:text-white transition-colors text-[13px] tracking-widest uppercase"
+        className="absolute top-5 right-6 z-50 flex items-center justify-center w-8 h-8 rounded-full transition-colors"
+        style={{
+          backgroundColor: 'rgba(0,0,0,0.35)',
+          color: 'rgba(255,255,255,0.7)',
+        }}
+        onMouseEnter={e => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(0,0,0,0.55)'
+          ;(e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,1)'
+        }}
+        onMouseLeave={e => {
+          (e.currentTarget as HTMLButtonElement).style.backgroundColor = 'rgba(0,0,0,0.35)'
+          ;(e.currentTarget as HTMLButtonElement).style.color = 'rgba(255,255,255,0.7)'
+        }}
       >
-        close
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
+        </svg>
       </button>
 
       {/* 썸네일 이미지 */}
@@ -331,6 +345,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
           </motion.div>
         )}
       </AnimatePresence>
+
     </motion.div>
 
     {/* 이미지 힌트 토스트 */}
@@ -352,18 +367,13 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
             onClick={closeLightbox}
           >
             {/* 이미지 */}
-            <AnimatePresence mode="wait">
-              <motion.img
-                key={lightboxIndex}
-                initial={{ opacity: 0, scale: 0.97 }}
-                animate={{ opacity: 1, scale: 1, transition: { duration: 0.2 } }}
-                exit={{ opacity: 0, scale: 0.97, transition: { duration: 0.15 } }}
-                src={lightboxImages[lightboxIndex]}
-                alt=""
-                className="max-h-[90vh] max-w-[90vw] object-contain rounded-[12px]"
-                style={{ pointerEvents: 'none' }}
-              />
-            </AnimatePresence>
+            <img
+              key={lightboxIndex}
+              src={lightboxImages[lightboxIndex]}
+              alt=""
+              className="max-h-[90vh] max-w-[90vw] object-contain rounded-[12px]"
+              style={{ pointerEvents: 'none' }}
+            />
 
             {/* 카운터 */}
             {lightboxImages.length > 1 && (
@@ -386,7 +396,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
             {/* 이전 버튼 */}
             {lightboxImages.length > 1 && (
               <button
-                className="absolute left-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all text-[32px]" style={{ lineHeight: 1 }}
+                className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all text-[32px]" style={{ lineHeight: 1 }}
                 onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => i !== null ? (i - 1 + lightboxImages.length) % lightboxImages.length : null) }}
               >
                 <span style={{ display: 'inline-block', transform: 'translate(-1px, -2px)' }}>‹</span>
@@ -396,7 +406,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
             {/* 다음 버튼 */}
             {lightboxImages.length > 1 && (
               <button
-                className="absolute right-10 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all text-[32px]" style={{ lineHeight: 1 }}
+                className="absolute right-4 top-1/2 -translate-y-1/2 flex items-center justify-center w-12 h-12 rounded-full text-white/40 hover:text-white hover:bg-white/10 transition-all text-[32px]" style={{ lineHeight: 1 }}
                 onClick={(e) => { e.stopPropagation(); setLightboxIndex(i => i !== null ? (i + 1) % lightboxImages.length : null) }}
               >
                 <span style={{ display: 'inline-block', transform: 'translate(1px, -2px)' }}>›</span>
