@@ -1,5 +1,6 @@
 import { type } from '../styles/typography'
 import { colors, useColors } from '../styles/colors'
+import { useTheme } from '../context/ThemeContext'
 
 // ─── 콘텐츠 데이터 ─────────────────────────────────────────────────────────────
 // 항목 추가/수정은 여기서만 하면 됩니다.
@@ -33,6 +34,7 @@ const links = [
 
 export default function AboutPage() {
   const c = useColors()
+  const { isDark } = useTheme()
 
   return (
     <section
@@ -136,6 +138,7 @@ export default function AboutPage() {
                 color: colors.white,
                 fontWeight: 400,
                 transition: 'background-color 0.15s',
+                boxShadow: isDark ? 'inset 0 0 0 0.5px rgba(255,255,255,0.35)' : 'inset 0 0 0 0.5px rgba(0,0,0,0.45)',
               }}
               onMouseEnter={e => (e.currentTarget.style.backgroundColor = c.btnHover)}
               onMouseLeave={e => (e.currentTarget.style.backgroundColor = c.btnBase)}

@@ -69,6 +69,7 @@ export default function Navbar() {
             position: 'relative',
             backdropFilter: 'blur(12px)',
             WebkitBackdropFilter: 'blur(12px)',
+            boxShadow: isDark ? 'inset 0 0 0 0.5px rgba(255,255,255,0.35)' : 'inset 0 0 0 0.5px rgba(0,0,0,0.45)',
           }}
         >
           {/* 상단 타이틀 + 메뉴 버튼 */}
