@@ -1,12 +1,36 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import type { Project } from '../data/projects'
+import type { Project, SceneVideo } from '../data/projects'
 import { type as typography } from '../styles/typography'
 import { colors } from '../styles/colors'
 import Toast from './Toast'
 
 export type { Project }
+
+function SceneVideoPlayer({ video }: { video: SceneVideo }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    const el = videoRef.current
+    if (!el || !video.delay) return
+    el.pause()
+    const timer = setTimeout(() => { el.play() }, video.delay)
+    return () => clearTimeout(timer)
+  }, [video.delay])
+
+  return (
+    <video
+      ref={videoRef}
+      src={video.src}
+      autoPlay={!video.delay}
+      loop
+      muted
+      playsInline
+      className="w-full h-auto block"
+    />
+  )
+}
 
 interface Props {
   project: Project
@@ -50,7 +74,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
 
   const lightboxImages = activeTab === 'detail'
     ? project.images.slice(1)
-    : (project.scenes?.map(s => s.image) ?? [])
+    : (project.scenes?.map(s => s.image).filter((img): img is string => !!img) ?? [])
 
   const closeLightbox = () => setLightboxIndex(null)
 
@@ -328,18 +352,31 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
             className="mx-[20px] pb-[20px]"
           >
             {project.scenes && project.scenes[activeScene] && (
-              <div
-                className="w-full rounded-[16px] overflow-hidden cursor-zoom-in"
-                style={{ backgroundColor: colors.panelImageBg }}
-                onClick={() => setLightboxIndex(activeScene)}
-              >
-                <img
-                  src={project.scenes[activeScene].image}
-                  alt={`${project.title} - ${project.scenes[activeScene].name}`}
-                  className="w-full h-auto pointer-events-none"
-                  style={{ opacity: 0, transition: 'opacity 0.3s ease' }}
-                  onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
-                />
+              <div className="flex flex-col gap-[20px]">
+                {project.scenes[activeScene].videos?.map((video, vi) => (
+                  <div
+                    key={vi}
+                    className="w-full rounded-[16px] overflow-hidden"
+                    style={{ backgroundColor: colors.panelImageBg }}
+                  >
+                    <SceneVideoPlayer video={video} />
+                  </div>
+                ))}
+                {project.scenes[activeScene].image && (
+                  <div
+                    className="w-full rounded-[16px] overflow-hidden cursor-zoom-in"
+                    style={{ backgroundColor: colors.panelImageBg }}
+                    onClick={() => setLightboxIndex(activeScene)}
+                  >
+                    <img
+                      src={project.scenes[activeScene].image}
+                      alt={`${project.title} - ${project.scenes[activeScene].name}`}
+                      className="w-full h-auto pointer-events-none"
+                      style={{ opacity: 0, transition: 'opacity 0.3s ease' }}
+                      onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
+                    />
+                  </div>
+                )}
               </div>
             )}
           </motion.div>

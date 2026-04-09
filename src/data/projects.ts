@@ -1,6 +1,12 @@
+export interface SceneVideo {
+  src: string
+  delay?: number
+}
+
 export interface Scene {
   name: string
-  image: string
+  image?: string
+  videos?: SceneVideo[]
 }
 
 export interface Project {
@@ -41,17 +47,81 @@ function loadScenes(glob: Record<string, unknown>): Scene[] {
     })
 }
 
-const wattScenes = loadScenes(import.meta.glob('../assets/projects/watt-a-lot/full/*.webp', { eager: true, import: 'default' }))
+const wattScenesRaw = loadScenes(import.meta.glob('../assets/projects/watt-a-lot/full/*.webp', { eager: true, import: 'default' }))
+const wattScenes: Scene[] = [
+  {
+    name: 'Main',
+    image: wattScenesRaw.find(s => s.name === 'Main')!.image,
+    videos: [{ src: '/videos/와트어랏/Main.mp4' }],
+  },
+  {
+    name: 'Question',
+    image: wattScenesRaw.find(s => s.name === 'Q')!.image,
+    videos: [
+      { src: '/videos/와트어랏/question.mp4' },
+      { src: '/videos/와트어랏/question-focus.mp4', delay: 4000 },
+    ],
+  },
+  {
+    name: 'Finish',
+    image: wattScenesRaw.find(s => s.name === 'Finish')!.image,
+    videos: [{ src: '/videos/와트어랏/finish.mp4' }],
+  },
+]
 const groundsScenesRaw = loadScenes(import.meta.glob('../assets/projects/grounds/full/*.webp', { eager: true, import: 'default' }))
-const groundsScenes = ['Main', 'Explore', 'PIP', 'Shop List']
-  .map(name => groundsScenesRaw.find(s => s.name === name))
-  .filter((s): s is Scene => s !== undefined)
+const groundsScenes: Scene[] = [
+  {
+    name: 'Main',
+    image: groundsScenesRaw.find(s => s.name === 'Main')?.image,
+  },
+  {
+    name: 'GNB',
+    videos: [
+      { src: '/videos/그라운즈/GNB-1.mp4' },
+      { src: '/videos/그라운즈/GNB-2.mp4' },
+      { src: '/videos/그라운즈/GNB-3.mp4' },
+    ],
+  },
+  {
+    name: 'Explore',
+    image: groundsScenesRaw.find(s => s.name === 'Explore')?.image,
+    videos: [{ src: '/videos/그라운즈/Explore.mp4' }],
+  },
+  {
+    name: 'PIP',
+    image: groundsScenesRaw.find(s => s.name === 'PIP')?.image,
+  },
+  {
+    name: 'Shop List',
+    image: groundsScenesRaw.find(s => s.name === 'Shop List')?.image,
+  },
+]
 const asterScenesRaw = loadScenes(import.meta.glob('../assets/projects/aster/full/*.webp', { eager: true, import: 'default' }))
-const asterScenes: Scene[] = [['typeA', 'Type A'], ['typeB', 'Type B'], ['PIP', 'PIP'], ['Login', 'Login'], ['Finish', 'Finish']]
-  .flatMap(([file, label]) => {
-    const found = asterScenesRaw.find(s => s.name === file)
-    return found ? [{ name: label, image: found.image }] : []
-  })
+const asterScenes: Scene[] = [
+  ...([['typeA', 'Type A'], ['typeB', 'Type B']] as const)
+    .flatMap(([file, label]) => {
+      const found = asterScenesRaw.find(s => s.name === file)
+      return found ? [{ name: label, image: found.image }] : []
+    }),
+  {
+    name: 'PIP',
+    image: asterScenesRaw.find(s => s.name === 'PIP')?.image,
+    videos: [{ src: '/videos/아스터/CTA.mp4' }],
+  },
+  ...(['Login', 'Finish'] as const)
+    .flatMap(label => {
+      const found = asterScenesRaw.find(s => s.name === label)
+      return found ? [{ name: label, image: found.image }] : []
+    }),
+  {
+    name: 'Icon',
+    videos: [
+      { src: '/videos/아스터/매치컷.mp4' },
+      { src: '/videos/아스터/아이콘-인터랙션.mp4' },
+      { src: '/videos/아스터/버튼.mp4' },
+    ],
+  },
+]
 
 export const projects: Project[] = [
   {
@@ -108,6 +178,12 @@ export const projects: Project[] = [
       '캐치테이블은 특별한 날의 식사를 더 특별하게 만드는 하이엔드 파인다이닝 예약 플랫폼입니다. 일반 식당과 다를 바 없던 예약 과정을 프리미엄 다이닝에 어울리는 경험으로 새로 설계한 UX/UI 리뉴얼로, 사용자가 예약 피로와 실수 없이 \'대접받는 경험\' 자체에 집중할 수 있도록 했습니다.',
     thumbnail: catchtableImages[0],
     images: catchtableImages,
+    scenes: [
+      {
+        name: 'Interaction',
+        videos: [{ src: '/videos/캐치테이블/캐치테이블.mp4' }],
+      },
+    ],
   },
   {
     id: 'plugway',
