@@ -71,11 +71,11 @@ export default function AboutPage() {
         <hr style={{ border: 'none', borderTop: `1px solid ${c.divider}`, marginBottom: 103 }} />
 
         {/* Education 섹션 */}
-        <div style={{ marginBottom: 103 }}>
-          <h2 className="font-semibold" style={{ ...type.sectionHeading, color: c.heading, marginBottom: 9 }}>
+        <div style={{ marginBottom: 72 }}>
+          <h2 className="font-semibold" style={{ ...type.sectionHeading, color: c.heading, marginBottom: 20 }}>
             Education
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
             {education.map((e) => (
               <div key={e.title} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
                 <span style={{ ...type.listTitle, color: c.heading }}>
@@ -89,17 +89,17 @@ export default function AboutPage() {
           </div>
         </div>
 
-        <hr style={{ border: 'none', borderTop: `1px solid ${c.divider}`, marginBottom: 103 }} />
+        <hr style={{ border: 'none', borderTop: `1px solid ${c.divider}`, marginBottom: 72 }} />
 
         {/* Awards 섹션 */}
-        <div style={{ marginBottom: 103 }}>
-          <h2 className="font-semibold" style={{ ...type.sectionHeading, color: c.heading, marginBottom: 9 }}>
+        <div style={{ marginBottom: 72 }}>
+          <h2 className="font-semibold" style={{ ...type.sectionHeading, color: c.heading, marginBottom: 20 }}>
             Awards
           </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 32 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 24 }}>
             {awards.map((a) => (
               <div key={a.title} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16 }}>
-                <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                   <span style={{ ...type.listTitle, color: c.heading }}>
                     {a.title}
                   </span>
