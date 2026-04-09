@@ -1,9 +1,10 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Project } from '../data/projects'
 import { type as typography } from '../styles/typography'
 import { colors } from '../styles/colors'
+import Toast from './Toast'
 
 export type { Project }
 
@@ -25,6 +26,27 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
   const [activeTab, setActiveTab] = useState<TabType>('detail')
   const [activeScene, setActiveScene] = useState(0)
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
+  const [showToast, setShowToast] = useState(false)
+  const observerRef = useRef<IntersectionObserver | null>(null)
+
+  const firstImageRef = useCallback((el: HTMLDivElement | null) => {
+    if (observerRef.current) {
+      observerRef.current.disconnect()
+      observerRef.current = null
+    }
+    if (!el || sessionStorage.getItem('image-hint-shown')) return
+    const observer = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) {
+        sessionStorage.setItem('image-hint-shown', '1')
+        setShowToast(true)
+        observer.disconnect()
+        observerRef.current = null
+        setTimeout(() => setShowToast(false), 3000)
+      }
+    }, { threshold: 0.1 })
+    observer.observe(el)
+    observerRef.current = observer
+  }, [])
 
   const lightboxImages = activeTab === 'detail'
     ? project.images.slice(1)
@@ -262,6 +284,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
             {project.images.slice(1).map((src, i) => (
               <div
                 key={i}
+                ref={i === 0 ? firstImageRef : undefined}
                 className="w-full rounded-[16px] overflow-hidden cursor-zoom-in"
                 style={{
                   backgroundColor: colors.panelImageBg,
@@ -309,6 +332,12 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
         )}
       </AnimatePresence>
     </motion.div>
+
+    {/* 이미지 힌트 토스트 */}
+    {createPortal(
+      <Toast message="이미지를 클릭하면 크게 볼 수 있어요" visible={showToast} />,
+      document.body
+    )}
 
     {/* 라이트박스 */}
     {createPortal(

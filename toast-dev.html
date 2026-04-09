@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Toast Dev</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: #181818;
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 32px;
+    }
+
+    /* ── 토스트 ────────────────────────────────── */
+    #toast {
+      position: fixed;
+      bottom: 32px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 150;
+
+      /* 여기 수정 */
+      background: #2c2c2c;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 9px 16px;
+      font-size: 13px;
+      color: rgba(255,255,255,0.75);
+      letter-spacing: 0.01em;
+      pointer-events: none;
+      white-space: nowrap;
+
+      opacity: 1;
+      transition: opacity 0.3s ease;
+    }
+
+    #toast.hidden { opacity: 0; }
+
+    /* ── 컨트롤 패널 ───────────────────────────── */
+    .panel {
+      background: #242424;
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 16px;
+      padding: 24px;
+      width: 360px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .panel h2 {
+      font-size: 13px;
+      font-weight: 600;
+      color: rgba(255,255,255,0.4);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+    }
+
+    .row {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 11px;
+      color: rgba(255,255,255,0.4);
+    }
+
+    input[type="text"],
+    input[type="color"],
+    input[type="range"] {
+      width: 100%;
+      background: #1a1a1a;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: white;
+      font-size: 13px;
+      outline: none;
+    }
+
+    input[type="color"] {
+      height: 36px;
+      padding: 4px 8px;
+      cursor: pointer;
+    }
+
+    input[type="range"] {
+      padding: 4px 0;
+      accent-color: white;
+    }
+
+    .range-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .range-val {
+      font-size: 12px;
+      color: rgba(255,255,255,0.5);
+      min-width: 36px;
+      text-align: right;
+    }
+
+    button {
+      width: 100%;
+      padding: 10px;
+      border-radius: 10px;
+      border: none;
+      background: rgba(255,255,255,0.1);
+      color: white;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    button:hover { background: rgba(255,255,255,0.18); }
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,0.07);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 토스트 -->
+  <div id="toast">이미지를 클릭하면 크게 볼 수 있어요</div>
+
+  <!-- 컨트롤 패널 -->
+  <div class="panel">
+    <h2>Toast Dev</h2>
+
+    <div class="row">
+      <label>텍스트</label>
+      <input type="text" id="ctrl-text" value="이미지를 클릭하면 크게 볼 수 있어요" oninput="apply()" />
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <label>배경색</label>
+      <input type="text" id="ctrl-bg" value="#2c2c2c" oninput="apply()" placeholder="#2c2c2c or rgba(...)" />
+    </div>
+
+    <div class="row">
+      <label>테두리</label>
+      <input type="text" id="ctrl-border" value="rgba(255,255,255,0.1)" oninput="apply()" />
+    </div>
+
+    <div class="row">
+      <label>텍스트 색상</label>
+      <input type="text" id="ctrl-color" value="rgba(255,255,255,0.75)" oninput="apply()" />
+    </div>
+
+    <div class="divider"></div>
+
+    <div class="row">
+      <label>Font size</label>
+      <div class="range-row">
+        <input type="range" id="ctrl-size" min="10" max="18" value="13" oninput="apply()" />
+        <span class="range-val" id="val-size">13px</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Border radius</label>
+      <div class="range-row">
+        <input type="range" id="ctrl-radius" min="4" max="999" value="999" oninput="apply()" />
+        <span class="range-val" id="val-radius">999px</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Padding (vertical)</label>
+      <div class="range-row">
+        <input type="range" id="ctrl-py" min="4" max="20" value="9" oninput="apply()" />
+        <span class="range-val" id="val-py">9px</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Padding (horizontal)</label>
+      <div class="range-row">
+        <input type="range" id="ctrl-px" min="8" max="32" value="16" oninput="apply()" />
+        <span class="range-val" id="val-px">16px</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Bottom offset</label>
+      <div class="range-row">
+        <input type="range" id="ctrl-bottom" min="12" max="80" value="32" oninput="apply()" />
+        <span class="range-val" id="val-bottom">32px</span>
+      </div>
+    </div>
+
+    <div class="row">
+      <label>Box shadow</label>
+      <input type="text" id="ctrl-shadow" value="" placeholder="0 4px 20px rgba(0,0,0,0.4)" oninput="apply()" />
+    </div>
+
+    <div class="divider"></div>
+
+    <button onclick="toggleToast()">토스트 토글</button>
+  </div>
+
+  <script>
+    const toast = document.getElementById('toast')
+
+    function apply() {
+      const text   = document.getElementById('ctrl-text').value
+      const bg     = document.getElementById('ctrl-bg').value
+      const border = document.getElementById('ctrl-border').value
+      const color  = document.getElementById('ctrl-color').value
+      const size   = document.getElementById('ctrl-size').value
+      const radius = document.getElementById('ctrl-radius').value
+      const py     = document.getElementById('ctrl-py').value
+      const px     = document.getElementById('ctrl-px').value
+      const bottom = document.getElementById('ctrl-bottom').value
+      const shadow = document.getElementById('ctrl-shadow').value
+
+      document.getElementById('val-size').textContent   = size + 'px'
+      document.getElementById('val-radius').textContent = radius + 'px'
+      document.getElementById('val-py').textContent     = py + 'px'
+      document.getElementById('val-px').textContent     = px + 'px'
+      document.getElementById('val-bottom').textContent = bottom + 'px'
+
+      toast.textContent           = text
+      toast.style.background      = bg
+      toast.style.border          = `1px solid ${border}`
+      toast.style.color           = color
+      toast.style.fontSize        = size + 'px'
+      toast.style.borderRadius    = radius + 'px'
+      toast.style.padding         = `${py}px ${px}px`
+      toast.style.bottom          = bottom + 'px'
+      toast.style.boxShadow       = shadow || 'none'
+    }
+
+    function toggleToast() {
+      toast.classList.toggle('hidden')
+    }
+  </script>
+</body>
+</html>
