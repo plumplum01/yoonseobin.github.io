@@ -15,7 +15,13 @@
       "Bash(git branch:*)",
       "Bash(git reset:*)",
       "Bash(npx tsc:*)",
-      "mcp__plugin_figma_figma__get_design_context"
+      "mcp__plugin_figma_figma__get_design_context",
+      "Bash(grep -v \"^commit\\\\|^Author\\\\|^Date\\\\|^$\\\\|^feat\\\\|^-\\\\|^    \")",
+      "Bash(npx vite:*)",
+      "Bash(gh run:*)",
+      "Bash(/opt/homebrew/bin/gh run:*)",
+      "Bash(/usr/local/bin/gh run:*)",
+      "Bash(git remote:*)"
     ]
   }
 }

@@ -54,9 +54,6 @@ export default function DesktopHero() {
    */
   const selectedCardRef = useRef<SelectedCard | null>(null)
 
-  /** 오버레이 스크롤 컨테이너 ref — ContentContainer의 scroll 이벤트 감지용 */
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
-
   // ─── 카드 선택/해제 ───────────────────────────────────────────────────────
 
   const selectCard = (card: SelectedCard | null) => {
@@ -235,22 +232,20 @@ export default function DesktopHero() {
           {/* 콘텐츠 패널 */}
           <AnimatePresence>
             {selectedCard !== null && (
-              <div
-                ref={scrollContainerRef}
+              <motion.div
                 key="scroll-overlay"
                 className="fixed inset-0 z-50 overflow-y-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
+                exit={{ opacity: 0, y: -80, transition: { duration: 0.35, ease: [0.4, 0, 0.6, 1] } }}
                 onClick={handleClose}
               >
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-                  exit={{ opacity: 0, y: -60, transition: { duration: 0.4, ease: [0.4, 0, 0.6, 1] } }}
                   className="relative mx-auto rounded-[40px] overflow-hidden"
                   style={{
                     width: '100%',
                     maxWidth: 1120,
                     marginTop: 100,
-                    marginBottom: 641,
                     backgroundColor: colors.panel,
                     willChange: 'transform, opacity',
                   }}
@@ -259,11 +254,25 @@ export default function DesktopHero() {
                   <ContentContainer
                     project={projects[(selectedCard.n - 1) % projects.length]}
                     onClose={handleClose}
-                    onScrollClose={handleClose}
-                    scrollContainerRef={scrollContainerRef}
                   />
                 </motion.div>
-              </div>
+
+                {/* 하단 닫기 버튼 — 블러 영역 */}
+                <div
+                  className="flex justify-center"
+                  style={{ paddingTop: '60px', paddingBottom: '100px' }}
+                >
+                  <button
+                    className="flex items-center justify-center w-12 h-12 rounded-full text-white/70 hover:text-white transition-all"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
+                    onClick={(e) => { e.stopPropagation(); handleClose() }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </>,

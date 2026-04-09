@@ -40,7 +40,7 @@ export default function Navbar() {
         className="fixed inset-0 z-20"
         initial={false}
         animate={{ opacity: isOpen ? 1 : 0 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.2 }}
         style={{
           backdropFilter: 'blur(6px)',
           WebkitBackdropFilter: 'blur(6px)',
@@ -60,7 +60,7 @@ export default function Navbar() {
             height: isOpen ? 186 : 47,
             backgroundColor: isOpen ? c.navOpen : c.navClosed,
           }}
-          transition={{ duration: 0.38, ease: [0.4, 0, 0.2, 1] }}
+          transition={{ duration: 0.25, ease: [0.4, 0, 0.2, 1] }}
           style={{
             width: navWidth,
             borderRadius: 12,
@@ -131,7 +131,7 @@ export default function Navbar() {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 exit={{ opacity: 0 }}
-                transition={{ duration: 0.18, delay: 0.12 }}
+                transition={{ duration: 0.15, delay: 0.08 }}
                 style={{ position: 'absolute', inset: 0 }}
               >
                 {/* 페이지 이동 버튼 */}

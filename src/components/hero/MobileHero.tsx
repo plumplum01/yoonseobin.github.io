@@ -9,7 +9,7 @@
  * - 콘텐츠 오버레이: 카드를 탭하면 블러 배경 위로 상세 패널이 열립니다.
  */
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useTheme } from '../../context/ThemeContext'
@@ -25,9 +25,6 @@ export default function MobileHero() {
 
   /** 현재 열려 있는 카드 번호 (null이면 닫힌 상태) */
   const [selectedN, setSelectedN] = useState<number | null>(null)
-
-  /** 오버레이 스크롤 컨테이너 ref — ContentContainer의 scroll 이벤트 감지용 */
-  const scrollContainerRef = useRef<HTMLDivElement>(null)
 
   const handleClose = () => setSelectedN(null)
 
@@ -137,21 +134,19 @@ export default function MobileHero() {
           {/* 콘텐츠 패널 */}
           <AnimatePresence>
             {selectedN !== null && (
-              <div
-                ref={scrollContainerRef}
+              <motion.div
                 key="mobile-scroll-overlay"
                 className="fixed inset-0 z-50 overflow-y-auto"
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
+                exit={{ opacity: 0, y: -80, transition: { duration: 0.35, ease: [0.4, 0, 0.6, 1] } }}
                 onClick={handleClose}
               >
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-                  exit={{ opacity: 0, y: -40, transition: { duration: 0.4, ease: [0.4, 0, 0.6, 1] } }}
                   className="relative mx-auto rounded-[20px] overflow-hidden"
                   style={{
                     width: 'calc(100vw - 24px)',
                     marginTop: 40,
-                    marginBottom: 300,
                     backgroundColor: colors.panel,
                     willChange: 'transform, opacity',
                   }}
@@ -160,12 +155,26 @@ export default function MobileHero() {
                   <ContentContainer
                     project={projects[(selectedN - 1) % projects.length]}
                     onClose={handleClose}
-                    onScrollClose={handleClose}
-                    scrollContainerRef={scrollContainerRef}
                     isMobile
                   />
                 </motion.div>
-              </div>
+
+                {/* 하단 닫기 버튼 — 블러 영역 */}
+                <div
+                  className="flex justify-center"
+                  style={{ paddingTop: '48px', paddingBottom: '80px' }}
+                >
+                  <button
+                    className="flex items-center justify-center w-12 h-12 rounded-full text-white/70 hover:text-white transition-all"
+                    style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
+                    onClick={(e) => { e.stopPropagation(); handleClose() }}
+                  >
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
+                      <path d="M18 6L6 18M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </motion.div>
             )}
           </AnimatePresence>
         </>,

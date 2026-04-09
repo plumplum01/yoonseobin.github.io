@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import type { Project } from '../data/projects'
@@ -10,8 +10,6 @@ export type { Project }
 interface Props {
   project: Project
   onClose: () => void
-  onScrollClose?: () => void
-  scrollContainerRef?: React.RefObject<HTMLDivElement | null>
   isMobile?: boolean
 }
 
@@ -22,8 +20,7 @@ const fadeIn = {
 
 type TabType = 'detail' | 'scene'
 
-export default function ContentContainer({ project, onClose, onScrollClose, scrollContainerRef, isMobile }: Props) {
-  const skipScrollClose = useRef(false)
+export default function ContentContainer({ project, onClose, isMobile }: Props) {
   const hasScenes = project.scenes && project.scenes.length > 0
   const [activeTab, setActiveTab] = useState<TabType>('detail')
   const [activeScene, setActiveScene] = useState(0)
@@ -36,9 +33,7 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
   const closeLightbox = () => setLightboxIndex(null)
 
   const switchTab = (tab: TabType) => {
-    skipScrollClose.current = true
     setActiveTab(tab)
-    setTimeout(() => { skipScrollClose.current = false }, 300)
   }
 
   // 프로젝트가 변경되면 탭 초기화
@@ -59,25 +54,6 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [lightboxIndex, lightboxImages.length])
-
-  // 마지막 콘텐츠의 하단이 뷰포트를 벗어나면 오버레이 닫기
-  useEffect(() => {
-    const container = scrollContainerRef?.current
-    if (!container || !onScrollClose) return
-
-    let triggered = false
-    const onScroll = () => {
-      if (triggered || skipScrollClose.current) return
-      const { scrollTop, scrollHeight, clientHeight } = container
-      if (scrollTop + clientHeight >= scrollHeight - 400) {
-        triggered = true
-        onScrollClose()
-      }
-    }
-
-    container.addEventListener('scroll', onScroll, { passive: true })
-    return () => container.removeEventListener('scroll', onScroll)
-  }, [scrollContainerRef, onScrollClose])
 
   return (
     <>
@@ -297,15 +273,17 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
                 <img
                   src={src}
                   alt={`${project.title} ${i + 2}`}
-                  loading="lazy"
+                  loading={i < 3 ? 'eager' : 'lazy'}
                   className="w-full h-auto pointer-events-none"
+                  style={{ opacity: 0, transition: 'opacity 0.3s ease' }}
+                  onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
                 />
               </div>
             ))}
           </motion.div>
         ) : (
           <motion.div
-            key={`scene-${activeScene}`}
+            key="scene"
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.25, 0.1, 0.25, 1] } }}
             exit={{ opacity: 0, y: -8, transition: { duration: 0.18, ease: [0.4, 0, 1, 1] } }}
@@ -322,6 +300,8 @@ export default function ContentContainer({ project, onClose, onScrollClose, scro
                   src={project.scenes[activeScene].image}
                   alt={`${project.title} - ${project.scenes[activeScene].name}`}
                   className="w-full h-auto pointer-events-none"
+                  style={{ opacity: 0, transition: 'opacity 0.3s ease' }}
+                  onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
                 />
               </div>
             )}
