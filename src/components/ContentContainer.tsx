@@ -155,7 +155,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
         {/* 상세 메타 정보 (기간 / 역할 / 클라이언트 / 도구) */}
         <div data-section="meta" className={styles.metaBlock}>
           <p className={`t-content-label ${styles.metaLabel}`}>상세</p>
-          <div className={`t-content-meta ${styles.metaGrid}`}>
+          <div className={`t-content-meta ${styles.metaGrid} ${isMobile ? styles.metaGridMobile : ''}`}>
             <div className={styles.metaColumn}>
               <div className={styles.metaRow}>
                 <span className={styles.metaKey}>기간</span>

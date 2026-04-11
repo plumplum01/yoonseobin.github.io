@@ -107,6 +107,10 @@
   gap: var(--cc-meta-grid-gap, 24px);
 }
 
+.metaGridMobile {
+  flex-direction: column;
+}
+
 .metaColumn {
   display: flex;
   flex-direction: column;
