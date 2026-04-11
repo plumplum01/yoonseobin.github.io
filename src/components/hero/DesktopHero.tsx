@@ -79,6 +79,23 @@ export default function DesktopHero() {
 
     const handleClose = () => selectCard(null);
 
+    // ─── 썸네일 이미지 프리디코드 ───────────────────────────────────────────
+    // loading="eager"만으로는 브라우저가 뷰포트 바깥 카드 이미지를 fetch만 하고
+    // 실제 decode는 paint 직전에야 한다. 스크롤 경계에서 카드가 진입하는 순간
+    // decode 지연으로 빈 프레임이 보이는 현상을 방지하려고, 마운트 시점에
+    // 모든 썸네일을 강제로 decode 요청해 브라우저 decoded bitmap 캐시에 올려둔다.
+
+    useEffect(() => {
+        projects.forEach((project) => {
+            if (!project.thumbnail) return;
+            const img = new Image();
+            img.src = project.thumbnail;
+            img.decode().catch(() => {
+                /* decode 실패는 무시 — 최악의 경우 기존 동작과 동일 */
+            });
+        });
+    }, []);
+
     // ─── 슬라이더 초기화 및 리사이즈 대응 ────────────────────────────────────
 
     useEffect(() => {
