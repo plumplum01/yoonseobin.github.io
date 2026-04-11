@@ -43,8 +43,17 @@ export default function DesktopHero() {
     /** 카드 한 세트의 전체 너비 (px) — resize 시 재계산 */
     const oneSetWidthRef = useRef(0);
 
-    /** wheel 이벤트 리스너를 붙일 section 엘리먼트 참조 */
+    /** wheel 이벤트 리스너를 붙일 section 엘리먼트 참조 (Lenis wrapper) */
     const sectionRef = useRef<HTMLElement>(null);
+
+    /**
+     * Lenis의 content 대상으로 쓸 보이지 않는 wide element 참조.
+     * Lenis는 wrapper/content 차이로 scroll limit을 계산하므로 content가
+     * wrapper보다 커야 scroll 델타가 발생한다. 실제 카드 이동은 x MotionValue
+     * 기반이라 이 element 자체의 transform은 시각적으로 무의미 — scroll
+     * 소스 역할만 한다.
+     */
+    const lenisContentRef = useRef<HTMLDivElement>(null);
 
     // ─── 오버레이 상태 ────────────────────────────────────────────────────────
 
@@ -159,22 +168,22 @@ export default function DesktopHero() {
     // 그대로 유지되고, 셋 다 x에만 독립적으로 쓴다.
 
     useEffect(() => {
-        const el = sectionRef.current;
-        if (!el) return;
+        const wrapper = sectionRef.current;
+        const content = lenisContentRef.current;
+        if (!wrapper || !content) return;
 
         const lenis = new Lenis({
-            wrapper: el,
-            content: el,
+            wrapper,
+            content,
             orientation: "horizontal",
             gestureOrientation: "vertical",
             smoothWheel: true,
             wheelMultiplier: WHEEL_SENSITIVITY,
             lerp: 0.1,
-            naiveDimensions: true,
             autoRaf: true,
         });
 
-        let lastScroll = 0;
+        let lastScroll = lenis.scroll;
         const unsubscribe = lenis.on("scroll", (instance: Lenis) => {
             const delta = instance.scroll - lastScroll;
             lastScroll = instance.scroll;
@@ -192,6 +201,24 @@ export default function DesktopHero() {
 
     return (
         <section ref={sectionRef} className={styles.section}>
+            {/*
+              * Lenis 가상 scroll 범위 확보용 invisible content.
+              * 10M px 폭으로 lenis scroll limit을 충분히 잡아둔다. 카드 이동은
+              * x MotionValue가 담당하므로 이 element는 시각적 역할 없음.
+              */}
+            <div
+                ref={lenisContentRef}
+                aria-hidden
+                style={{
+                    position: "absolute",
+                    top: 0,
+                    left: 0,
+                    width: "10000000px",
+                    height: "1px",
+                    visibility: "hidden",
+                    pointerEvents: "none",
+                }}
+            />
             {/* 무한 슬라이더 */}
             <div className={styles.sliderViewport}>
                 <motion.div
