@@ -1,4 +1,9 @@
 
+## 프로젝트 규칙
+
+- 기능 추가 시 항상 브랜치를 먼저 생성한 뒤 작업한다
+- 브랜치를 닫을 때는 항상 기능 리뷰 및 테스트를 진행한 후 머지한다
+
 ## Skill routing
 
 When the user's request matches an available skill, ALWAYS invoke it using the Skill
