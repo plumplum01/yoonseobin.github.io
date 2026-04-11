@@ -22,6 +22,8 @@ import {
   DESKTOP_ITEM_GAP,
   AUTO_SCROLL_SPEED,
   ITEM_COUNT,
+  WHEEL_SENSITIVITY,
+  wheelDeltaToX,
   type SelectedCard,
 } from './constants'
 import styles from './DesktopHero.module.css'
@@ -34,6 +36,9 @@ export default function DesktopHero() {
 
   /** 카드 한 세트의 전체 너비 (px) — resize 시 재계산 */
   const oneSetWidthRef = useRef(0)
+
+  /** wheel 이벤트 리스너를 붙일 section 엘리먼트 참조 */
+  const sectionRef = useRef<HTMLElement>(null)
 
   /** 드래그 중 여부 — 자동 스크롤 일시 정지에 사용 */
   const isDragging = useRef(false)
@@ -116,10 +121,26 @@ export default function DesktopHero() {
     else unlock()
   }, [selectedCard, lock, unlock])
 
+  // ─── 휠 → 가로 이동 연결 ────────────────────────────────────────────────
+  // section 위에서 세로 휠/트랙패드 입력을 가로 x 이동으로 변환한다.
+  // preventDefault()로 페이지 세로 스크롤을 차단하려면 { passive: false } 필수.
+  // 기존 auto-scroll, drag, 오버레이 로직과 커플링 없음 — 오직 x에만 쓴다.
+
+  useEffect(() => {
+    const el = sectionRef.current
+    if (!el) return
+    const onWheel = (e: WheelEvent) => {
+      e.preventDefault()
+      x.set(x.get() + wheelDeltaToX(e.deltaY, WHEEL_SENSITIVITY))
+    }
+    el.addEventListener('wheel', onWheel, { passive: false })
+    return () => el.removeEventListener('wheel', onWheel)
+  }, [x])
+
   // ─── 렌더 ─────────────────────────────────────────────────────────────────
 
   return (
-    <section className={styles.section}>
+    <section ref={sectionRef} className={styles.section}>
       {/* 무한 드래그 슬라이더 */}
       <div className={styles.sliderViewport}>
         <motion.div
