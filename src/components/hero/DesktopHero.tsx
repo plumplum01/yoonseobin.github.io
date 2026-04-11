@@ -27,9 +27,9 @@ import {
     DESKTOP_ITEMS,
     DESKTOP_ITEM_WIDTH_VW,
     DESKTOP_ITEM_GAP,
-    AUTO_SCROLL_SPEED,
     ITEM_COUNT,
     WHEEL_SENSITIVITY,
+    stepHeroFrame,
     type SelectedCard,
 } from "./constants";
 import styles from "./DesktopHero.module.css";
@@ -59,6 +59,15 @@ export default function DesktopHero() {
      * 결정되며, 넉넉한 10M px을 잡아 실사용 범위를 초과 걱정 없이 둔다.
      */
     const lenisContentRef = useRef<HTMLDivElement>(null);
+
+    /**
+     * Lenis 인스턴스 ref. 단일 RAF 루프에서 `lenis.raf(time)`으로 수동 tick
+     * 하기 위해 ref에 저장한다 (autoRaf: false).
+     */
+    const lenisRef = useRef<Lenis | null>(null);
+
+    /** Lenis가 마지막으로 관측한 scroll 값 — 매 프레임 delta 계산용 */
+    const lastLenisScrollRef = useRef(0);
 
     // ─── 오버레이 상태 ────────────────────────────────────────────────────────
 
@@ -121,23 +130,37 @@ export default function DesktopHero() {
         return () => window.removeEventListener("resize", init);
     }, [x]);
 
-    // ─── 무한 루프: 경계 도달 시 중간 세트로 순간이동 ────────────────────────
+    // ─── 단일 RAF 루프: Lenis tick → stepHeroFrame → x.set ────────────────
+    // 이전에는 두 개의 RAF가 병렬로 돌았다 (Lenis autoRaf + useAnimationFrame).
+    // 그리고 teleport는 x.on('change')에서 동기로 끼어들었다.
+    // 문제: 서로 다른 프레임 실행 + teleport가 delta 중간에 끼어듦.
+    //
+    // 해결: autoRaf 끄고 우리 RAF 한 개에서 순서대로 처리.
+    //   1) lenis.raf(time) — Lenis 내부 상태 진행
+    //   2) lenisDelta 읽기
+    //   3) stepHeroFrame(...) — delta + auto-scroll + 경계 wrap을 순수 함수로 계산
+    //   4) x.set(next) — 프레임당 한 번만 MotionValue에 커밋
+    //
+    // 계산 로직은 stepHeroFrame에 격리되어 단위 테스트로 검증된다.
+    // RAF 루프는 Lenis tick과 MotionValue I/O만 담당.
 
-    useEffect(() => {
-        return x.on("change", (latest) => {
-            const w = oneSetWidthRef.current;
-            if (!w) return;
-            if (latest <= -2 * w) x.set(latest + w);
-            else if (latest >= 0) x.set(latest - w);
-        });
-    }, [x]);
-
-    // ─── 자동 스크롤: 오버레이가 열리면 멈춤 ─────────────────────────────
-
-    useAnimationFrame(() => {
-        if (!selectedCardRef.current) {
-            x.set(x.get() - AUTO_SCROLL_SPEED);
+    useAnimationFrame((time) => {
+        const lenis = lenisRef.current;
+        let lenisDelta = 0;
+        if (lenis) {
+            lenis.raf(time);
+            const current = lenis.scroll;
+            lenisDelta = current - lastLenisScrollRef.current;
+            lastLenisScrollRef.current = current;
         }
+
+        const next = stepHeroFrame({
+            x: x.get(),
+            lenisDelta,
+            autoScrollEnabled: !selectedCardRef.current,
+            oneSetWidth: oneSetWidthRef.current,
+        });
+        x.set(next);
     });
 
     // ─── ESC 키로 오버레이 닫기 ───────────────────────────────────────────────
@@ -157,20 +180,18 @@ export default function DesktopHero() {
         else unlock();
     }, [selectedCard, lock, unlock]);
 
-    // ─── 휠 → 가로 이동 연결 (Lenis 스무딩) ────────────────────────────────
-    // Lenis 인스턴스가 hero section의 wheel 이벤트를 가로채 lerp 기반
-    // 부드러운 가상 스크롤로 변환한다. 가상 스크롤 델타(lenis.scroll의 프레임
-    // 간 변화량)를 x MotionValue에 가산하면 카드가 관성을 가진 채 움직인다.
+    // ─── Lenis 인스턴스 생성 (autoRaf: false) ──────────────────────────────
+    // Lenis는 hero section의 wheel 이벤트를 lerp 기반 가상 스크롤로 변환만
+    // 담당한다. RAF tick은 위의 단일 useAnimationFrame에서 수동으로 돌린다.
     //
     // - orientation: 'horizontal' + gestureOrientation: 'vertical'
     //   → 세로 휠 입력이 가로 가상 스크롤로 매핑
-    // - smoothWheel + lerp: 0.1 → 부드러운 감속
-    // - wheelMultiplier: WHEEL_SENSITIVITY → 기존 민감도 유지
-    // - naiveDimensions + content === wrapper → 실제 DOM 스크롤 없이 가상값만 사용
-    // - autoRaf → lenis가 RAF 루프 자체 운영
+    // - smoothWheel + lerp: 0.08 → 부드러운 감속
+    // - wheelMultiplier: WHEEL_SENSITIVITY → 튜닝된 민감도
+    // - autoRaf: false → 단일 RAF 루프에서 lenis.raf(time) 수동 호출
     //
-    // 기존 auto-scroll(useAnimationFrame)과 무한 루프 핸들러(x.on('change'))는
-    // 그대로 유지되고, 셋 다 x에만 독립적으로 쓴다.
+    // ref에 저장해 RAF 루프가 접근할 수 있게 한다. x는 의존성에 없어도
+    // RAF 루프가 closure로 접근하므로 재구독 필요 없음.
 
     useEffect(() => {
         const section = sectionRef.current;
@@ -187,22 +208,17 @@ export default function DesktopHero() {
             smoothWheel: true,
             wheelMultiplier: WHEEL_SENSITIVITY,
             lerp: 0.08,
-            autoRaf: true,
+            autoRaf: false,
         });
 
-        let lastScroll = lenis.scroll;
-        const unsubscribe = lenis.on("scroll", (instance: Lenis) => {
-            const delta = instance.scroll - lastScroll;
-            lastScroll = instance.scroll;
-            // lenis scroll이 증가하면 카드는 왼쪽으로 (x 감소)
-            x.set(x.get() - delta);
-        });
+        lenisRef.current = lenis;
+        lastLenisScrollRef.current = lenis.scroll;
 
         return () => {
-            unsubscribe();
             lenis.destroy();
+            lenisRef.current = null;
         };
-    }, [x]);
+    }, []);
 
     // ─── 렌더 ─────────────────────────────────────────────────────────────────
 

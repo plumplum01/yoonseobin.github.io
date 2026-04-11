@@ -44,29 +44,50 @@ export interface SelectedCard {
   bg: string
 }
 
-// ─── 휠 스크롤 → 가로 이동 변환 ────────────────────────────────────────────────
+// ─── 휠 민감도 ────────────────────────────────────────────────────────────────
 
 /**
- * 휠 deltaY 1px당 카드 가로 이동 px.
- * 값이 클수록 한 틱당 카드가 더 멀리 움직인다.
- * 튜닝 여지를 위해 상수로 노출.
+ * Lenis wheelMultiplier에 전달되는 민감도 상수.
+ * 값이 클수록 한 틱당 Lenis 가상 scroll이 더 많이 증가한다.
  */
 export const WHEEL_SENSITIVITY = 1.2
 
+// ─── 프레임 전이 함수 ────────────────────────────────────────────────────────
+
+/** stepHeroFrame 입력 */
+export interface HeroFrameInput {
+  /** 현재 x 좌표 (px, 음수) */
+  x: number
+  /** 이번 프레임 Lenis scroll 델타 — 양수면 카드가 왼쪽으로 */
+  lenisDelta: number
+  /** auto-scroll 활성 여부 (오버레이 닫힘 시 true) */
+  autoScrollEnabled: boolean
+  /** 카드 한 세트 전체 너비 — 0이면 아직 init 전 */
+  oneSetWidth: number
+}
+
 /**
- * 휠 이벤트의 deltaY를 카드 x 이동량으로 변환한다.
+ * 한 프레임의 x 좌표 전이 계산.
  *
- * 부호 규약: 스크롤 다운(deltaY > 0)이면 x가 감소(카드가 왼쪽으로 이동)하여
- * 새 카드가 오른쪽에서 들어온다. 기존 auto-scroll(`x -= AUTO_SCROLL_SPEED`)과
- * 동일한 방향이라 유휴 자동 스크롤과 일관된 흐름이 된다.
+ * 순수 함수. 입력을 받아 다음 x를 반환한다. 부수효과 없음.
  *
- * deltaY 또는 sensitivity가 0일 때 explicit early return으로 `-0` 회귀를 회피한다
- * (Vitest의 `.toBe`는 `Object.is`를 써서 -0과 0을 구분).
+ * 적용 순서:
+ *   1. next = x - lenisDelta         // lenis 휠 입력
+ *   2. autoScroll 활성 시 next -= AUTO_SCROLL_SPEED
+ *   3. 무한 루프 경계 체크 (oneSetWidth > 0일 때만)
+ *      - next <= -2w : next += w
+ *      - next >=  0  : next -= w
  *
- * 순수 함수라 단위 테스트 가능. 추후 lenis 통합 시에도 같은 계약을
- * 만족해야 한다.
+ * 경계 체크가 마지막에 한 번만 일어나도록 설계 — lenisDelta와 auto-scroll로
+ * 한 프레임에 경계를 넘어도 한 번의 wrap으로 교정된다.
  */
-export function wheelDeltaToX(deltaY: number, sensitivity: number): number {
-  if (deltaY === 0 || sensitivity === 0) return 0
-  return -deltaY * sensitivity
+export function stepHeroFrame(input: HeroFrameInput): number {
+  let next = input.x - input.lenisDelta
+  if (input.autoScrollEnabled) next -= AUTO_SCROLL_SPEED
+  const w = input.oneSetWidth
+  if (w > 0) {
+    if (next <= -2 * w) next += w
+    else if (next >= 0) next -= w
+  }
+  return next
 }
