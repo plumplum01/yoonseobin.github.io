@@ -1,3 +1,5 @@
+import { sortedEntries, findOrNull } from '../utils/projectUtils'
+
 export interface SceneVideo {
   src: string
   delay?: number
@@ -23,20 +25,14 @@ export interface Project {
   scenes?: Scene[]
 }
 
-function sorted(glob: Record<string, unknown>): string[] {
-  return Object.entries(glob)
-    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-    .map(([, v]) => v as string)
-}
-
-const wattImages = sorted(import.meta.glob('../assets/projects/watt-a-lot/*.webp', { eager: true, import: 'default' }))
-const groundsImages = sorted(import.meta.glob('../assets/projects/grounds/*.webp', { eager: true, import: 'default' }))
-const asterImages = sorted(import.meta.glob('../assets/projects/aster/*.webp', { eager: true, import: 'default' }))
-const catchtableImages = sorted(import.meta.glob('../assets/projects/catchtable/*.webp', { eager: true, import: 'default' }))
-const plugwayImages = sorted(import.meta.glob('../assets/projects/plugway/*.webp', { eager: true, import: 'default' }))
-const preLoanImages = sorted(import.meta.glob('../assets/projects/pre-loan-onboarding/*.webp', { eager: true, import: 'default' }))
-const earningsVote1Images = sorted(import.meta.glob('../assets/projects/earnings-vote-1/*.webp', { eager: true, import: 'default' }))
-const earningsVote2Images = sorted(import.meta.glob('../assets/projects/earnings-vote-2/*.webp', { eager: true, import: 'default' }))
+const wattImages = sortedEntries(import.meta.glob('../assets/projects/watt-a-lot/*.webp', { eager: true, import: 'default' }))
+const groundsImages = sortedEntries(import.meta.glob('../assets/projects/grounds/*.webp', { eager: true, import: 'default' }))
+const asterImages = sortedEntries(import.meta.glob('../assets/projects/aster/*.webp', { eager: true, import: 'default' }))
+const catchtableImages = sortedEntries(import.meta.glob('../assets/projects/catchtable/*.webp', { eager: true, import: 'default' }))
+const plugwayImages = sortedEntries(import.meta.glob('../assets/projects/plugway/*.webp', { eager: true, import: 'default' }))
+const preLoanImages = sortedEntries(import.meta.glob('../assets/projects/pre-loan-onboarding/*.webp', { eager: true, import: 'default' }))
+const earningsVote1Images = sortedEntries(import.meta.glob('../assets/projects/earnings-vote-1/*.webp', { eager: true, import: 'default' }))
+const earningsVote2Images = sortedEntries(import.meta.glob('../assets/projects/earnings-vote-2/*.webp', { eager: true, import: 'default' }))
 
 function loadScenes(glob: Record<string, unknown>): Scene[] {
   return Object.entries(glob)
@@ -51,12 +47,12 @@ const wattScenesRaw = loadScenes(import.meta.glob('../assets/projects/watt-a-lot
 const wattScenes: Scene[] = [
   {
     name: 'Main',
-    image: wattScenesRaw.find(s => s.name === 'Main')!.image,
+    image: findOrNull(wattScenesRaw, 'Main') ?? undefined,
     videos: [{ src: '/videos/와트어랏/Main.mp4' }],
   },
   {
     name: 'Question',
-    image: wattScenesRaw.find(s => s.name === 'Q')!.image,
+    image: findOrNull(wattScenesRaw, 'Q') ?? undefined,
     videos: [
       { src: '/videos/와트어랏/question.mp4' },
       { src: '/videos/와트어랏/question-focus.mp4', delay: 4000 },
@@ -64,7 +60,7 @@ const wattScenes: Scene[] = [
   },
   {
     name: 'Finish',
-    image: wattScenesRaw.find(s => s.name === 'Finish')!.image,
+    image: findOrNull(wattScenesRaw, 'Finish') ?? undefined,
     videos: [{ src: '/videos/와트어랏/finish.mp4' }],
   },
 ]
@@ -72,7 +68,7 @@ const groundsScenesRaw = loadScenes(import.meta.glob('../assets/projects/grounds
 const groundsScenes: Scene[] = [
   {
     name: 'Main',
-    image: groundsScenesRaw.find(s => s.name === 'Main')?.image,
+    image: findOrNull(groundsScenesRaw, 'Main') ?? undefined,
   },
   {
     name: 'GNB',
@@ -84,16 +80,16 @@ const groundsScenes: Scene[] = [
   },
   {
     name: 'Explore',
-    image: groundsScenesRaw.find(s => s.name === 'Explore')?.image,
+    image: findOrNull(groundsScenesRaw, 'Explore') ?? undefined,
     videos: [{ src: '/videos/그라운즈/Explore.mp4' }],
   },
   {
     name: 'PIP',
-    image: groundsScenesRaw.find(s => s.name === 'PIP')?.image,
+    image: findOrNull(groundsScenesRaw, 'PIP') ?? undefined,
   },
   {
     name: 'Shop List',
-    image: groundsScenesRaw.find(s => s.name === 'Shop List')?.image,
+    image: findOrNull(groundsScenesRaw, 'Shop List') ?? undefined,
   },
 ]
 const asterScenesRaw = loadScenes(import.meta.glob('../assets/projects/aster/full/*.webp', { eager: true, import: 'default' }))
