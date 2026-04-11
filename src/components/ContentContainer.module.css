@@ -185,7 +185,7 @@
 }
 
 .tabButtonDesktop { width: 120px; }
-.tabButtonMobile  { width: auto; }
+.tabButtonMobile  { width: auto; padding-inline: 12px; }
 
 .tabButtonActive {
   opacity: 1;
