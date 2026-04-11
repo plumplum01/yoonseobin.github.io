@@ -12,7 +12,8 @@
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useTheme } from '../../context/ThemeContext'
+import { useThemeStore } from '../../store/themeStore'
+import { useScrollLock } from '../../hooks/useScrollLock'
 import { type } from '../../styles/typography'
 import { colors, useColors } from '../../styles/colors'
 import { projects } from '../../data/projects'
@@ -20,11 +21,12 @@ import ContentContainer from '../ContentContainer'
 import { ITEMS } from './constants'
 
 export default function MobileHero() {
-  const { isDark } = useTheme()
+  const isDark = useThemeStore((s) => s.isDark)
   const c = useColors()
 
   /** 현재 열려 있는 카드 번호 (null이면 닫힌 상태) */
   const [selectedN, setSelectedN] = useState<number | null>(null)
+  const { lock, unlock } = useScrollLock()
 
   const handleClose = () => setSelectedN(null)
 
@@ -39,9 +41,9 @@ export default function MobileHero() {
   // ─── 오버레이 열릴 때 body 스크롤 잠금 ───────────────────────────────────
 
   useEffect(() => {
-    document.body.style.overflow = selectedN !== null ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [selectedN])
+    if (selectedN !== null) lock()
+    else unlock()
+  }, [selectedN, lock, unlock])
 
   // ─── 렌더 ─────────────────────────────────────────────────────────────────
 

@@ -12,3 +12,13 @@ export function findOrNull(
 ): string | null {
   return items.find(s => s.name === name)?.image ?? null
 }
+
+/** glob import 결과를 { name, image } Scene 배열로 변환한다 (숫자 순 정렬) */
+export function loadScenes(glob: Record<string, unknown>): { name: string; image: string }[] {
+  return Object.entries(glob)
+    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
+    .map(([path, v]) => {
+      const name = path.split('/').pop()?.replace('.webp', '') ?? ''
+      return { name, image: v as string }
+    })
+}

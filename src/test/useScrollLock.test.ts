@@ -63,4 +63,12 @@ describe('useScrollLock', () => {
 
     expect(document.body.style.overflow).toBe('')
   })
+
+  it('리렌더링 사이에 lock/unlock 레퍼런스가 동일하게 유지된다', () => {
+    const { result, rerender } = renderHook(() => useScrollLock())
+    const { lock: lockBefore, unlock: unlockBefore } = result.current
+    rerender()
+    expect(result.current.lock).toBe(lockBefore)
+    expect(result.current.unlock).toBe(unlockBefore)
+  })
 })

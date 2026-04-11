@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 
 let lockCount = 0
 
@@ -26,18 +26,19 @@ export function useScrollLock() {
     }
   }, [])
 
-  return {
-    lock() {
-      if (!locked.current) {
-        locked.current = true
-        applyLock()
-      }
-    },
-    unlock() {
-      if (locked.current) {
-        locked.current = false
-        releaseLock()
-      }
-    },
-  }
+  const lock = useCallback(() => {
+    if (!locked.current) {
+      locked.current = true
+      applyLock()
+    }
+  }, [])
+
+  const unlock = useCallback(() => {
+    if (locked.current) {
+      locked.current = false
+      releaseLock()
+    }
+  }, [])
+
+  return { lock, unlock }
 }
