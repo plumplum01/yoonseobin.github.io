@@ -43,15 +43,20 @@ export default function DesktopHero() {
     /** 카드 한 세트의 전체 너비 (px) — resize 시 재계산 */
     const oneSetWidthRef = useRef(0);
 
-    /** wheel 이벤트 리스너를 붙일 section 엘리먼트 참조 (Lenis wrapper) */
+    /** section 엘리먼트 참조 (Lenis eventsTarget 전용 — wheel 캡처) */
     const sectionRef = useRef<HTMLElement>(null);
 
     /**
-     * Lenis의 content 대상으로 쓸 보이지 않는 wide element 참조.
-     * Lenis는 wrapper/content 차이로 scroll limit을 계산하므로 content가
-     * wrapper보다 커야 scroll 델타가 발생한다. 실제 카드 이동은 x MotionValue
-     * 기반이라 이 element 자체의 transform은 시각적으로 무의미 — scroll
-     * 소스 역할만 한다.
+     * Lenis wrapper 전용 invisible element. Lenis가 이 element에 scroll/
+     * transform을 적용하지만 `visibility: hidden`이라 화면상 영향 없음.
+     * section 자체를 wrapper로 쓰면 푸터/오버레이까지 함께 움직이는
+     * 문제가 있어 별도 element로 격리.
+     */
+    const lenisWrapperRef = useRef<HTMLDivElement>(null);
+
+    /**
+     * Lenis content 대상 wide element. wrapper와의 폭 차이로 scroll limit이
+     * 결정되며, 넉넉한 10M px을 잡아 실사용 범위를 초과 걱정 없이 둔다.
      */
     const lenisContentRef = useRef<HTMLDivElement>(null);
 
@@ -168,13 +173,15 @@ export default function DesktopHero() {
     // 그대로 유지되고, 셋 다 x에만 독립적으로 쓴다.
 
     useEffect(() => {
-        const wrapper = sectionRef.current;
+        const section = sectionRef.current;
+        const wrapper = lenisWrapperRef.current;
         const content = lenisContentRef.current;
-        if (!wrapper || !content) return;
+        if (!section || !wrapper || !content) return;
 
         const lenis = new Lenis({
             wrapper,
             content,
+            eventsTarget: section,
             orientation: "horizontal",
             gestureOrientation: "vertical",
             smoothWheel: true,
@@ -202,23 +209,34 @@ export default function DesktopHero() {
     return (
         <section ref={sectionRef} className={styles.section}>
             {/*
-              * Lenis 가상 scroll 범위 확보용 invisible content.
-              * 10M px 폭으로 lenis scroll limit을 충분히 잡아둔다. 카드 이동은
-              * x MotionValue가 담당하므로 이 element는 시각적 역할 없음.
+              * Lenis 전용 invisible scroll 컨테이너.
+              * section 자체를 wrapper로 쓰면 Lenis가 section 전체에 scroll/
+              * transform을 적용해 푸터까지 함께 움직이는 문제가 있어 별도
+              * element로 격리. eventsTarget은 section이라 wheel 이벤트는
+              * section 위 어디에서든 캡처된다.
               */}
             <div
-                ref={lenisContentRef}
+                ref={lenisWrapperRef}
                 aria-hidden
                 style={{
                     position: "absolute",
                     top: 0,
                     left: 0,
-                    width: "10000000px",
+                    width: "1px",
                     height: "1px",
+                    overflow: "hidden",
                     visibility: "hidden",
                     pointerEvents: "none",
                 }}
-            />
+            >
+                <div
+                    ref={lenisContentRef}
+                    style={{
+                        width: "10000000px",
+                        height: "1px",
+                    }}
+                />
+            </div>
             {/* 무한 슬라이더 */}
             <div className={styles.sliderViewport}>
                 <motion.div
