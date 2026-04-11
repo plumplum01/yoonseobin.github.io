@@ -1,0 +1,39 @@
+.header {
+    position: absolute;
+    top: var(--nav-header-top);
+    left: 0;
+    right: 0;
+    height: var(--nav-header-height);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+}
+
+.name {
+    color: var(--nav-fg);
+    user-select: none;
+    cursor: pointer;
+    transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menuToggle {
+    --size: 44px;
+    position: absolute;
+    right: 6px;
+    background: none;
+    border: none;
+    color: var(--nav-fg);
+    cursor: pointer;
+    padding: 0;
+    display: grid;
+    place-items: center;
+    width: var(--size);
+    height: var(--size);
+    opacity: 0.9;
+    transition: color 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menuToggle > * {
+    grid-area: 1 / 1;
+}

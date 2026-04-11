@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
+import { X } from 'lucide-react'
 import type { Project, SceneVideo } from '../lib/projects'
 import site from '../data/site.json'
 import Toast from './Toast'
+import { useIsMobile } from '../hooks/useIsMobile'
 import styles from './ContentContainer.module.css'
+
+const ICON_SIZE = 16
 
 export type { Project }
 
@@ -34,7 +38,6 @@ function SceneVideoPlayer({ video }: { video: SceneVideo }) {
 interface Props {
   project: Project
   onClose: () => void
-  isMobile?: boolean
 }
 
 const fadeIn = {
@@ -44,7 +47,8 @@ const fadeIn = {
 
 type TabType = 'detail' | 'scene'
 
-export default function ContentContainer({ project, onClose, isMobile }: Props) {
+export default function ContentContainer({ project, onClose }: Props) {
+  const isMobile = useIsMobile()
   const hasScenes = project.scenes && project.scenes.length > 0
   const [activeTab, setActiveTab] = useState<TabType>('detail')
   const [activeScene, setActiveScene] = useState(0)
@@ -120,9 +124,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
 <motion.div {...fadeIn} className={styles.root}>
       {/* 닫기 버튼 */}
       <button onClick={onClose} className={styles.closeButton}>
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <path d="M1 1L11 11M11 1L1 11" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round"/>
-        </svg>
+        <X size={ICON_SIZE} />
       </button>
 
       {/* 썸네일 이미지 */}

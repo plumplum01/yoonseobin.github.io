@@ -27,71 +27,6 @@
     will-change: transform;
 }
 
-.card {
-    position: relative;
-    flex-shrink: 0;
-    display: flex;
-    flex-direction: column;
-    cursor: pointer;
-}
-
-.cardImage {
-    border-radius: 32px;
-    flex-shrink: 0;
-    overflow: hidden;
-    /*
-     * 각 카드 이미지를 독립 GPU 레이어로 승격.
-     * 부모 sliderTrack이 무한 루프 teleport로 큰 폭 translate 점프를 할 때
-     * Chrome/Blink compositor가 레이어를 invalidate & repaint하는 현상이 있었다.
-     * 자식을 미리 composited layer로 올려두면 부모 transform 변경 시
-     * repaint 없이 재합성만 일어나 경계 flash가 사라진다.
-     * Safari는 원래 이렇게 동작해서 해당 현상이 없었다.
-     */
-    transform: translateZ(0);
-    backface-visibility: hidden;
-    -webkit-backface-visibility: hidden;
-    will-change: transform;
-}
-
-.cardImage img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    user-select: none;
-    pointer-events: none;
-}
-
-.cardText {
-    padding-left: 4px;
-    padding-top: 14px;
-}
-
-.cardTitle {
-    color: var(--text-primary);
-    line-height: 1.375;
-}
-
-.cardSubtitle {
-    color: var(--text-secondary);
-    line-height: 1.375;
-}
-
-/* ─── Footer ──────────────────────────────────────────────────────── */
-
-.footer {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 53px;
-    padding-left: 32px;
-    padding-right: 32px;
-    color: var(--text-footer);
-}
-
 /* ─── 오버레이 ──────────────────────────────────────────────────────── */
 
 .backdrop {
@@ -149,10 +84,3 @@
     background-color: var(--nav-btn-hover);
 }
 
-.footer a,
-.footer span {
-    color: var(--text-footer);
-    text-decoration: none;
-    font-size: 0.8rem;
-    font-weight: 400;
-}

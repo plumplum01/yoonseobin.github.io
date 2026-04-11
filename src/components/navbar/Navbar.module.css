@@ -1,0 +1,61 @@
+/* ─── 배경 블러 오버레이 ─────────────────────────────────────────────── */
+
+.backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 20;
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    background-color: var(--backdrop-nav);
+    will-change: opacity;
+}
+
+/* ─── 네비게이션 컨테이너 ─────────────────────────────────────────────── */
+
+.nav {
+    position: fixed;
+    top: 40px;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    display: flex;
+    justify-content: center;
+    pointer-events: none;
+}
+
+.panel {
+    --outline-width: 0px;
+    --nav-fg: var(--nav-text);
+    --blur: 24px;
+    --nav-header-height: 47px;
+    --nav-header-top: 0px;
+    --nav-menu-top: calc(var(--nav-header-height) + 7px);
+    --shadow-opacity: 0;
+
+    pointer-events: auto;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(var(--blur));
+    -webkit-backdrop-filter: blur(var(--blur));
+    background-color: var(--nav-closed);
+    outline: var(--outline-width) solid var(--panel-inset-border);
+    box-shadow: 0 0 16px rgba(0, 0, 0, var(--shadow-opacity));
+    /* border-radius 는 framer-motion 이 동적으로 셋함 (panelAnimate). 여기서는
+       corner-shape 만 선언해 지원 브라우저에서 squircle 로 렌더. 미지원
+       브라우저는 기본 사분타원(round) 모서리로 폴백. */
+    corner-shape: squircle;
+    transition:
+        background-color 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        box-shadow 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+        outline-width 0.15s ease-out;
+}
+
+.panel:hover {
+    --outline-width: 3px;
+}
+
+.isOpen {
+    --nav-fg: var(--nav-text-open);
+    --shadow-opacity: 0.2;
+    background-color: var(--nav-open);
+}
