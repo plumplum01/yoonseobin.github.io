@@ -1,0 +1,120 @@
+.section {
+  min-height: 100vh;
+  text-align: left;
+  background-color: var(--bg-about);
+  width: 100vw;
+  margin-left: calc((100% - 100vw) / 2);
+}
+
+.container {
+  max-width: 466px;
+  margin-inline: auto;
+  padding-top: 200px;
+  padding-bottom: 80px;
+}
+
+.heading {
+  color: var(--text-heading);
+  margin-bottom: 24px;
+  font-weight: var(--fw-semibold);
+  line-height: 1.3;
+  white-space: pre-line;
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-bottom: 103px;
+}
+
+.introParagraph {
+  color: var(--text-primary);
+}
+
+.divider {
+  border: none;
+  border-top: 1px solid var(--divider);
+}
+
+.dividerIntro   { margin-bottom: 103px; }
+.dividerSection { margin-bottom: 72px; }
+.dividerLinks   { margin-bottom: 39px; }
+
+.sectionBlock {
+  margin-bottom: 72px;
+}
+
+.sectionTitle {
+  color: var(--text-heading);
+  margin-bottom: 20px;
+  font-weight: var(--fw-semibold);
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+}
+
+.listEducation { gap: 20px; }
+.listAwards    { gap: 24px; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+}
+
+.eduTitle {
+  color: var(--text-heading);
+}
+
+.eduDate {
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.awardBody {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.awardTitle {
+  color: var(--text-heading);
+}
+
+.awardDesc {
+  color: var(--text-primary);
+  white-space: pre-line;
+}
+
+.awardDate {
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.links {
+  display: flex;
+  gap: 7px;
+}
+
+.linkButton {
+  flex: 1;
+  height: 39px;
+  background-color: var(--btn-base);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  color: var(--white);
+  font-weight: var(--fw-regular);
+  transition: background-color 0.15s;
+  box-shadow: inset 0 0 0 0.5px var(--panel-inset-border);
+}
+
+.linkButton:hover {
+  background-color: var(--btn-hover);
+}

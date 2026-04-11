@@ -5,10 +5,12 @@
  * 카드를 추가하거나 레이아웃을 조정할 때 이 파일을 수정하세요.
  */
 
+import { projects } from '../../lib/projects'
+
 // ─── 카드 목록 ────────────────────────────────────────────────────────────────
 
-/** 표시할 프로젝트 카드 수 */
-export const ITEM_COUNT = 8
+/** 표시할 프로젝트 카드 수 — projects 배열 길이와 항상 동기화됨 */
+export const ITEM_COUNT = projects.length
 
 /** 1~ITEM_COUNT 숫자 배열 */
 export const ITEMS = Array.from({ length: ITEM_COUNT }, (_, i) => i + 1)
@@ -34,7 +36,7 @@ export const DESKTOP_ITEMS = [...ITEMS, ...ITEMS, ...ITEMS]
 
 /** 데스크탑에서 선택된 카드 정보 */
 export interface SelectedCard {
-  /** DESKTOP_ITEMS 배열 내 고유 인덱스 (0~23) */
+  /** DESKTOP_ITEMS 배열 내 고유 인덱스 (0 ~ ITEM_COUNT*3-1) */
   index: number
   /** 프로젝트 번호 (1~ITEM_COUNT) */
   n: number

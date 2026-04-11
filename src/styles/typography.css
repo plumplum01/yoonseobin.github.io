@@ -1,0 +1,104 @@
+/**
+ * 타이포그래피 유틸리티 클래스
+ *
+ * SCSS 믹스인 대신 글로벌 유틸리티 클래스로 텍스트 스타일을 재사용한다.
+ * 사용 예:
+ *   <p className="t-body">본문</p>
+ *   <h2 className="t-section-heading">제목</h2>
+ *
+ * 색상은 별도 클래스(또는 모듈 CSS)에서 지정하며, 이 파일은 크기·굵기·자간·행간만 담당한다.
+ */
+
+/* 섹션 헤딩 — "Education", "Awards" 등 */
+.t-section-heading {
+  font-size: var(--fs-xl);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-heading);
+}
+
+/* About 본문 단락 */
+.t-body {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-loose);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* 리스트 항목 타이틀 (수상명, 학교명 등) */
+.t-list-title {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
+}
+
+/* 리스트 항목 보조 텍스트 (날짜 등) */
+.t-list-detail {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-tight);
+  line-height: var(--lh-tight);
+}
+
+/* 네비게이션 및 버튼 레이블 */
+.t-nav {
+  font-size: var(--fs-nav);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-nav);
+  line-height: var(--lh-none);
+}
+
+/* 카드 타이틀 (슬라이더 카드) */
+.t-card-title {
+  font-size: var(--fs-nav);
+  font-weight: var(--fw-semibold);
+  letter-spacing: var(--tracking-card);
+}
+
+/* 카드 서브타이틀 (슬라이더 카드) */
+.t-card-subtitle {
+  font-size: var(--fs-nav);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-card);
+}
+
+/* 콘텐츠 패널 — 프로젝트 제목 */
+.t-content-title {
+  font-size: var(--fs-xxl);
+  font-weight: var(--fw-semibold);
+}
+
+/* 콘텐츠 패널 — 섹션 레이블 ("상세", "설명") */
+.t-content-label {
+  font-size: var(--fs-lg);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-base);
+}
+
+/* 콘텐츠 패널 — 메타 정보 (기간, 역할 등) */
+.t-content-meta {
+  font-size: var(--fs-sm);
+  font-weight: var(--fw-medium);
+  line-height: var(--lh-base);
+}
+
+/* 콘텐츠 패널 — 프로젝트 설명문 */
+.t-content-body {
+  font-size: var(--fs-lg);
+  line-height: var(--lh-body);
+  letter-spacing: var(--tracking-detail);
+}
+
+/* 푸터 / 하단 소형 텍스트 */
+.t-footer {
+  font-size: var(--fs-md);
+  font-weight: var(--fw-medium);
+  letter-spacing: var(--tracking-tight);
+}
+
+/* 캡션 — 크레딧, 부가 텍스트 */
+.t-caption {
+  font-size: var(--fs-xs);
+  letter-spacing: var(--tracking-caption);
+  line-height: var(--lh-none);
+}
