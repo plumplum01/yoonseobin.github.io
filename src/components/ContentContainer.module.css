@@ -70,17 +70,17 @@
 /* ─── 인포 영역 ──────────────────────────────────────────────────────── */
 
 .info {
-  padding-top: 24px;
+  padding-top: var(--cc-info-pt, 16px);
 }
 
-.infoDesktop { padding-left: 51px; }
-.infoMobile  { padding-left: 16px; }
+.infoDesktop { padding-left: var(--cc-info-pl, 54px); }
+.infoMobile  { padding-left: var(--cc-info-pl-mobile, 16px); }
 
 .titleBlock {
   display: flex;
   flex-direction: column;
   line-height: 1.4;
-  padding-bottom: 45px;
+  padding-bottom: var(--cc-title-pb, 40px);
 }
 
 .title {
@@ -94,8 +94,8 @@
 .metaBlock {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding-bottom: 79px;
+  gap: var(--cc-meta-gap, 12px);
+  padding-bottom: var(--cc-meta-pb, 40px);
 }
 
 .metaLabel {
@@ -104,18 +104,23 @@
 
 .metaGrid {
   display: flex;
-  gap: 12px;
+  gap: var(--cc-meta-grid-gap, 24px);
+}
+
+.metaGridMobile {
+  flex-direction: column;
+  gap: var(--cc-meta-col-gap, 8px);
 }
 
 .metaColumn {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--cc-meta-col-gap, 8px);
 }
 
 .metaRow {
   display: flex;
-  gap: 8px;
+  gap: var(--cc-meta-row-gap, 8px);
 }
 
 .metaKey {
@@ -131,8 +136,8 @@
 .descriptionBlock {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  padding-bottom: 100px;
+  gap: var(--cc-desc-gap, 12px);
+  padding-bottom: var(--cc-desc-pb, 100px);
 }
 
 .descriptionLabel {
@@ -145,11 +150,11 @@
 }
 
 .descriptionBodyDesktop { width: 438px; }
-.descriptionBodyMobile  { width: auto; padding-right: 16px; }
+.descriptionBodyMobile  { width: auto; padding-right: 16px; font-size: 13px; }
 
 .tossNote {
   opacity: 0.5;
-  margin-top: 16px;
+  margin-top: var(--cc-toss-mt, 36px);
 }
 
 /* ─── 탭 ─────────────────────────────────────────────────────────────── */
@@ -180,7 +185,7 @@
 }
 
 .tabButtonDesktop { width: 120px; }
-.tabButtonMobile  { width: auto; }
+.tabButtonMobile  { width: auto; padding-inline: 12px; }
 
 .tabButtonActive {
   opacity: 1;

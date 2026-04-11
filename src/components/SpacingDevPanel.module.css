@@ -1,0 +1,122 @@
+.panel {
+  position: fixed;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 260px;
+  z-index: 9999;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+  font-size: 11px;
+  color: #ccc;
+  box-shadow: -4px 0 24px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.header {
+  padding: 10px 14px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #888;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  padding: 8px 0;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 6px 14px;
+}
+
+.row:hover {
+  background-color: #222;
+}
+
+.rowLabel {
+  font-size: 10px;
+  color: #777;
+  white-space: nowrap;
+}
+
+.rowInputs {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.slider {
+  flex: 1;
+  height: 2px;
+  accent-color: #6b8cff;
+  cursor: pointer;
+}
+
+.numberInput {
+  width: 38px;
+  background: #111;
+  border: 1px solid #333;
+  border-radius: 4px;
+  color: #e0e0e0;
+  font-size: 10px;
+  font-family: inherit;
+  text-align: right;
+  padding: 2px 4px;
+  -moz-appearance: textfield;
+}
+
+.numberInput::-webkit-inner-spin-button,
+.numberInput::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+.actions {
+  display: flex;
+  gap: 6px;
+  padding: 10px 14px;
+  border-top: 1px solid #2a2a2a;
+}
+
+.copyBtn,
+.resetBtn {
+  flex: 1;
+  padding: 6px 0;
+  border: none;
+  border-radius: 6px;
+  font-size: 10px;
+  font-family: inherit;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.15s;
+}
+
+.copyBtn {
+  background-color: #6b8cff;
+  color: #fff;
+}
+
+.copyBtn:hover {
+  opacity: 0.85;
+}
+
+.resetBtn {
+  background-color: #2a2a2a;
+  color: #aaa;
+}
+
+.resetBtn:hover {
+  background-color: #333;
+}

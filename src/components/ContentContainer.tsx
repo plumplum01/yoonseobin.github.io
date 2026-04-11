@@ -117,7 +117,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
 
   return (
     <>
-    <motion.div {...fadeIn} className={styles.root}>
+<motion.div {...fadeIn} className={styles.root}>
       {/* 닫기 버튼 */}
       <button onClick={onClose} className={styles.closeButton}>
         <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -153,7 +153,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
         {/* 상세 메타 정보 (기간 / 역할 / 클라이언트 / 도구) */}
         <div data-section="meta" className={styles.metaBlock}>
           <p className={`t-content-label ${styles.metaLabel}`}>상세</p>
-          <div className={`t-content-meta ${styles.metaGrid}`}>
+          <div className={`t-content-meta ${styles.metaGrid} ${isMobile ? styles.metaGridMobile : ''}`}>
             <div className={styles.metaColumn}>
               <div className={styles.metaRow}>
                 <span className={styles.metaKey}>기간</span>
