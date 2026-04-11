@@ -18,6 +18,7 @@ import {
     useMotionValue,
     useAnimationFrame,
 } from "framer-motion";
+import Lenis from "lenis";
 import { projects } from "../../lib/projects";
 import site from "../../data/site.json";
 import ContentContainer from "../ContentContainer";
@@ -29,7 +30,6 @@ import {
     AUTO_SCROLL_SPEED,
     ITEM_COUNT,
     WHEEL_SENSITIVITY,
-    wheelDeltaToX,
     type SelectedCard,
 } from "./constants";
 import styles from "./DesktopHero.module.css";
@@ -143,20 +143,49 @@ export default function DesktopHero() {
         else unlock();
     }, [selectedCard, lock, unlock]);
 
-    // ─── 휠 → 가로 이동 연결 ────────────────────────────────────────────────
-    // section 위에서 세로 휠/트랙패드 입력을 가로 x 이동으로 변환한다.
-    // preventDefault()로 페이지 세로 스크롤을 차단하려면 { passive: false } 필수.
-    // 기존 auto-scroll, 오버레이 로직과 커플링 없음 — 오직 x에만 쓴다.
+    // ─── 휠 → 가로 이동 연결 (Lenis 스무딩) ────────────────────────────────
+    // Lenis 인스턴스가 hero section의 wheel 이벤트를 가로채 lerp 기반
+    // 부드러운 가상 스크롤로 변환한다. 가상 스크롤 델타(lenis.scroll의 프레임
+    // 간 변화량)를 x MotionValue에 가산하면 카드가 관성을 가진 채 움직인다.
+    //
+    // - orientation: 'horizontal' + gestureOrientation: 'vertical'
+    //   → 세로 휠 입력이 가로 가상 스크롤로 매핑
+    // - smoothWheel + lerp: 0.1 → 부드러운 감속
+    // - wheelMultiplier: WHEEL_SENSITIVITY → 기존 민감도 유지
+    // - naiveDimensions + content === wrapper → 실제 DOM 스크롤 없이 가상값만 사용
+    // - autoRaf → lenis가 RAF 루프 자체 운영
+    //
+    // 기존 auto-scroll(useAnimationFrame)과 무한 루프 핸들러(x.on('change'))는
+    // 그대로 유지되고, 셋 다 x에만 독립적으로 쓴다.
 
     useEffect(() => {
         const el = sectionRef.current;
         if (!el) return;
-        const onWheel = (e: WheelEvent) => {
-            e.preventDefault();
-            x.set(x.get() + wheelDeltaToX(e.deltaY, WHEEL_SENSITIVITY));
+
+        const lenis = new Lenis({
+            wrapper: el,
+            content: el,
+            orientation: "horizontal",
+            gestureOrientation: "vertical",
+            smoothWheel: true,
+            wheelMultiplier: WHEEL_SENSITIVITY,
+            lerp: 0.1,
+            naiveDimensions: true,
+            autoRaf: true,
+        });
+
+        let lastScroll = 0;
+        const unsubscribe = lenis.on("scroll", (instance: Lenis) => {
+            const delta = instance.scroll - lastScroll;
+            lastScroll = instance.scroll;
+            // lenis scroll이 증가하면 카드는 왼쪽으로 (x 감소)
+            x.set(x.get() - delta);
+        });
+
+        return () => {
+            unsubscribe();
+            lenis.destroy();
         };
-        el.addEventListener("wheel", onWheel, { passive: false });
-        return () => el.removeEventListener("wheel", onWheel);
     }, [x]);
 
     // ─── 렌더 ─────────────────────────────────────────────────────────────────
