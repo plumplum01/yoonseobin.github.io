@@ -110,7 +110,7 @@
   height: 48px;
   border-radius: var(--radius-full);
   color: var(--on-dark-default);
-  background-color: var(--overlay-btn);
+  background-color: var(--nav-btn);
   transition: all 0.2s;
   border: none;
   cursor: pointer;
@@ -118,4 +118,5 @@
 
 .closeButton:hover {
   color: var(--on-dark);
+  background-color: var(--nav-btn-hover);
 }
