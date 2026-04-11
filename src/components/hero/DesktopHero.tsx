@@ -186,7 +186,7 @@ export default function DesktopHero() {
             gestureOrientation: "vertical",
             smoothWheel: true,
             wheelMultiplier: WHEEL_SENSITIVITY,
-            lerp: 0.1,
+            lerp: 0.08,
             autoRaf: true,
         });
 

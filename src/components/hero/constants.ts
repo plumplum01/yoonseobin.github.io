@@ -51,7 +51,7 @@ export interface SelectedCard {
  * 값이 클수록 한 틱당 카드가 더 멀리 움직인다.
  * 튜닝 여지를 위해 상수로 노출.
  */
-export const WHEEL_SENSITIVITY = 2.0
+export const WHEEL_SENSITIVITY = 1.2
 
 /**
  * 휠 이벤트의 deltaY를 카드 x 이동량으로 변환한다.
