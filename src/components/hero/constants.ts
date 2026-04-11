@@ -43,3 +43,51 @@ export interface SelectedCard {
   /** 카드 배경색 (CSS 변수 문자열) */
   bg: string
 }
+
+// ─── 휠 민감도 ────────────────────────────────────────────────────────────────
+
+/**
+ * Lenis wheelMultiplier에 전달되는 민감도 상수.
+ * 값이 클수록 한 틱당 Lenis 가상 scroll이 더 많이 증가한다.
+ */
+export const WHEEL_SENSITIVITY = 1.2
+
+// ─── 프레임 전이 함수 ────────────────────────────────────────────────────────
+
+/** stepHeroFrame 입력 */
+export interface HeroFrameInput {
+  /** 현재 x 좌표 (px, 음수) */
+  x: number
+  /** 이번 프레임 Lenis scroll 델타 — 양수면 카드가 왼쪽으로 */
+  lenisDelta: number
+  /** auto-scroll 활성 여부 (오버레이 닫힘 시 true) */
+  autoScrollEnabled: boolean
+  /** 카드 한 세트 전체 너비 — 0이면 아직 init 전 */
+  oneSetWidth: number
+}
+
+/**
+ * 한 프레임의 x 좌표 전이 계산.
+ *
+ * 순수 함수. 입력을 받아 다음 x를 반환한다. 부수효과 없음.
+ *
+ * 적용 순서:
+ *   1. next = x - lenisDelta         // lenis 휠 입력
+ *   2. autoScroll 활성 시 next -= AUTO_SCROLL_SPEED
+ *   3. 무한 루프 경계 체크 (oneSetWidth > 0일 때만)
+ *      - next <= -2w : next += w
+ *      - next >=  0  : next -= w
+ *
+ * 경계 체크가 마지막에 한 번만 일어나도록 설계 — lenisDelta와 auto-scroll로
+ * 한 프레임에 경계를 넘어도 한 번의 wrap으로 교정된다.
+ */
+export function stepHeroFrame(input: HeroFrameInput): number {
+  let next = input.x - input.lenisDelta
+  if (input.autoScrollEnabled) next -= AUTO_SCROLL_SPEED
+  const w = input.oneSetWidth
+  if (w > 0) {
+    if (next <= -2 * w) next += w
+    else if (next >= 0) next -= w
+  }
+  return next
+}

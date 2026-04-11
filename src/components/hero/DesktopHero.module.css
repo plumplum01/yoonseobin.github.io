@@ -1,137 +1,157 @@
 .section {
-  position: relative;
-  overflow: hidden;
-  text-align: left;
-  width: 100vw;
-  height: 100vh;
-  margin-left: calc((100% - 100vw) / 2);
-  background-color: var(--bg-page);
+    position: relative;
+    overflow: hidden;
+    text-align: left;
+    width: 100vw;
+    height: 100vh;
+    margin-left: calc((100% - 100vw) / 2);
+    background-color: var(--bg-page);
 }
 
 .sliderViewport {
-  position: absolute;
-  inset-inline: 0;
-  top: 0;
-  overflow: hidden;
-  height: 90vh;
+    position: absolute;
+    inset-inline: 0;
+    top: 0;
+    overflow: hidden;
+    height: 90vh;
 }
 
 .sliderTrack {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  display: flex;
-  align-items: flex-start;
-  user-select: none;
-  cursor: grab;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    user-select: none;
+    will-change: transform;
 }
 
 .card {
-  position: relative;
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
+    position: relative;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
 }
 
 .cardImage {
-  border-radius: 32px;
-  flex-shrink: 0;
-  overflow: hidden;
+    border-radius: 32px;
+    flex-shrink: 0;
+    overflow: hidden;
+    /*
+     * 각 카드 이미지를 독립 GPU 레이어로 승격.
+     * 부모 sliderTrack이 무한 루프 teleport로 큰 폭 translate 점프를 할 때
+     * Chrome/Blink compositor가 레이어를 invalidate & repaint하는 현상이 있었다.
+     * 자식을 미리 composited layer로 올려두면 부모 transform 변경 시
+     * repaint 없이 재합성만 일어나 경계 flash가 사라진다.
+     * Safari는 원래 이렇게 동작해서 해당 현상이 없었다.
+     */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+    -webkit-backface-visibility: hidden;
+    will-change: transform;
 }
 
 .cardImage img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  user-select: none;
-  pointer-events: none;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    user-select: none;
+    pointer-events: none;
 }
 
 .cardText {
-  padding-left: 4px;
-  padding-top: 14px;
+    padding-left: 4px;
+    padding-top: 14px;
 }
 
 .cardTitle {
-  color: var(--text-primary);
-  line-height: 1.375;
+    color: var(--text-primary);
+    line-height: 1.375;
 }
 
 .cardSubtitle {
-  color: var(--text-secondary);
-  line-height: 1.375;
+    color: var(--text-secondary);
+    line-height: 1.375;
 }
 
 /* ─── Footer ──────────────────────────────────────────────────────── */
 
 .footer {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  height: 53px;
-  padding-left: 32px;
-  padding-right: 32px;
-  color: var(--text-footer);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 53px;
+    padding-left: 32px;
+    padding-right: 32px;
+    color: var(--text-footer);
 }
 
 /* ─── 오버레이 ──────────────────────────────────────────────────────── */
 
 .backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: var(--backdrop-panel);
-  will-change: opacity;
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background-color: var(--backdrop-panel);
+    will-change: opacity;
 }
 
 .overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  overflow-y: auto;
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    overflow-y: auto;
 }
 
 .panel {
-  position: relative;
-  margin-inline: auto;
-  width: 100%;
-  max-width: 1120px;
-  margin-top: 100px;
-  border-radius: 40px; /* panel-specific 대형 반경 */
-  overflow: hidden;
-  background-color: var(--panel);
-  will-change: transform, opacity;
+    position: relative;
+    margin-inline: auto;
+    width: 100%;
+    max-width: 1120px;
+    margin-top: 100px;
+    border-radius: 40px; /* panel-specific 대형 반경 */
+    overflow: hidden;
+    background-color: var(--panel);
+    will-change: transform, opacity;
 }
 
 .closeWrapper {
-  display: flex;
-  justify-content: center;
-  padding-top: 60px;
-  padding-bottom: 100px;
+    display: flex;
+    justify-content: center;
+    padding-top: 60px;
+    padding-bottom: 100px;
 }
 
 .closeButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-full);
-  color: var(--on-dark-default);
-  background-color: var(--overlay-btn);
-  transition: all 0.2s;
-  border: none;
-  cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: var(--radius-full);
+    color: var(--on-dark-default);
+    background-color: var(--overlay-btn);
+    transition: all 0.2s;
+    border: none;
+    cursor: pointer;
 }
 
 .closeButton:hover {
-  color: var(--on-dark);
+    color: var(--on-dark);
+}
+
+.footer a,
+.footer span {
+    color: var(--text-footer);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 400;
 }
