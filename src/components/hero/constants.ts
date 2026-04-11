@@ -43,3 +43,26 @@ export interface SelectedCard {
   /** 카드 배경색 (CSS 변수 문자열) */
   bg: string
 }
+
+// ─── 휠 스크롤 → 가로 이동 변환 ────────────────────────────────────────────────
+
+/**
+ * 휠 deltaY 1px당 카드 가로 이동 px.
+ * 값이 클수록 한 틱당 카드가 더 멀리 움직인다.
+ * 튜닝 여지를 위해 상수로 노출.
+ */
+export const WHEEL_SENSITIVITY = 2.0
+
+/**
+ * 휠 이벤트의 deltaY를 카드 x 이동량으로 변환한다.
+ *
+ * 부호 규약: 스크롤 다운(deltaY > 0)이면 x가 감소(카드가 왼쪽으로 이동)하여
+ * 새 카드가 오른쪽에서 들어온다. 기존 auto-scroll(`x -= AUTO_SCROLL_SPEED`)과
+ * 동일한 방향이라 유휴 자동 스크롤과 일관된 흐름이 된다.
+ *
+ * 순수 함수라 단위 테스트 가능. 추후 lenis 통합 시에도 같은 계약을
+ * 만족해야 한다.
+ */
+export function wheelDeltaToX(deltaY: number, sensitivity: number): number {
+  return (-deltaY * sensitivity) || 0
+}
