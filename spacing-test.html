@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Spacing Test — ContentContainer</title>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --cc-info-pt: 24px;
+    --cc-info-pl: 51px;
+    --cc-title-pb: 45px;
+    --cc-meta-pb: 79px;
+    --cc-desc-pb: 100px;
+    --cc-meta-gap: 7px;
+    --cc-desc-gap: 7px;
+    --cc-meta-grid-gap: 12px;
+    --cc-toss-mt: 16px;
+
+    --panel: #1c1c1e;
+    --panel-text: rgba(255,255,255,0.9);
+    --panel-muted: rgba(255,255,255,0.35);
+    --panel-detail: rgba(255,255,255,0.55);
+    --on-dark: rgba(255,255,255,0.75);
+  }
+
+  body {
+    background: #111;
+    display: flex;
+    min-height: 100vh;
+    font-family: -apple-system, BlinkMacSystemFont, 'Pretendard', sans-serif;
+  }
+
+  /* ── 프리뷰 영역 ── */
+  .preview {
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 40px 20px 40px 20px;
+    overflow-y: auto;
+  }
+
+  .content-container {
+    width: 390px;
+    background: var(--panel);
+    border-radius: 16px;
+    overflow: hidden;
+  }
+
+  /* 썸네일 */
+  .thumbnail {
+    width: 100%;
+    aspect-ratio: 954 / 546;
+    background: #2a2a2e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: rgba(255,255,255,0.2);
+    font-size: 13px;
+  }
+
+  /* info 영역 — CSS 변수 사용 */
+  .info {
+    padding-top: var(--cc-info-pt);
+    padding-left: var(--cc-info-pl);
+  }
+
+  .title-block {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.4;
+    padding-bottom: var(--cc-title-pb);
+  }
+
+  .t-content-title {
+    font-size: 22px;
+    font-weight: 600;
+    color: var(--panel-text);
+  }
+
+  .t-content-label {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--panel-muted);
+    letter-spacing: 0.01em;
+  }
+
+  .t-content-meta {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--on-dark);
+  }
+
+  .t-content-body {
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--panel-text);
+  }
+
+  .meta-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cc-meta-gap);
+    padding-bottom: var(--cc-meta-pb);
+  }
+
+  .meta-grid {
+    display: flex;
+    gap: var(--cc-meta-grid-gap);
+    font-size: 11px;
+  }
+
+  .meta-column {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cc-meta-col-gap, 8px);
+  }
+
+  .meta-row {
+    display: flex;
+    gap: var(--cc-meta-row-gap, 8px);
+  }
+
+  .meta-key {
+    color: var(--on-dark);
+    white-space: nowrap;
+  }
+
+  .meta-value {
+    color: var(--panel-detail);
+    white-space: nowrap;
+  }
+
+  .description-block {
+    display: flex;
+    flex-direction: column;
+    gap: var(--cc-desc-gap);
+    padding-bottom: var(--cc-desc-pb);
+  }
+
+  .description-body {
+    width: 300px;
+    color: var(--panel-text);
+  }
+
+  .toss-note {
+    opacity: 0.5;
+    margin-top: var(--cc-toss-mt);
+    width: 300px;
+  }
+
+  /* ── 컨트롤 패널 ── */
+  .panel {
+    position: sticky;
+    top: 0;
+    align-self: flex-start;
+    width: 260px;
+    min-width: 260px;
+    height: 100vh;
+    overflow-y: auto;
+    background: #1a1a1a;
+    border-left: 1px solid #2a2a2a;
+    font-family: ui-monospace, 'SF Mono', Menlo, monospace;
+    font-size: 11px;
+    color: #ccc;
+  }
+
+  .panel-header {
+    padding: 14px 16px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: #888;
+    border-bottom: 1px solid #2a2a2a;
+    position: sticky;
+    top: 0;
+    background: #1a1a1a;
+    z-index: 1;
+  }
+
+  .controls {
+    padding: 8px 0;
+  }
+
+  .row {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: 8px 16px;
+    transition: background 0.1s;
+  }
+
+  .row:hover { background: #222; }
+
+  .row-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .row-label {
+    font-size: 10px;
+    color: #aaa;
+  }
+
+  .row-var {
+    font-size: 9px;
+    color: #555;
+    font-family: inherit;
+  }
+
+  .row-inputs {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .slider {
+    flex: 1;
+    height: 3px;
+    accent-color: #6b8cff;
+    cursor: pointer;
+    appearance: auto;
+  }
+
+  .num-input {
+    width: 38px;
+    background: #111;
+    border: 1px solid #333;
+    border-radius: 4px;
+    color: #e0e0e0;
+    font-size: 10px;
+    font-family: inherit;
+    text-align: right;
+    padding: 3px 5px;
+    -moz-appearance: textfield;
+  }
+
+  .num-input::-webkit-inner-spin-button,
+  .num-input::-webkit-outer-spin-button { -webkit-appearance: none; }
+
+  .divider {
+    border: none;
+    border-top: 1px solid #2a2a2a;
+    margin: 4px 0;
+  }
+
+  .actions {
+    display: flex;
+    gap: 6px;
+    padding: 10px 16px 16px;
+  }
+
+  .btn {
+    flex: 1;
+    padding: 7px 0;
+    border: none;
+    border-radius: 7px;
+    font-size: 10px;
+    font-family: inherit;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.15s;
+  }
+
+  .btn-copy {
+    background: #6b8cff;
+    color: #fff;
+  }
+
+  .btn-copy:hover { opacity: 0.85; }
+
+  .btn-reset {
+    background: #2a2a2a;
+    color: #aaa;
+  }
+
+  .btn-reset:hover { background: #333; }
+
+  .copy-toast {
+    display: none;
+    position: fixed;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #6b8cff;
+    color: #fff;
+    font-family: ui-monospace, monospace;
+    font-size: 12px;
+    padding: 8px 16px;
+    border-radius: 8px;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  .copy-toast.show { display: block; }
+</style>
+</head>
+<body>
+
+<!-- 프리뷰 -->
+<div class="preview">
+  <div class="content-container">
+    <div class="thumbnail">썸네일 영역 (954×546)</div>
+
+    <div class="info">
+      <!-- 제목 -->
+      <div class="title-block">
+        <p class="t-content-title">어닝콜 이후 주가 투표하기 (2)</p>
+        <p class="t-content-label">Earnings Reaction Voting</p>
+      </div>
+
+      <!-- 상세 메타 -->
+      <div class="meta-block">
+        <p class="t-content-label">상세</p>
+        <div class="meta-grid t-content-meta">
+          <div class="meta-column">
+            <div class="meta-row">
+              <span class="meta-key">기간</span>
+              <span class="meta-value">2025년 9월 – 10월</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">역할</span>
+              <span class="meta-value">UI/UX Designer</span>
+            </div>
+          </div>
+          <div class="meta-column">
+            <div class="meta-row">
+              <span class="meta-key">클라이언트</span>
+              <span class="meta-value">TOSS 인터랙션 디자인 캠프</span>
+            </div>
+            <div class="meta-row">
+              <span class="meta-key">사용 도구</span>
+              <span class="meta-value">Figma</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 설명 -->
+      <div class="description-block">
+        <p class="t-content-label">설명</p>
+        <p class="t-content-body description-body">
+          어닝콜 직후, 상승·하락 포인트 개수를 먼저 보여줘 빠른 판단을 유도합니다. 빠른 참여를 이끌면서도 어닝콜 내용이 자연스럽게 읽히도록 설계했습니다.
+        </p>
+        <!-- tossNote -->
+        <p class="t-content-body description-body toss-note">
+          토스 인터랙션 디자인 캠프에서 지속적인 UI/모션 피드백을 받아가며 작업했습니다.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 컨트롤 패널 -->
+<div class="panel">
+  <div class="panel-header">Spacing Dev</div>
+  <div class="controls" id="controls"></div>
+  <div class="actions">
+    <button class="btn btn-copy" onclick="copyCSS()">Copy CSS</button>
+    <button class="btn btn-reset" onclick="resetAll()">Reset</button>
+  </div>
+</div>
+
+<div class="copy-toast" id="toast">Copied!</div>
+
+<script>
+const CONFIGS = [
+  { variable: '--cc-info-pt',       label: 'info 상단 패딩',  defaultValue: 24,  min: 0, max: 80  },
+  { variable: '--cc-info-pl',       label: 'info 좌측 패딩',  defaultValue: 51,  min: 0, max: 100 },
+  { variable: '--cc-title-pb',      label: '제목↔상세 간격',  defaultValue: 45,  min: 0, max: 120 },
+  { variable: '--cc-meta-pb',       label: '상세↔설명 간격',  defaultValue: 79,  min: 0, max: 160 },
+  { variable: '--cc-desc-pb',       label: '설명↔탭 간격',    defaultValue: 100, min: 0, max: 200 },
+  { variable: '--cc-meta-gap',      label: '상세 라벨 gap',   defaultValue: 7,   min: 0, max: 30  },
+  { variable: '--cc-desc-gap',      label: '설명 라벨 gap',   defaultValue: 7,   min: 0, max: 30  },
+  { variable: '--cc-meta-grid-gap', label: '메타 컬럼 gap',   defaultValue: 12,  min: 0, max: 60  },
+  { variable: '--cc-toss-mt',       label: 'tossNote margin', defaultValue: 16,  min: 0, max: 60  },
+]
+
+const values = {}
+CONFIGS.forEach(c => { values[c.variable] = c.defaultValue })
+
+function buildControls() {
+  const container = document.getElementById('controls')
+  CONFIGS.forEach(({ variable, label, defaultValue, min, max }) => {
+    const row = document.createElement('div')
+    row.className = 'row'
+    row.innerHTML = `
+      <div class="row-top">
+        <span class="row-label">${label}</span>
+        <span class="row-var">${variable}</span>
+      </div>
+      <div class="row-inputs">
+        <input type="range" class="slider" min="${min}" max="${max}" value="${defaultValue}"
+          oninput="update('${variable}', this.value)"
+          data-var="${variable}">
+        <input type="number" class="num-input" min="${min}" max="${max}" value="${defaultValue}"
+          oninput="update('${variable}', this.value)"
+          data-num="${variable}">
+      </div>
+    `
+    container.appendChild(row)
+  })
+}
+
+function update(variable, val) {
+  const v = Number(val)
+  values[variable] = v
+  document.documentElement.style.setProperty(variable, v + 'px')
+  // sync slider ↔ number
+  const slider = document.querySelector(`[data-var="${variable}"]`)
+  const num    = document.querySelector(`[data-num="${variable}"]`)
+  if (slider) slider.value = v
+  if (num)    num.value    = v
+}
+
+function resetAll() {
+  CONFIGS.forEach(({ variable, defaultValue }) => {
+    update(variable, defaultValue)
+  })
+}
+
+function copyCSS() {
+  const lines = CONFIGS.map(c => `  ${c.variable}: ${values[c.variable]}px;`).join('\n')
+  navigator.clipboard.writeText(lines).then(() => {
+    const toast = document.getElementById('toast')
+    toast.classList.add('show')
+    setTimeout(() => toast.classList.remove('show'), 1800)
+  })
+}
+
+buildControls()
+</script>
+</body>
+</html>

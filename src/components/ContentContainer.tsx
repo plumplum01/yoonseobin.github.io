@@ -5,6 +5,7 @@ import type { Project, SceneVideo } from '../lib/projects'
 import site from '../data/site.json'
 import Toast from './Toast'
 import styles from './ContentContainer.module.css'
+import SpacingDevPanel from './SpacingDevPanel'
 
 export type { Project }
 
@@ -117,6 +118,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
 
   return (
     <>
+    {import.meta.env.DEV && <SpacingDevPanel />}
     <motion.div {...fadeIn} className={styles.root}>
       {/* 닫기 버튼 */}
       <button onClick={onClose} className={styles.closeButton}>
