@@ -4,20 +4,24 @@
  * md(768px) 미만에서 표시되는 모바일 메인 화면입니다.
  *
  * 구성:
- * - 상단 이름/이메일
  * - 프로젝트 카드 세로 목록
+ * - 하단 이름/이메일 (Footer)
  * - 콘텐츠 오버레이: 카드를 탭하면 블러 배경 위로 상세 패널이 열립니다.
  */
 
 import { useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
+import { X } from 'lucide-react'
 import { useScrollLock } from '../../hooks/useScrollLock'
 import { projects } from '../../lib/projects'
-import site from '../../data/site.json'
 import ContentContainer from '../ContentContainer'
+import Footer from '../Footer'
+import MobileCard from '../card/MobileCard'
 import { ITEMS } from './constants'
 import styles from './MobileHero.module.css'
+
+const ICON_SIZE = 16
 
 export default function MobileHero() {
   /** 현재 열려 있는 카드 번호 (null이면 닫힌 상태) */
@@ -45,47 +49,15 @@ export default function MobileHero() {
 
   return (
     <section className={styles.section}>
-      {/* 상단 이름/이메일 */}
-      <div className={`t-footer ${styles.header}`}>
-        <span>{site.nameDisplay}</span>
-        <span>{site.email}</span>
-      </div>
-
       {/* 프로젝트 카드 목록 */}
       <div className={styles.cardList}>
-        {ITEMS.map((n) => {
-          const project = projects[(n - 1) % projects.length]
-          return (
-            <div
-              key={n}
-              className={styles.card}
-              onClick={() => setSelectedN(n)}
-            >
-              {/* 카드 이미지 */}
-              <div className={styles.cardImage}>
-                {project.thumbnail && (
-                  <img
-                    src={project.thumbnail}
-                    alt={project.title}
-                    loading="lazy"
-                    draggable={false}
-                  />
-                )}
-              </div>
-
-              {/* 카드 텍스트 */}
-              <div className={styles.cardText}>
-                <p className={`t-card-title ${styles.cardTitle}`}>
-                  {project.title}
-                </p>
-                <p className={`t-card-subtitle ${styles.cardSubtitle}`}>
-                  {project.subtitle}
-                </p>
-              </div>
-            </div>
-          )
-        })}
+        {ITEMS.map((n) => (
+          <MobileCard key={n} n={n} onSelect={setSelectedN} />
+        ))}
       </div>
+
+      {/* 하단 이름/이메일 */}
+      <Footer variant="mobile" />
 
       <div className={styles.spacer} />
 
@@ -120,7 +92,6 @@ export default function MobileHero() {
                   <ContentContainer
                     project={projects[(selectedN - 1) % projects.length]}
                     onClose={handleClose}
-                    isMobile
                   />
                 </motion.div>
 
@@ -130,9 +101,7 @@ export default function MobileHero() {
                     className={styles.closeButton}
                     onClick={(e) => { e.stopPropagation(); handleClose() }}
                   >
-                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                      <path d="M18 6L6 18M6 6l12 12" />
-                    </svg>
+                    <X size={ICON_SIZE} />
                   </button>
                 </div>
               </motion.div>

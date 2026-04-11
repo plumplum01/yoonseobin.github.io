@@ -1,0 +1,15 @@
+.root {
+    --size: 44px;
+    width: var(--size);
+    height: var(--size);
+    background: none;
+    border: none;
+    color: var(--on-dark-default);
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-bottom: 2px;
+}

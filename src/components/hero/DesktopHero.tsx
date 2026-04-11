@@ -19,10 +19,14 @@ import {
     useAnimationFrame,
 } from "framer-motion";
 import Lenis from "lenis";
+import { X } from "lucide-react";
 import { projects } from "../../lib/projects";
-import site from "../../data/site.json";
 import ContentContainer from "../ContentContainer";
+import Footer from "../Footer";
+import DesktopCard from "../card/DesktopCard";
 import { useScrollLock } from "../../hooks/useScrollLock";
+
+const ICON_SIZE = 16;
 import {
     DESKTOP_ITEMS,
     DESKTOP_ITEM_WIDTH_VW,
@@ -259,83 +263,19 @@ export default function DesktopHero() {
                     style={{ x, gap: DESKTOP_ITEM_GAP }}
                     className={styles.sliderTrack}
                 >
-                    {DESKTOP_ITEMS.map((n, i) => {
-                        const isEven = n % 2 === 0;
-                        const bg = isEven
-                            ? "var(--card-even)"
-                            : "var(--card-odd)";
-
-                        return (
-                            <div
-                                key={i}
-                                className={styles.card}
-                                style={{
-                                    width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
-                                    marginTop: isEven ? "17.7vh" : "30.2vh",
-                                }}
-                                onClick={() =>
-                                    selectCard({ index: i, n, bg })
-                                }
-                            >
-                                {/* 카드 이미지 */}
-                                <div
-                                    className={styles.cardImage}
-                                    style={{
-                                        height: isEven ? "63.7vh" : "51.1vh",
-                                        backgroundColor: bg,
-                                    }}
-                                >
-                                    {projects[(n - 1) % projects.length]
-                                        .thumbnail && (
-                                        <img
-                                            src={
-                                                projects[
-                                                    (n - 1) % projects.length
-                                                ].thumbnail
-                                            }
-                                            alt={
-                                                projects[
-                                                    (n - 1) % projects.length
-                                                ].title
-                                            }
-                                            loading="eager"
-                                            decoding="async"
-                                            draggable={false}
-                                        />
-                                    )}
-                                </div>
-
-                                {/* 카드 텍스트 */}
-                                <div className={styles.cardText}>
-                                    <p
-                                        className={`t-card-title ${styles.cardTitle}`}
-                                    >
-                                        {
-                                            projects[(n - 1) % projects.length]
-                                                .title
-                                        }
-                                    </p>
-                                    <p
-                                        className={`t-card-subtitle ${styles.cardSubtitle}`}
-                                    >
-                                        {
-                                            projects[(n - 1) % projects.length]
-                                                .subtitle
-                                        }
-                                    </p>
-                                </div>
-                            </div>
-                        );
-                    })}
+                    {DESKTOP_ITEMS.map((n, i) => (
+                        <DesktopCard
+                            key={i}
+                            index={i}
+                            n={n}
+                            onSelect={selectCard}
+                        />
+                    ))}
                 </motion.div>
             </div>
 
             {/* 하단 Footer */}
-            <footer className={`t-footer ${styles.footer}`}>
-                <span>{site.nameDisplay}</span>
-                <span>ⓒ2026</span>
-                <a href={`mailto:${site.email}`}>{site.email}</a>
-            </footer>
+            <Footer variant="desktop" />
 
             {/* 콘텐츠 오버레이 — body에 Portal로 렌더링 (z-index 스택 충돌 방지) */}
             {createPortal(
@@ -401,17 +341,7 @@ export default function DesktopHero() {
                                             handleClose();
                                         }}
                                     >
-                                        <svg
-                                            width="14"
-                                            height="14"
-                                            viewBox="0 0 24 24"
-                                            fill="none"
-                                            stroke="currentColor"
-                                            strokeWidth="2.5"
-                                            strokeLinecap="round"
-                                        >
-                                            <path d="M18 6L6 18M6 6l12 12" />
-                                        </svg>
+                                        <X size={ICON_SIZE} />
                                     </button>
                                 </div>
                             </motion.div>

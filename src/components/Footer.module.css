@@ -1,0 +1,42 @@
+/* ─── Shared ──────────────────────────────────────────────────────── */
+.desktop a,
+.desktop span,
+.mobile a,
+.mobile span {
+    color: var(--text-footer);
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: 400;
+}
+
+/* ─── Desktop ─────────────────────────────────────────────────────── */
+
+.desktop {
+    display: flex;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 44px;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.desktop > div {
+    flex: 1;
+}
+
+.info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+
+/* ─── Mobile ──────────────────────────────────────────────────────── */
+
+.mobile {
+    display: flex;
+    flex-direction: column;
+    margin-top: 40px;
+    padding: 12px;
+}
