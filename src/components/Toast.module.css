@@ -1,0 +1,19 @@
+.wrapper {
+  position: fixed;
+  bottom: 56px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 150;
+  pointer-events: none;
+}
+
+.pill {
+  background: var(--nav-btn);
+  border: 1px solid var(--ghost-1);
+  border-radius: var(--radius-full);
+  padding: 14px 28px;
+  font-size: var(--fs-nav);
+  color: var(--on-dark-strong);
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+}
