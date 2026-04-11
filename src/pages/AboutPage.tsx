@@ -1,6 +1,6 @@
 import { type } from '../styles/typography'
 import { colors, useColors } from '../styles/colors'
-import { useTheme } from '../context/ThemeContext'
+import { useThemeStore } from '../store/themeStore'
 
 // ─── 콘텐츠 데이터 ─────────────────────────────────────────────────────────────
 // 항목 추가/수정은 여기서만 하면 됩니다.
@@ -34,7 +34,7 @@ const links = [
 
 export default function AboutPage() {
   const c = useColors()
-  const { isDark } = useTheme()
+  const isDark = useThemeStore((s) => s.isDark)
 
   return (
     <section

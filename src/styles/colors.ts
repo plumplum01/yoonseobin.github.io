@@ -15,7 +15,7 @@
  *   style={{ color: c.textPrimary, backgroundColor: c.pageBg }}
  */
 
-import { useTheme } from '../context/ThemeContext'
+import { useThemeStore } from '../store/themeStore'
 
 // ─── 고정 색상 (라이트/다크 무관) ──────────────────────────────────────────────
 
@@ -72,6 +72,6 @@ function makeColors(isDark: boolean) {
 
 /** 테마에 따라 달라지는 색상을 반환하는 훅 */
 export function useColors() {
-  const { isDark } = useTheme()
+  const isDark = useThemeStore((s) => s.isDark)
   return makeColors(isDark)
 }

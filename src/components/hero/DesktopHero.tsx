@@ -16,6 +16,7 @@ import { type } from '../../styles/typography'
 import { colors, useColors } from '../../styles/colors'
 import { projects } from '../../data/projects'
 import ContentContainer from '../ContentContainer'
+import { useScrollLock } from '../../hooks/useScrollLock'
 import {
   DESKTOP_ITEMS,
   DESKTOP_ITEM_WIDTH_VW,
@@ -46,6 +47,7 @@ export default function DesktopHero() {
 
   /** 현재 열려 있는 카드 정보 (null이면 닫힌 상태) */
   const [selectedCard, setSelectedCard] = useState<SelectedCard | null>(null)
+  const { lock, unlock } = useScrollLock()
 
   /**
    * ref로도 selectedCard를 추적합니다.
@@ -112,9 +114,9 @@ export default function DesktopHero() {
   // ─── 오버레이 열릴 때 body 스크롤 잠금 ───────────────────────────────────
 
   useEffect(() => {
-    document.body.style.overflow = selectedCard ? 'hidden' : ''
-    return () => { document.body.style.overflow = '' }
-  }, [selectedCard])
+    if (selectedCard) lock()
+    else unlock()
+  }, [selectedCard, lock, unlock])
 
   // ─── 렌더 ─────────────────────────────────────────────────────────────────
 
