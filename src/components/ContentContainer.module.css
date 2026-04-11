@@ -74,7 +74,7 @@
 }
 
 .infoDesktop { padding-left: var(--cc-info-pl, 54px); }
-.infoMobile  { padding-left: 16px; }
+.infoMobile  { padding-left: var(--cc-info-pl-mobile, 16px); }
 
 .titleBlock {
   display: flex;
