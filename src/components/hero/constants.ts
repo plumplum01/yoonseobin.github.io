@@ -60,9 +60,13 @@ export const WHEEL_SENSITIVITY = 2.0
  * 새 카드가 오른쪽에서 들어온다. 기존 auto-scroll(`x -= AUTO_SCROLL_SPEED`)과
  * 동일한 방향이라 유휴 자동 스크롤과 일관된 흐름이 된다.
  *
+ * deltaY 또는 sensitivity가 0일 때 explicit early return으로 `-0` 회귀를 회피한다
+ * (Vitest의 `.toBe`는 `Object.is`를 써서 -0과 0을 구분).
+ *
  * 순수 함수라 단위 테스트 가능. 추후 lenis 통합 시에도 같은 계약을
  * 만족해야 한다.
  */
 export function wheelDeltaToX(deltaY: number, sensitivity: number): number {
-  return (-deltaY * sensitivity) || 0
+  if (deltaY === 0 || sensitivity === 0) return 0
+  return -deltaY * sensitivity
 }
