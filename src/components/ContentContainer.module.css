@@ -150,7 +150,7 @@
 }
 
 .descriptionBodyDesktop { width: 438px; }
-.descriptionBodyMobile  { width: auto; padding-right: 16px; }
+.descriptionBodyMobile  { width: auto; padding-right: 16px; font-size: 13px; }
 
 .tossNote {
   opacity: 0.5;
