@@ -36,7 +36,7 @@ export const DESKTOP_ITEMS = [...ITEMS, ...ITEMS, ...ITEMS]
 
 /** 데스크탑에서 선택된 카드 정보 */
 export interface SelectedCard {
-  /** DESKTOP_ITEMS 배열 내 고유 인덱스 (0~23) */
+  /** DESKTOP_ITEMS 배열 내 고유 인덱스 (0 ~ ITEM_COUNT*3-1) */
   index: number
   /** 프로젝트 번호 (1~ITEM_COUNT) */
   n: number

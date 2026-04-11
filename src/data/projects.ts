@@ -68,7 +68,7 @@ const groundsScenesRaw = loadScenes(import.meta.glob('../assets/projects/grounds
 const groundsScenes: Scene[] = [
   {
     name: 'Main',
-    image: groundsScenesRaw.find(s => s.name === 'Main')?.image,
+    image: findOrNull(groundsScenesRaw, 'Main') ?? undefined,
   },
   {
     name: 'GNB',
@@ -80,16 +80,16 @@ const groundsScenes: Scene[] = [
   },
   {
     name: 'Explore',
-    image: groundsScenesRaw.find(s => s.name === 'Explore')?.image,
+    image: findOrNull(groundsScenesRaw, 'Explore') ?? undefined,
     videos: [{ src: '/videos/그라운즈/Explore.mp4' }],
   },
   {
     name: 'PIP',
-    image: groundsScenesRaw.find(s => s.name === 'PIP')?.image,
+    image: findOrNull(groundsScenesRaw, 'PIP') ?? undefined,
   },
   {
     name: 'Shop List',
-    image: groundsScenesRaw.find(s => s.name === 'Shop List')?.image,
+    image: findOrNull(groundsScenesRaw, 'Shop List') ?? undefined,
   },
 ]
 const asterScenesRaw = loadScenes(import.meta.glob('../assets/projects/aster/full/*.webp', { eager: true, import: 'default' }))
