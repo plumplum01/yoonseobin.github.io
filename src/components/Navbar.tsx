@@ -5,6 +5,7 @@ import { useThemeStore } from "../store/themeStore";
 import { useScrollLock } from "../hooks/useScrollLock";
 import { type } from "../styles/typography";
 import { colors, useColors } from "../styles/colors";
+import site from "../data/site.json";
 
 export default function Navbar() {
     const [isOpen, setIsOpen] = useState(false);
@@ -100,7 +101,7 @@ export default function Navbar() {
                                 cursor: "pointer",
                             }}
                         >
-                            Seobin Yoon
+                            {site.name}
                         </span>
 
                         {/* 메뉴 열기/닫기 버튼 */}
@@ -191,7 +192,7 @@ export default function Navbar() {
 
                                     {/* 이메일 링크 */}
                                     <a
-                                        href="mailto:plumplum01@naver.com"
+                                        href={`mailto:${site.email}`}
                                         className="bg-[#2c2c2c] hover:bg-[#3c3c3c] transition-colors duration-150"
                                         style={{
                                             ...type.nav,
@@ -230,7 +231,7 @@ export default function Navbar() {
                                             userSelect: "none",
                                         }}
                                     >
-                                        Vibe Coded in Claude Code
+                                        {site.credit}
                                     </span>
 
                                     {/* 다크/라이트 모드 토글 */}

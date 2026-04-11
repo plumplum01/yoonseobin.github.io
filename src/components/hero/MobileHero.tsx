@@ -16,7 +16,8 @@ import { useThemeStore } from '../../store/themeStore'
 import { useScrollLock } from '../../hooks/useScrollLock'
 import { type } from '../../styles/typography'
 import { colors, useColors } from '../../styles/colors'
-import { projects } from '../../data/projects'
+import { projects } from '../../lib/projects'
+import site from '../../data/site.json'
 import ContentContainer from '../ContentContainer'
 import { ITEMS } from './constants'
 
@@ -63,8 +64,8 @@ export default function MobileHero() {
           color: c.textFooter,
         }}
       >
-        <span>Seobin yoon</span>
-        <span>plumplum01@naver.com</span>
+        <span>{site.nameDisplay}</span>
+        <span>{site.email}</span>
       </div>
 
       {/* 프로젝트 카드 목록 */}

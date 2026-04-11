@@ -1,9 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
-import type { Project, SceneVideo } from '../data/projects'
+import type { Project, SceneVideo } from '../lib/projects'
 import { type as typography } from '../styles/typography'
 import { colors } from '../styles/colors'
+import site from '../data/site.json'
 import Toast from './Toast'
 
 export type { Project }
@@ -193,7 +194,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
           </p>
 
           {/* 토스 캠프 프로젝트 한정 안내 */}
-          {project.client === 'TOSS 인터랙션 디자인 캠프' && (
+          {project.client === site.tossCampClient && (
             <p
               style={{
                 ...typography.contentBody,
@@ -204,7 +205,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
                 marginTop: '16px',
               }}
             >
-              토스 인터랙션 디자인 캠프에서 지속적인 UI/모션 피드백을 받아가며 작업했습니다.
+              {site.tossCampNote}
             </p>
           )}
         </div>
@@ -387,7 +388,7 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
 
     {/* 이미지 힌트 토스트 */}
     {createPortal(
-      <Toast message="이미지를 클릭하면 크게 볼 수 있어요" visible={showToast} />,
+      <Toast message={site.imageHintToast} visible={showToast} />,
       document.body
     )}
 

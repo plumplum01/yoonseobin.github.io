@@ -14,7 +14,8 @@ import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
 import { type } from '../../styles/typography'
 import { colors, useColors } from '../../styles/colors'
-import { projects } from '../../data/projects'
+import { projects } from '../../lib/projects'
+import site from '../../data/site.json'
 import ContentContainer from '../ContentContainer'
 import { useScrollLock } from '../../hooks/useScrollLock'
 import {
@@ -208,8 +209,8 @@ export default function DesktopHero() {
         className="absolute bottom-0 left-0 right-0 flex items-center justify-between"
         style={{ height: '53px', paddingLeft: '32px', paddingRight: '32px', ...type.footer, color: c.textFooter }}
       >
-        <span>Seobin yoon</span>
-        <span>plumplum01@naver.com</span>
+        <span>{site.nameDisplay}</span>
+        <span>{site.email}</span>
       </div>
 
       {/* 콘텐츠 오버레이 — body에 Portal로 렌더링 (z-index 스택 충돌 방지) */}
