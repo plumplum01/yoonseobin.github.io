@@ -10,7 +10,7 @@ interface SpacingConfig {
 }
 
 const SPACING_CONFIGS: SpacingConfig[] = [
-  { variable: '--cc-info-pt',         label: 'info 상단 패딩',       defaultValue: 36,  min: 0, max: 80  },
+  { variable: '--cc-info-pt',         label: 'info 상단 패딩',       defaultValue: 18,  min: 0, max: 80  },
   { variable: '--cc-info-pl',         label: 'info 좌측 패딩',       defaultValue: 54,  min: 0, max: 100 },
   { variable: '--cc-info-pl-mobile',  label: 'info 좌측 패딩 (모바일)', defaultValue: 16, min: 0, max: 60  },
   { variable: '--cc-title-pb',        label: '제목↔상세 간격',       defaultValue: 40,  min: 0, max: 120 },

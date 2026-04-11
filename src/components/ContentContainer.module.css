@@ -70,7 +70,7 @@
 /* ─── 인포 영역 ──────────────────────────────────────────────────────── */
 
 .info {
-  padding-top: var(--cc-info-pt, 36px);
+  padding-top: var(--cc-info-pt, 18px);
 }
 
 .infoDesktop { padding-left: var(--cc-info-pl, 54px); }
