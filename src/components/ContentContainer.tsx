@@ -52,6 +52,17 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
   const [showToast, setShowToast] = useState(false)
   const observerRef = useRef<IntersectionObserver | null>(null)
 
+  const markLoaded = useCallback((el: HTMLImageElement | null) => {
+    if (!el) return
+    const frame = el.closest('[data-image-frame]') as HTMLElement | null
+    if (!frame) return
+    if (el.complete) {
+      frame.dataset.loaded = 'true'
+    } else {
+      el.addEventListener('load', () => { frame.dataset.loaded = 'true' }, { once: true })
+    }
+  }, [])
+
   const firstImageRef = useCallback((el: HTMLDivElement | null) => {
     if (observerRef.current) {
       observerRef.current.disconnect()
@@ -115,9 +126,15 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
       </button>
 
       {/* 썸네일 이미지 */}
-      <div data-section="thumbnail" className={styles.thumbnail}>
+      <div data-section="thumbnail" data-image-frame className={styles.thumbnail}>
         {project.thumbnail && (
-          <img src={project.thumbnail} alt={project.title} loading="lazy" />
+          <img
+            ref={markLoaded}
+            src={project.thumbnail}
+            alt={project.title}
+            loading="eager"
+            fetchPriority="high"
+          />
         )}
       </div>
 
@@ -230,14 +247,16 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
               <div
                 key={i}
                 ref={i === 0 ? firstImageRef : undefined}
+                data-image-frame
                 className={styles.imageFrame}
                 onClick={() => setLightboxIndex(i)}
               >
                 <img
+                  ref={markLoaded}
                   src={src}
                   alt={`${project.title} ${i + 2}`}
-                  loading={i < 3 ? 'eager' : 'lazy'}
-                  onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
+                  loading="eager"
+                  fetchPriority={i < 2 ? 'high' : 'auto'}
                 />
               </div>
             ))}
@@ -260,13 +279,15 @@ export default function ContentContainer({ project, onClose, isMobile }: Props) 
                 ))}
                 {project.scenes[activeScene].image && (
                   <div
+                    data-image-frame
                     className={styles.sceneImageFrame}
                     onClick={() => setLightboxIndex(activeScene)}
                   >
                     <img
+                      ref={markLoaded}
                       src={project.scenes[activeScene].image}
                       alt={`${project.title} - ${project.scenes[activeScene].name}`}
-                      onLoad={(e) => { e.currentTarget.style.opacity = '1' }}
+                      loading="eager"
                     />
                   </div>
                 )}
