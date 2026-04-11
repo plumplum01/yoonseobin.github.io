@@ -70,6 +70,10 @@
   /* ─── Panel 깊은 면 (씬 서브탭 컨테이너 등) ───────────────────────────── */
   --panel-sunken:     #191919;
 
+  /* ─── Skeleton 로딩 (라이트모드: 패널이 어두우므로 약간 밝은 shimmer) ─── */
+  --skeleton-base:    #1c1c1c;
+  --skeleton-shine:   #2e2e2e;
+
   /* ─── Brand 하이라이트 ────────────────────────────────────────────────── */
   --selection-bg:     #006FFF;
   --selection-fg:     #ffffff;
@@ -139,4 +143,8 @@
 
   /* Panel 인셋 보더 플립 */
   --panel-inset-border: rgba(255, 255, 255, 0.35);
+
+  /* Skeleton 로딩 (다크모드: 더 밝은 shimmer로 대비 강화) */
+  --skeleton-base:    #222222;
+  --skeleton-shine:   #383838;
 }
