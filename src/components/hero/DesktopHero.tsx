@@ -12,8 +12,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
-import { type } from '../../styles/typography'
-import { colors, useColors } from '../../styles/colors'
 import { projects } from '../../lib/projects'
 import site from '../../data/site.json'
 import ContentContainer from '../ContentContainer'
@@ -26,10 +24,9 @@ import {
   ITEM_COUNT,
   type SelectedCard,
 } from './constants'
+import styles from './DesktopHero.module.css'
 
 export default function DesktopHero() {
-  const c = useColors()
-
   // ─── 슬라이더 상태 ────────────────────────────────────────────────────────
 
   /** 슬라이더의 현재 X 위치 (framer-motion MotionValue) */
@@ -122,24 +119,16 @@ export default function DesktopHero() {
   // ─── 렌더 ─────────────────────────────────────────────────────────────────
 
   return (
-    <section
-      className="relative overflow-hidden text-left"
-      style={{
-        width: '100vw',
-        height: '100vh',
-        marginLeft: 'calc((100% - 100vw) / 2)',
-        backgroundColor: 'var(--bg)',
-      }}
-    >
+    <section className={styles.section}>
       {/* 무한 드래그 슬라이더 */}
-      <div className="absolute inset-x-0 top-0 overflow-hidden" style={{ height: '90vh' }}>
+      <div className={styles.sliderViewport}>
         <motion.div
           drag="x"
           dragConstraints={{ left: -999999, right: 999999 }}
           dragElastic={0}
           dragTransition={{ power: 0, timeConstant: 0 }}
-          style={{ x, cursor: 'grab', gap: DESKTOP_ITEM_GAP }}
-          className="absolute top-0 left-0 h-full flex items-start select-none"
+          style={{ x, gap: DESKTOP_ITEM_GAP }}
+          className={styles.sliderTrack}
           whileDrag={{ cursor: 'grabbing' }}
           onDragStart={() => {
             isDragging.current = true
@@ -158,11 +147,10 @@ export default function DesktopHero() {
             return (
               <div
                 key={i}
-                className="relative flex-shrink-0 flex flex-col"
+                className={styles.card}
                 style={{
                   width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
                   marginTop: isEven ? '17.7vh' : '30.2vh',
-                  cursor: 'pointer',
                 }}
                 onClick={() => {
                   if (!hasDragged.current) selectCard({ index: i, n, bg })
@@ -170,12 +158,10 @@ export default function DesktopHero() {
               >
                 {/* 카드 이미지 */}
                 <div
+                  className={styles.cardImage}
                   style={{
                     height: isEven ? '63.7vh' : '51.1vh',
                     backgroundColor: bg,
-                    borderRadius: '32px',
-                    flexShrink: 0,
-                    overflow: 'hidden',
                   }}
                 >
                   {projects[(n - 1) % projects.length].thumbnail && (
@@ -184,17 +170,16 @@ export default function DesktopHero() {
                       alt={projects[(n - 1) % projects.length].title}
                       loading="lazy"
                       draggable={false}
-                      className="w-full h-full object-cover select-none pointer-events-none"
                     />
                   )}
                 </div>
 
                 {/* 카드 텍스트 */}
-                <div style={{ paddingLeft: '4px', paddingTop: '14px' }}>
-                  <p className="leading-snug" style={{ ...type.cardTitle, color: c.textPrimary }}>
+                <div className={styles.cardText}>
+                  <p className={`t-card-title ${styles.cardTitle}`}>
                     {projects[(n - 1) % projects.length].title}
                   </p>
-                  <p className="leading-snug" style={{ ...type.cardSubtitle, color: c.textSecondary }}>
+                  <p className={`t-card-subtitle ${styles.cardSubtitle}`}>
                     {projects[(n - 1) % projects.length].subtitle}
                   </p>
                 </div>
@@ -205,10 +190,7 @@ export default function DesktopHero() {
       </div>
 
       {/* 하단 Footer */}
-      <div
-        className="absolute bottom-0 left-0 right-0 flex items-center justify-between"
-        style={{ height: '53px', paddingLeft: '32px', paddingRight: '32px', ...type.footer, color: c.textFooter }}
-      >
+      <div className={`t-footer ${styles.footer}`}>
         <span>{site.nameDisplay}</span>
         <span>{site.email}</span>
       </div>
@@ -218,17 +200,11 @@ export default function DesktopHero() {
         <>
           {/* 블러 배경 — 항상 DOM에 존재하여 GPU 레이어를 미리 확보, opacity만 전환 */}
           <motion.div
-            className="fixed inset-0 z-40"
+            className={styles.backdrop}
             initial={false}
             animate={{ opacity: selectedCard ? 1 : 0 }}
             transition={{ duration: 0.3 }}
-            style={{
-              backdropFilter: 'blur(8px)',
-              WebkitBackdropFilter: 'blur(8px)',
-              backgroundColor: colors.backdropPanel,
-              pointerEvents: selectedCard ? 'auto' : 'none',
-              willChange: 'opacity',
-            }}
+            style={{ pointerEvents: selectedCard ? 'auto' : 'none' }}
             onClick={handleClose}
           />
 
@@ -237,21 +213,14 @@ export default function DesktopHero() {
             {selectedCard !== null && (
               <motion.div
                 key="scroll-overlay"
-                className="fixed inset-0 z-50 overflow-y-auto"
+                className={styles.overlay}
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
                 exit={{ opacity: 0, y: -80, transition: { duration: 0.35, ease: [0.4, 0, 0.6, 1] } }}
                 onClick={handleClose}
               >
                 <motion.div
-                  className="relative mx-auto rounded-[40px] overflow-hidden"
-                  style={{
-                    width: '100%',
-                    maxWidth: 1120,
-                    marginTop: 100,
-                    backgroundColor: colors.panel,
-                    willChange: 'transform, opacity',
-                  }}
+                  className={styles.panel}
                   onClick={(e) => e.stopPropagation()}
                 >
                   <ContentContainer
@@ -261,13 +230,9 @@ export default function DesktopHero() {
                 </motion.div>
 
                 {/* 하단 닫기 버튼 — 블러 영역 */}
-                <div
-                  className="flex justify-center"
-                  style={{ paddingTop: '60px', paddingBottom: '100px' }}
-                >
+                <div className={styles.closeWrapper}>
                   <button
-                    className="flex items-center justify-center w-12 h-12 rounded-full text-white/70 hover:text-white transition-all"
-                    style={{ backgroundColor: 'rgba(0,0,0,0.35)' }}
+                    className={styles.closeButton}
                     onClick={(e) => { e.stopPropagation(); handleClose() }}
                   >
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">

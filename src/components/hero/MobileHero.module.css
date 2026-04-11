@@ -1,0 +1,121 @@
+.section {
+  padding-bottom: 40px;
+  background-color: var(--bg-page);
+  text-align: left;
+  position: relative;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+  padding-top: 112px;
+  margin-bottom: 24px;
+  color: var(--text-footer);
+}
+
+.cardList {
+  display: flex;
+  flex-direction: column;
+  margin-left: 12px;
+  gap: 18px;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
+  width: calc(100vw - 24px);
+  min-width: 351px;
+  cursor: pointer;
+}
+
+.cardImage {
+  aspect-ratio: 1 / 1;
+  background-color: var(--card-odd);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.cardImage img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  user-select: none;
+  pointer-events: none;
+}
+
+.cardText {
+  padding-left: 4px;
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.cardTitle {
+  color: var(--text-primary);
+  line-height: 1.375; /* leading-snug */
+}
+
+.cardSubtitle {
+  color: var(--text-secondary);
+  line-height: 1.375;
+}
+
+.spacer {
+  height: 40px;
+}
+
+/* ─── 오버레이 ──────────────────────────────────────────────────────── */
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 40;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  background-color: var(--backdrop-panel);
+  will-change: opacity;
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  overflow-y: auto;
+}
+
+.panel {
+  position: relative;
+  margin-inline: auto;
+  width: calc(100vw - 24px);
+  margin-top: 40px;
+  border-radius: 20px;
+  overflow: hidden;
+  background-color: var(--panel);
+  will-change: transform, opacity;
+}
+
+.closeWrapper {
+  display: flex;
+  justify-content: center;
+  padding-top: 48px;
+  padding-bottom: 80px;
+}
+
+.closeButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  color: var(--on-dark-default);
+  background-color: var(--overlay-btn);
+  transition: all 0.2s;
+  border: none;
+  cursor: pointer;
+}
+
+.closeButton:hover {
+  color: var(--on-dark);
+}
