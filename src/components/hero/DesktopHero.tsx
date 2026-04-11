@@ -4,7 +4,8 @@
  * md(768px) 이상에서 표시되는 데스크탑 메인 화면입니다.
  *
  * 구성:
- * - 무한 드래그 슬라이더: 프로젝트 카드를 가로로 나열하고 자동 스크롤합니다.
+ * - 무한 슬라이더: 프로젝트 카드를 가로로 나열하고 자동 스크롤합니다.
+ *   마우스 휠/트랙패드 세로 입력이 가로 이동에 연결됩니다.
  * - 콘텐츠 오버레이: 카드를 클릭하면 블러 배경 위로 상세 패널이 열립니다.
  * - Footer: 화면 하단에 이름과 이메일을 표시합니다.
  */
@@ -44,12 +45,6 @@ export default function DesktopHero() {
 
     /** wheel 이벤트 리스너를 붙일 section 엘리먼트 참조 */
     const sectionRef = useRef<HTMLElement>(null);
-
-    /** 드래그 중 여부 — 자동 스크롤 일시 정지에 사용 */
-    const isDragging = useRef(false);
-
-    /** 드래그가 실제로 발생했는지 — 드래그 후 onClick 방지 */
-    const hasDragged = useRef(false);
 
     // ─── 오버레이 상태 ────────────────────────────────────────────────────────
 
@@ -123,10 +118,10 @@ export default function DesktopHero() {
         });
     }, [x]);
 
-    // ─── 자동 스크롤: 드래그 중이거나 오버레이가 열리면 멈춤 ─────────────────
+    // ─── 자동 스크롤: 오버레이가 열리면 멈춤 ─────────────────────────────
 
     useAnimationFrame(() => {
-        if (!isDragging.current && !selectedCardRef.current) {
+        if (!selectedCardRef.current) {
             x.set(x.get() - AUTO_SCROLL_SPEED);
         }
     });
@@ -151,7 +146,7 @@ export default function DesktopHero() {
     // ─── 휠 → 가로 이동 연결 ────────────────────────────────────────────────
     // section 위에서 세로 휠/트랙패드 입력을 가로 x 이동으로 변환한다.
     // preventDefault()로 페이지 세로 스크롤을 차단하려면 { passive: false } 필수.
-    // 기존 auto-scroll, drag, 오버레이 로직과 커플링 없음 — 오직 x에만 쓴다.
+    // 기존 auto-scroll, 오버레이 로직과 커플링 없음 — 오직 x에만 쓴다.
 
     useEffect(() => {
         const el = sectionRef.current;
@@ -168,27 +163,11 @@ export default function DesktopHero() {
 
     return (
         <section ref={sectionRef} className={styles.section}>
-            {/* 무한 드래그 슬라이더 */}
+            {/* 무한 슬라이더 */}
             <div className={styles.sliderViewport}>
                 <motion.div
-                    drag="x"
-                    dragConstraints={{ left: -999999, right: 999999 }}
-                    dragElastic={0}
-                    dragTransition={{ power: 0, timeConstant: 0 }}
                     style={{ x, gap: DESKTOP_ITEM_GAP }}
                     className={styles.sliderTrack}
-                    whileDrag={{ cursor: "grabbing" }}
-                    onDragStart={() => {
-                        isDragging.current = true;
-                        hasDragged.current = true;
-                    }}
-                    onDragEnd={() => {
-                        isDragging.current = false;
-                        // onClick보다 뒤에 리셋되도록 한 프레임 지연
-                        setTimeout(() => {
-                            hasDragged.current = false;
-                        }, 0);
-                    }}
                 >
                     {DESKTOP_ITEMS.map((n, i) => {
                         const isEven = n % 2 === 0;
@@ -204,10 +183,9 @@ export default function DesktopHero() {
                                     width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
                                     marginTop: isEven ? "17.7vh" : "30.2vh",
                                 }}
-                                onClick={() => {
-                                    if (!hasDragged.current)
-                                        selectCard({ index: i, n, bg });
-                                }}
+                                onClick={() =>
+                                    selectCard({ index: i, n, bg })
+                                }
                             >
                                 {/* 카드 이미지 */}
                                 <div
