@@ -1,4 +1,4 @@
-import { sortedEntries, findOrNull } from '../utils/projectUtils'
+import { sortedEntries, findOrNull, loadScenes } from '../utils/projectUtils'
 
 describe('sortedEntries', () => {
   it('숫자 순서로 정렬된 값 배열을 반환한다', () => {
@@ -32,5 +32,34 @@ describe('findOrNull', () => {
   it('image가 없는 항목이면 null을 반환한다', () => {
     const noImage = [{ name: 'Main' }] as { name: string; image?: string }[]
     expect(findOrNull(noImage, 'Main')).toBeNull()
+  })
+})
+
+describe('loadScenes', () => {
+  it('glob을 숫자 순서로 정렬하고 { name, image } 배열로 변환한다', () => {
+    const glob = {
+      '../assets/projects/watt/full/10-finish.webp': 'url-finish',
+      '../assets/projects/watt/full/2-question.webp': 'url-question',
+      '../assets/projects/watt/full/1-main.webp': 'url-main',
+    }
+    expect(loadScenes(glob)).toEqual([
+      { name: '1-main',    image: 'url-main' },
+      { name: '2-question', image: 'url-question' },
+      { name: '10-finish', image: 'url-finish' },
+    ])
+  })
+
+  it('빈 glob이면 빈 배열을 반환한다', () => {
+    expect(loadScenes({})).toEqual([])
+  })
+
+  it('파일명에서 .webp 확장자를 제거한다', () => {
+    const glob = { '../assets/Main.webp': 'url-main' }
+    expect(loadScenes(glob)[0].name).toBe('Main')
+  })
+
+  it('경로에서 파일명(마지막 세그먼트)만 추출한다', () => {
+    const glob = { '../deeply/nested/path/Scene.webp': 'url' }
+    expect(loadScenes(glob)[0].name).toBe('Scene')
   })
 })

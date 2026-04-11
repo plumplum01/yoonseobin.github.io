@@ -1,4 +1,4 @@
-import { sortedEntries, findOrNull } from '../utils/projectUtils'
+import { sortedEntries, findOrNull, loadScenes } from '../utils/projectUtils'
 
 export interface SceneVideo {
   src: string
@@ -34,14 +34,6 @@ const preLoanImages = sortedEntries(import.meta.glob('../assets/projects/pre-loa
 const earningsVote1Images = sortedEntries(import.meta.glob('../assets/projects/earnings-vote-1/*.webp', { eager: true, import: 'default' }))
 const earningsVote2Images = sortedEntries(import.meta.glob('../assets/projects/earnings-vote-2/*.webp', { eager: true, import: 'default' }))
 
-function loadScenes(glob: Record<string, unknown>): Scene[] {
-  return Object.entries(glob)
-    .sort(([a], [b]) => a.localeCompare(b, undefined, { numeric: true }))
-    .map(([path, v]) => {
-      const filename = path.split('/').pop()?.replace('.webp', '') ?? ''
-      return { name: filename, image: v as string }
-    })
-}
 
 const wattScenesRaw = loadScenes(import.meta.glob('../assets/projects/watt-a-lot/full/*.webp', { eager: true, import: 'default' }))
 const wattScenes: Scene[] = [
