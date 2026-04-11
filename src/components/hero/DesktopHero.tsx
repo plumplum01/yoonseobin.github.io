@@ -213,7 +213,8 @@ export default function DesktopHero() {
                                                     (n - 1) % projects.length
                                                 ].title
                                             }
-                                            loading="lazy"
+                                            loading="eager"
+                                            decoding="async"
                                             draggable={false}
                                         />
                                     )}
