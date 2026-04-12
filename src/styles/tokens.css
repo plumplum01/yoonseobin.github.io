@@ -38,7 +38,7 @@
     --nav-btn: var(--text-primary);
     --nav-btn-hover: #3c3c3c;
     --nav-open: rgba(32, 32, 32, 1);
-    --nav-closed: rgba(222, 222, 222, 0.8);
+    --nav-closed: #DEDEDE;
     --btn-base: rgb(153, 149, 149);
     --btn-hover: rgb(110, 107, 107);
 
@@ -139,7 +139,7 @@
 
     /* 네비게이션/버튼 */
     --nav-open: rgba(70, 70, 70, 1);
-    --nav-closed: rgba(255, 255, 255, 0.18);
+    --nav-closed: #414141;
     --btn-base: #3a3838;
     --btn-hover: #555353;
 
