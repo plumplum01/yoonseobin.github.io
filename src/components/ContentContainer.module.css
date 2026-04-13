@@ -176,6 +176,7 @@
   justify-content: center;
   padding: 10px;
   border-radius: var(--radius-md);
+  corner-shape: squircle;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.4;
@@ -201,6 +202,7 @@
   height: 42px;
   padding: 2px 2px 2px 22px;
   border-radius: var(--radius-md);
+  corner-shape: squircle;
   gap: 27px;
   background-color: transparent;
   opacity: 0.4;
@@ -231,6 +233,7 @@
   background-color: var(--panel-sunken);
   padding: 2px;
   border-radius: var(--radius-sm);
+  corner-shape: squircle;
   gap: 6px;
 }
 
@@ -241,6 +244,7 @@
   min-width: 61px;
   padding: 8px 10px;
   border-radius: var(--radius-md);
+  corner-shape: squircle;
   font-size: 12px;
   font-weight: 500;
   line-height: 1.4;
@@ -255,6 +259,7 @@
 .sceneSubTabActive {
   opacity: 1;
   border-radius: 6px;
+  corner-shape: squircle;
   background-color: var(--ghost-1);
   border-color: var(--ghost-2);
 }
@@ -276,6 +281,7 @@
   width: 100%;
   min-height: 200px;
   border-radius: var(--radius-lg);
+  corner-shape: squircle;
   overflow: hidden;
   cursor: zoom-in;
   background: var(--skeleton-base);
@@ -323,6 +329,7 @@
 .sceneVideoFrame {
   width: 100%;
   border-radius: var(--radius-lg);
+  corner-shape: squircle;
   overflow: hidden;
   background-color: var(--panel-image-bg);
 }
@@ -342,6 +349,7 @@
   width: 100%;
   min-height: 200px;
   border-radius: var(--radius-lg);
+  corner-shape: squircle;
   overflow: hidden;
   cursor: zoom-in;
   background: var(--skeleton-base);
@@ -391,6 +399,7 @@
   max-width: 90vw;
   object-fit: contain;
   border-radius: 12px;
+  corner-shape: squircle;
   pointer-events: none;
 }
 

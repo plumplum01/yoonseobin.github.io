@@ -8,6 +8,7 @@
 
 .cardImage {
     border-radius: 32px;
+    corner-shape: squircle;
     flex-shrink: 0;
     overflow: hidden;
     /*

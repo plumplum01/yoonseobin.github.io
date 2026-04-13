@@ -105,6 +105,7 @@
   height: 39px;
   background-color: var(--btn-base);
   border-radius: var(--radius-sm);
+  corner-shape: squircle;
   display: flex;
   align-items: center;
   justify-content: center;

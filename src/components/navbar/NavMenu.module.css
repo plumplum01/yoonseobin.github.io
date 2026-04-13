@@ -17,6 +17,7 @@
 .button {
     height: 44px;
     border-radius: var(--radius-sm);
+    corner-shape: squircle;
     border: none;
     color: var(--white);
     background-color: var(--nav-btn);
