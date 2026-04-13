@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//Users/yoonseobin/.claude/plugins/cache/claude-plugins-official/superpowers/5.0.7/skills/brainstorming/**)",
+      "Read(//Users/yoonseobin/.claude/skills/toss-writing/**)",
+      "Read(//Users/yoonseobin/.claude/skills/kakao-writing/**)",
+      "Read(//Users/yoonseobin/.claude/skills/**)"
+    ],
+    "additionalDirectories": [
+      "/Users/yoonseobin/.claude/skills"
+    ]
+  }
+}

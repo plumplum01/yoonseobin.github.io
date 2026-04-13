@@ -21,7 +21,8 @@
       "Bash(gh run:*)",
       "Bash(/opt/homebrew/bin/gh run:*)",
       "Bash(/usr/local/bin/gh run:*)",
-      "Bash(git remote:*)"
+      "Bash(git remote:*)",
+      "Bash(npm install:*)"
     ]
   }
 }
