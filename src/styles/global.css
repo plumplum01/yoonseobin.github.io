@@ -67,3 +67,10 @@ p {
   background-color: var(--selection-bg);
   color: var(--selection-fg);
 }
+
+/* ─── 커스텀 커서 (마우스 기기에서만) ───────────────────────────────────── */
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
+}

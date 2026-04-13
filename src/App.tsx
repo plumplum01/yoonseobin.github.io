@@ -4,6 +4,7 @@ import Hero from "./components/hero";
 import About from "./components/About";
 import Contact from "./components/Contact";
 import AboutPage from "./pages/AboutPage";
+import Cursor from "./components/Cursor";
 
 function Home() {
     return (
@@ -18,6 +19,7 @@ function Home() {
 export default function App() {
     return (
         <BrowserRouter basename="/">
+            <Cursor />
             <Navbar />
             <Routes>
                 <Route path="/" element={<Home />} />

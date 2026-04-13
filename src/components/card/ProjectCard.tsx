@@ -21,6 +21,7 @@ interface ProjectCardProps {
     imageLoading?: 'eager' | 'lazy'
     imageDecoding?: 'async' | 'sync' | 'auto'
     onClick?: MouseEventHandler<HTMLDivElement>
+    dataCursor?: string
 }
 
 export default function ProjectCard({
@@ -35,9 +36,10 @@ export default function ProjectCard({
     imageLoading,
     imageDecoding,
     onClick,
+    dataCursor,
 }: ProjectCardProps) {
     return (
-        <div className={className} style={style} onClick={onClick}>
+        <div className={className} style={style} onClick={onClick} data-cursor={dataCursor}>
             <div className={imageClassName} style={imageStyle}>
                 {project.thumbnail && (
                     <img
