@@ -298,21 +298,21 @@ export default function DesktopHero() {
                             <motion.div
                                 key="scroll-overlay"
                                 className={styles.overlay}
-                                initial={{ opacity: 0, y: 20 }}
+                                initial={{ opacity: 0, y: 60 }}
                                 animate={{
                                     opacity: 1,
                                     y: 0,
                                     transition: {
                                         duration: 0.3,
-                                        ease: [0.4, 0, 0.2, 1],
+                                        ease: [0.25, 0.1, 0.25, 1],
                                     },
                                 }}
                                 exit={{
                                     opacity: 0,
-                                    y: -80,
+                                    y: -30,
                                     transition: {
-                                        duration: 0.35,
-                                        ease: [0.4, 0, 0.6, 1],
+                                        duration: 0.2,
+                                        ease: [0.25, 0.1, 0.25, 1],
                                     },
                                 }}
                                 onClick={handleClose}
