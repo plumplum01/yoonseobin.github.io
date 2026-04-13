@@ -68,6 +68,20 @@ p {
   color: var(--selection-fg);
 }
 
+/* ─── 다크/라이트 테마 전환 트랜지션 ────────────────────────────────────── */
+html {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease;
+}
+
+* {
+  transition:
+    background-color 200ms ease,
+    color 200ms ease,
+    border-color 200ms ease;
+}
+
 /* ─── 커스텀 커서 (마우스 기기에서만) ───────────────────────────────────── */
 @media (pointer: fine) {
   * {
