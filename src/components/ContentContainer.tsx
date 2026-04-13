@@ -273,11 +273,13 @@ export default function ContentContainer({ project, onClose }: Props) {
             className={styles.tabContent}
           >
             {project.scenes && project.scenes[activeScene] && (
-              <div className={styles.sceneList}>
-                {project.scenes[activeScene].videos?.map((video, vi) => (
-                  <div key={vi} className={styles.sceneVideoFrame}>
-                    <SceneVideoPlayer video={video} />
-                  </div>
+              <div className={`${styles.sceneList} ${(project.scenes[activeScene].videos?.length ?? 0) > 1 ? styles.sceneListRow : ''}`}>
+                {project.scenes[activeScene].videos?.map((video, vi, arr) => (
+                  arr.length > 1 && vi === arr.length - 1 ? null : (
+                    <div key={vi} className={styles.sceneVideoFrame}>
+                      <SceneVideoPlayer video={video} />
+                    </div>
+                  )
                 ))}
                 {project.scenes[activeScene].image && (
                   <div
@@ -303,7 +305,7 @@ export default function ContentContainer({ project, onClose }: Props) {
 
     {/* 이미지 힌트 토스트 */}
     {createPortal(
-      <Toast message={site.imageHintToast} visible={showToast} />,
+      <Toast message={site.imageHintToast} visible={showToast} icon={'\u{101F08}'} />,
       document.body
     )}
 
