@@ -1,0 +1,80 @@
+/* ─── 베이스 dot ──────────────────────────────────────────────────────────── */
+.dot {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    border-radius: 9999px;
+    pointer-events: none;
+    z-index: 9999;
+    will-change: transform;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    opacity: 0;
+
+    /* Light mode: 짙은 dot */
+    background-color: #141414;
+
+    transition:
+        width 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+        height 0.28s cubic-bezier(0.34, 1.56, 0.64, 1),
+        background-color 0.2s ease,
+        opacity 0.2s ease;
+}
+
+/* Dark mode: 밝은 dot */
+:global(.dark) .dot {
+    background-color: #f0f0f0;
+}
+
+/* 화면 진입 후 표시 */
+.visible {
+    opacity: 1;
+}
+
+/* ─── 링크/버튼 hover ─────────────────────────────────────────────────────── */
+.link {
+    width: 28px;
+    height: 28px;
+    opacity: 0.45;
+}
+
+/* ─── 카드 hover → "OPEN" 원형 ───────────────────────────────────────────── */
+.card {
+    width: 72px;
+    height: 72px;
+
+    /* Light mode: 짙은 배경 */
+    background-color: #141414;
+}
+
+:global(.dark) .card {
+    /* Dark mode: 밝은 배경 */
+    background-color: #f0f0f0;
+}
+
+/* ─── OPEN 레이블 ─────────────────────────────────────────────────────────── */
+.label {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    pointer-events: none;
+    white-space: nowrap;
+    opacity: 0;
+    transition: opacity 0.15s ease;
+
+    /* Light mode: 흰 텍스트 (짙은 bg 위) */
+    color: #ffffff;
+}
+
+:global(.dark) .label {
+    /* Dark mode: 검은 텍스트 (밝은 bg 위) */
+    color: #000000;
+}
+
+.card .label {
+    opacity: 1;
+}

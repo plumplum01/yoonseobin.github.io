@@ -1,58 +1,83 @@
+import { motion } from 'framer-motion'
 import aboutData from '../data/about.json'
 import styles from './AboutPage.module.css'
 
 const { heading, paragraphs, education, awards, links } = aboutData
 
+const container = {
+  hidden: {},
+  show: {
+    transition: {
+      staggerChildren: 0.08,
+      delayChildren: 0.05,
+    },
+  },
+}
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  show: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.55, ease: [0.22, 1, 0.36, 1] as const },
+  },
+}
+
 export default function AboutPage() {
   return (
     <section className={styles.section}>
-      <div className={styles.container}>
+      <motion.div
+        className={styles.container}
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
 
         {/* 페이지 헤딩 */}
-        <h1 className={`t-section-heading ${styles.heading}`}>
+        <motion.h1 variants={fadeUp} className={`t-section-heading ${styles.heading}`}>
           {heading}
-        </h1>
+        </motion.h1>
 
         {/* 본문 단락 */}
         <div className={styles.intro}>
           {paragraphs.map((p, i) => (
-            <p key={i} className={`t-body ${styles.introParagraph}`}>
+            <motion.p key={i} variants={fadeUp} className={`t-body ${styles.introParagraph}`}>
               {p}
-            </p>
+            </motion.p>
           ))}
         </div>
 
-        <hr className={`${styles.divider} ${styles.dividerIntro}`} />
+        <motion.hr variants={fadeUp} className={`${styles.divider} ${styles.dividerIntro}`} />
 
         {/* Education 섹션 */}
         <div className={styles.sectionBlock}>
-          <h2 className={`t-section-heading ${styles.sectionTitle}`}>
+          <motion.h2 variants={fadeUp} className={`t-section-heading ${styles.sectionTitle}`}>
             Education
-          </h2>
+          </motion.h2>
           <div className={`${styles.list} ${styles.listEducation}`}>
             {education.map((e) => (
-              <div key={e.title} className={styles.row}>
+              <motion.div key={e.title} variants={fadeUp} className={styles.row}>
                 <span className={`t-list-title ${styles.eduTitle}`}>
                   {e.title}
                 </span>
                 <span className={`t-list-detail ${styles.eduDate}`}>
                   {e.date}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        <hr className={`${styles.divider} ${styles.dividerSection}`} />
+        <motion.hr variants={fadeUp} className={`${styles.divider} ${styles.dividerSection}`} />
 
         {/* Awards 섹션 */}
         <div className={styles.sectionBlock}>
-          <h2 className={`t-section-heading ${styles.sectionTitle}`}>
+          <motion.h2 variants={fadeUp} className={`t-section-heading ${styles.sectionTitle}`}>
             Awards
-          </h2>
+          </motion.h2>
           <div className={`${styles.list} ${styles.listAwards}`}>
             {awards.map((a) => (
-              <div key={a.title} className={styles.row}>
+              <motion.div key={a.title} variants={fadeUp} className={styles.row}>
                 <div className={styles.awardBody}>
                   <span className={`t-list-title ${styles.awardTitle}`}>
                     {a.title}
@@ -64,15 +89,15 @@ export default function AboutPage() {
                 <span className={`t-list-detail ${styles.awardDate}`}>
                   {a.date}
                 </span>
-              </div>
+              </motion.div>
             ))}
           </div>
         </div>
 
-        <hr className={`${styles.divider} ${styles.dividerLinks}`} />
+        <motion.hr variants={fadeUp} className={`${styles.divider} ${styles.dividerLinks}`} />
 
         {/* 링크 버튼 */}
-        <div className={styles.links}>
+        <motion.div variants={fadeUp} className={styles.links}>
           {links.map(({ label, href }) => (
             <a
               key={label}
@@ -84,9 +109,9 @@ export default function AboutPage() {
               {label}
             </a>
           ))}
-        </div>
+        </motion.div>
 
-      </div>
+      </motion.div>
     </section>
   )
 }

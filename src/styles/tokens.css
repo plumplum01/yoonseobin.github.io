@@ -142,6 +142,8 @@
     --nav-closed: #414141;
     --btn-base: #3a3838;
     --btn-hover: #555353;
+    --nav-btn: rgba(255, 255, 255, 0.11);
+    --nav-btn-hover: rgba(255, 255, 255, 0.19);
 
     /* Panel 인셋 보더 플립 */
     --panel-inset-border: rgba(0, 0, 0, 0.5);

@@ -41,6 +41,7 @@ export default function DesktopCard({ index, n, onSelect }: DesktopCardProps) {
             imageLoading="eager"
             imageDecoding="async"
             onClick={() => onSelect({ index, n, bg })}
+            dataCursor="card"
         />
     )
 }
