@@ -14,8 +14,15 @@ interface ThemeState {
  *   import { useThemeStore } from '../store/themeStore'
  *   const { isDark, toggleTheme } = useThemeStore()
  */
+function getInitialIsDark(): boolean {
+  if (typeof window === 'undefined') return false
+  const stored = localStorage.getItem('theme')
+  if (stored !== null) return stored === 'dark'
+  return window.matchMedia('(prefers-color-scheme: dark)').matches
+}
+
 export const useThemeStore = create<ThemeState>((set, get) => ({
-  isDark: typeof window !== 'undefined' && localStorage.getItem('theme') === 'dark',
+  isDark: getInitialIsDark(),
   toggleTheme: () => {
     const next = !get().isDark
     set({ isDark: next })
@@ -26,10 +33,7 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   },
 }))
 
-// 앱 시작 시 저장된 테마를 DOM에 즉시 적용
+// 앱 시작 시 테마를 DOM에 즉시 적용
 if (typeof window !== 'undefined') {
-  document.documentElement.classList.toggle(
-    'dark',
-    localStorage.getItem('theme') === 'dark',
-  )
+  document.documentElement.classList.toggle('dark', getInitialIsDark())
 }
