@@ -12,7 +12,7 @@ type AppPageRoute = {
   render: (options: { smoothScrollEnabled: boolean }) => ReactNode
 }
 
-export const pageRoutes: AppPageRoute[] = [
+export const pageRoutes = [
   {
     id: 'home',
     path: '/',
@@ -27,7 +27,9 @@ export const pageRoutes: AppPageRoute[] = [
     smoothScroll: false,
     render: () => <About />,
   },
-]
+] as const satisfies readonly AppPageRoute[]
+
+export type AppRoutePath = (typeof pageRoutes)[number]['path']
 
 export const routes: RouteObject[] = [
   {

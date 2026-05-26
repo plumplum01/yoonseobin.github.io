@@ -14,7 +14,7 @@ import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { site } from '../../../registry/site'
-import styles from './NavHeader.module.css'
+import { IconButton } from '../../ui'
 
 const MotionX = motion.create(X)
 const MotionMenu = motion.create(Menu)
@@ -42,13 +42,17 @@ export default function NavHeader({ isOpen, onToggle, onClose }: Props) {
   }
 
   return (
-    <header className={styles.header}>
-      <span className={`t-nav ${styles.name}`} onClick={goHome}>
-        {site.name}
-      </span>
+    <header className="absolute inset-x-0 top-[var(--nav-header-top)] z-[1] flex h-[var(--nav-header-height)] items-center justify-center">
       <button
+        type="button"
+        className="cursor-pointer border-0 bg-transparent p-0 text-nav font-medium leading-none tracking-nav text-[var(--nav-fg)] transition-colors duration-[250ms] ease-in-out select-none"
+        onClick={goHome}
+      >
+        {site.name}
+      </button>
+      <IconButton
         onClick={onToggle}
-        className={styles.menuToggle}
+        className="absolute right-1.5 grid text-[var(--nav-fg)] opacity-90 transition-colors duration-[250ms] ease-in-out [&>*]:[grid-area:1/1]"
         aria-label={isOpen ? '메뉴 닫기' : '메뉴 열기'}
       >
         <AnimatePresence>
@@ -58,7 +62,7 @@ export default function NavHeader({ isOpen, onToggle, onClose }: Props) {
             <MotionMenu key="menu" size={ICON_SIZE} {...iconMotion} />
           )}
         </AnimatePresence>
-      </button>
+      </IconButton>
     </header>
   )
 }

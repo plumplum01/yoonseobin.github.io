@@ -9,9 +9,11 @@
 
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
+import type { AppRoutePath } from '../../../app/router'
+import { cn } from '../../../lib/cn'
 import { site } from '../../../registry/site'
+import { buttonVariants } from '../../ui'
 import ThemeToggle from '../../features/theme/ThemeToggle'
-import styles from './NavMenu.module.css'
 
 interface Props {
   onClose: () => void
@@ -22,14 +24,16 @@ export default function NavMenu({ onClose }: Props) {
   const location = useLocation()
   const isHome = location.pathname === '/'
 
-  const goTo = (path: string) => {
+  const goTo = (path: AppRoutePath) => {
     navigate(path)
     onClose()
   }
 
+  const menuItemClassName = cn(buttonVariants({ variant: 'nav', size: 'navItem' }), 'rounded-sm')
+
   return (
     <motion.div
-      className={styles.root}
+      className="flex h-full flex-col box-border pt-[var(--nav-menu-top)] pb-2.5"
       initial={{
         scale: 0.9,
         opacity: 0,
@@ -49,28 +53,41 @@ export default function NavMenu({ onClose }: Props) {
       transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
     >
       {/* 페이지 이동 버튼 */}
-      <div className={styles.buttons}>
+      <div className="flex flex-col gap-2 px-3">
         {/* Home에선 About, About에선 Home 버튼 표시 */}
         {isHome ? (
-          <button className={`t-nav ${styles.button}`} onClick={() => goTo('/about')}>
+          <button
+            type="button"
+            className={menuItemClassName}
+            onClick={() => goTo('/about')}
+          >
             About
           </button>
         ) : (
-          <button className={`t-nav ${styles.button}`} onClick={() => goTo('/')}>
+          <button
+            type="button"
+            className={menuItemClassName}
+            onClick={() => goTo('/')}
+          >
             Home
           </button>
         )}
 
         {/* 이메일 링크 */}
-        <a href={`mailto:${site.email}`} className={`t-nav ${styles.button}`}>
+        <a
+          href={`mailto:${site.email}`}
+          className={menuItemClassName}
+        >
           Email
         </a>
       </div>
 
       {/* 하단: 크레딧 + 다크모드 토글 */}
-      <footer className={styles.footer}>
-        <span className={`t-caption ${styles.credit}`}>{site.credit}</span>
-        <div className={styles.toggle}>
+      <footer className="mt-auto flex items-center">
+        <span className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap pl-4 text-left text-caption leading-none tracking-caption text-[var(--caption-gray)] select-none">
+          {site.credit}
+        </span>
+        <div className="pr-1.5">
           <ThemeToggle />
         </div>
       </footer>

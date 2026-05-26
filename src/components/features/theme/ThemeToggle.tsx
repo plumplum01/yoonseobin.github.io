@@ -8,8 +8,8 @@
  */
 
 import { Moon, Sun } from 'lucide-react'
+import { IconButton } from '../../ui'
 import { useTheme } from '../../../hooks/useTheme'
-import styles from './ThemeToggle.module.css'
 
 const ICON_SIZE = 16
 
@@ -17,8 +17,13 @@ export default function ThemeToggle() {
   const { isDark, toggleTheme } = useTheme()
 
   return (
-    <button type="button" className={styles.root} aria-label="모드 전환" onClick={toggleTheme}>
+    <IconButton
+      type="button"
+      className="mb-0.5 text-[var(--on-dark-default)]"
+      aria-label="모드 전환"
+      onClick={toggleTheme}
+    >
       {isDark ? <Moon size={ICON_SIZE} /> : <Sun size={ICON_SIZE} />}
-    </button>
+    </IconButton>
   )
 }

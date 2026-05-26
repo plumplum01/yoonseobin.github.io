@@ -24,8 +24,8 @@ export default function MobileCard({ n, onSelect }: MobileCardProps) {
       className={styles.card}
       imageClassName={styles.cardImage}
       textClassName={styles.cardText}
-      titleClassName={`t-card-title ${styles.cardTitle}`}
-      subtitleClassName={`t-card-subtitle ${styles.cardSubtitle}`}
+      titleClassName={`text-nav font-semibold tracking-card ${styles.cardTitle}`}
+      subtitleClassName={`text-nav font-medium tracking-card ${styles.cardSubtitle}`}
       imageLoading="lazy"
       onClick={() => onSelect(n)}
     />

@@ -1,6 +1,5 @@
 @import "tailwindcss";
 @import "./tokens.css";
-@import "./typography.css";
 
 @utility text-cjk {
   word-break: keep-all;

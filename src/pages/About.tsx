@@ -28,7 +28,10 @@ export default function About() {
     <section className={styles.section}>
       <motion.div className={styles.container} variants={container} initial="hidden" animate="show">
         {/* 페이지 헤딩 */}
-        <motion.h1 variants={fadeUp} className={`t-section-heading ${styles.heading}`}>
+        <motion.h1
+          variants={fadeUp}
+          className={`text-section-heading font-semibold tracking-heading ${styles.heading}`}
+        >
           {heading}
         </motion.h1>
 
@@ -38,7 +41,7 @@ export default function About() {
             <motion.p
               key={i}
               variants={fadeUp}
-              className={`t-body text-cjk ${styles.introParagraph}`}
+              className={`text-body font-medium leading-loose tracking-tight text-cjk ${styles.introParagraph}`}
             >
               {p}
             </motion.p>
@@ -49,7 +52,10 @@ export default function About() {
 
         {/* Education 섹션 */}
         <div className={styles.sectionBlock}>
-          <motion.h2 variants={fadeUp} className={`t-section-heading ${styles.sectionTitle}`}>
+          <motion.h2
+            variants={fadeUp}
+            className={`text-section-heading font-semibold tracking-heading ${styles.sectionTitle}`}
+          >
             Education
           </motion.h2>
           <div className={`${styles.list} ${styles.listEducation}`}>
@@ -70,7 +76,10 @@ export default function About() {
 
         {/* Awards 섹션 */}
         <div className={styles.sectionBlock}>
-          <motion.h2 variants={fadeUp} className={`t-section-heading ${styles.sectionTitle}`}>
+          <motion.h2
+            variants={fadeUp}
+            className={`text-section-heading font-semibold tracking-heading ${styles.sectionTitle}`}
+          >
             Awards
           </motion.h2>
           <div className={`${styles.list} ${styles.listAwards}`}>
@@ -102,7 +111,7 @@ export default function About() {
               href={href}
               target="_blank"
               rel="noopener noreferrer"
-              className={`t-nav ${styles.linkButton}`}
+              className={`text-nav font-medium leading-none tracking-nav ${styles.linkButton}`}
             >
               {label}
             </a>

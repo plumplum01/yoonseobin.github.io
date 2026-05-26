@@ -145,15 +145,17 @@ export default function ContentContainer({ project, onClose }: Props) {
         >
           {/* 제목 + 서브타이틀 */}
           <div data-section="title" className={styles.titleBlock}>
-            <p className={`t-content-title ${styles.title}`}>{project.title}</p>
-            <p className={`t-content-label ${styles.subtitle}`}>{project.subtitle}</p>
+            <p className={`text-content-title font-semibold ${styles.title}`}>{project.title}</p>
+            <p className={`text-content-label font-medium leading-base ${styles.subtitle}`}>
+              {project.subtitle}
+            </p>
           </div>
 
           {/* 상세 메타 정보 (기간 / 역할 / 클라이언트 / 도구) */}
           <div data-section="meta" className={styles.metaBlock}>
-            <p className={`t-content-label ${styles.metaLabel}`}>상세</p>
+            <p className={`text-content-label font-medium leading-base ${styles.metaLabel}`}>상세</p>
             <div
-              className={`t-content-meta ${styles.metaGrid} ${isMobile ? styles.metaGridMobile : ''}`}
+              className={`text-meta font-medium leading-base ${styles.metaGrid} ${isMobile ? styles.metaGridMobile : ''}`}
             >
               <div className={styles.metaColumn}>
                 <div className={styles.metaRow}>
@@ -180,9 +182,9 @@ export default function ContentContainer({ project, onClose }: Props) {
 
           {/* 설명 */}
           <div data-section="description" className={styles.descriptionBlock}>
-            <p className={`t-content-label ${styles.descriptionLabel}`}>설명</p>
+            <p className={`text-content-label font-medium leading-base ${styles.descriptionLabel}`}>설명</p>
             <p
-              className={`t-content-body text-cjk ${styles.descriptionBody} ${descriptionBodySizeClass}`}
+              className={`text-content-label leading-body tracking-detail text-cjk ${styles.descriptionBody} ${descriptionBodySizeClass}`}
             >
               {project.description}
             </p>
@@ -190,7 +192,7 @@ export default function ContentContainer({ project, onClose }: Props) {
             {/* 토스 캠프 프로젝트 한정 안내 */}
             {project.client === site.tossCampClient && (
               <p
-                className={`t-content-body text-cjk ${styles.descriptionBody} ${descriptionBodySizeClass} ${styles.tossNote}`}
+                className={`text-content-label leading-body tracking-detail text-cjk ${styles.descriptionBody} ${descriptionBodySizeClass} ${styles.tossNote}`}
               >
                 {site.tossCampNote}
               </p>

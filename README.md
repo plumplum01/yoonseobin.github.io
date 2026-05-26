@@ -11,6 +11,7 @@ React, TypeScript, Vite 기반의 포트폴리오 사이트입니다.
 - Zustand
 - Framer Motion
 - Embla Carousel
+- Class Variance Authority
 - Biome
 - Vitest
 - Playwright
@@ -30,6 +31,9 @@ src/
     About.tsx
   components/
     ui/
+      Button.tsx
+      IconButton.tsx
+      Text.tsx
     layout/
       Cursor.tsx
       Footer.tsx
@@ -82,8 +86,9 @@ tests/
 - `src/components/features`는 home, projects, theme처럼 기능/도메인 의도가 있는 UI 컴포넌트를 보관합니다.
 - `*.module.css`는 deprecated로 간주하고, 신규 스타일은 cva + Tailwind utility 기반으로 작성합니다.
 - 기존 `*.module.css`는 기능 개발 과정에서 점진적으로 제거합니다.
-- 커스텀 typography utility인 `src/styles/typography.css`도 deprecated로 간주하고, Tailwind text utility와 `@theme` 토큰으로 대체합니다.
+- 커스텀 typography utility였던 `src/styles/typography.css`는 제거되었고, Tailwind text utility와 `@theme` 토큰으로 대체합니다.
 - 한국어/일본어/중국어처럼 CJK 본문 줄바꿈이 필요한 긴 텍스트에는 `text-cjk` 유틸리티를 사용합니다.
+- `src/components/ui`에는 cva 기반 primitive를 두고, class 조합은 `src/lib/cn.ts`의 `cn` 유틸리티를 사용합니다.
 - `src/data`는 Sanity로 완전히 통합하기 전까지 사용하는 임시 로컬 원본 데이터/미디어 영역입니다.
 - `src/registry`는 앱이 소비하는 데이터 registry이자 추후 DOT(Data Orchestration/Translation) 계층으로 전환할 예정인 경계입니다.
 - 앱 컴포넌트는 `src/data`나 Sanity에 직접 의존하지 않고 `src/registry`를 통해 데이터를 사용합니다.

@@ -36,8 +36,8 @@ export default function DesktopCard({ index, n, onSelect }: DesktopCardProps) {
         backgroundColor: bg,
       }}
       textClassName={styles.cardText}
-      titleClassName={`t-card-title ${styles.cardTitle}`}
-      subtitleClassName={`t-card-subtitle ${styles.cardSubtitle}`}
+      titleClassName={`text-nav font-semibold tracking-card ${styles.cardTitle}`}
+      subtitleClassName={`text-nav font-medium tracking-card ${styles.cardSubtitle}`}
       imageLoading="eager"
       imageDecoding="async"
       onClick={() => onSelect({ index, n, bg })}
