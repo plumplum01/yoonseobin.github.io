@@ -5,6 +5,17 @@
 - 브랜치를 닫을 때는 항상 기능 리뷰 및 테스트를 진행한 후 머지한다
 - 커밋 전에는 항상 `npm run test:run`과 `npx vite build`로 회귀 없음을 확인한다
 
+## 콘텐츠 구조 및 CMS 전환 계획
+
+- `packages/types`를 콘텐츠 타입의 SSOT로 둔다
+- `packages/sanity`는 Sanity schema, query, client를 관리하는 CMS 패키지로 둔다
+- `src/content`는 Sanity로 완전히 통합하기 전까지 사용하는 임시 로컬 콘텐츠 영역이다
+- `src/content/data`는 로컬 콘텐츠 데이터, `src/content/assets`는 로컬 미디어 asset을 보관한다
+- 앱 컴포넌트는 `src/content`나 Sanity에 직접 의존하지 않고 `src/lib/content`의 loader/adapter를 통해 콘텐츠를 사용한다
+- `src/lib/content`는 현재 loader/adapter 역할이며, 추후 DOT(Data Orchestration/Translation) 계층으로 변경될 예정이다
+- Sanity 통합 시에는 `src/lib/content`의 데이터 소스만 Sanity query 기반으로 교체하고, 앱 타입은 `packages/types` 기준을 유지한다
+- Sanity asset CDN으로 전환되면 `src/content/assets`는 점진적으로 축소하거나 제거한다
+
 ## 기능 크기별 작업 모드
 
 1인 포트폴리오라는 맥락에서 "스펙 → 플랜 → subagent TDD → 2단계 리뷰" 풀 체인은
