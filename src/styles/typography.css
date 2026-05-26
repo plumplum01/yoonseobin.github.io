@@ -1,6 +1,8 @@
 /**
  * 타이포그래피 유틸리티 클래스
  *
+ * @deprecated Tailwind text utility와 @theme 토큰으로 점진적으로 대체한다.
+ *
  * SCSS 믹스인 대신 글로벌 유틸리티 클래스로 텍스트 스타일을 재사용한다.
  * 사용 예:
  *   <p className="t-body">본문</p>
@@ -22,22 +24,6 @@
   font-weight: var(--fw-medium);
   line-height: var(--lh-loose);
   letter-spacing: var(--tracking-tight);
-}
-
-/* 리스트 항목 타이틀 (수상명, 학교명 등) */
-.t-list-title {
-  font-size: var(--fs-md);
-  font-weight: var(--fw-semibold);
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--lh-tight);
-}
-
-/* 리스트 항목 보조 텍스트 (날짜 등) */
-.t-list-detail {
-  font-size: var(--fs-md);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--tracking-tight);
-  line-height: var(--lh-tight);
 }
 
 /* 네비게이션 및 버튼 레이블 */
@@ -87,13 +73,6 @@
   font-size: var(--fs-lg);
   line-height: var(--lh-body);
   letter-spacing: var(--tracking-detail);
-}
-
-/* 푸터 / 하단 소형 텍스트 */
-.t-footer {
-  font-size: var(--fs-md);
-  font-weight: var(--fw-medium);
-  letter-spacing: var(--tracking-tight);
 }
 
 /* 캡션 — 크레딧, 부가 텍스트 */

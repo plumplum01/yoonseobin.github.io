@@ -2,7 +2,7 @@ import {
   stepHeroFrame,
   WHEEL_SENSITIVITY,
   AUTO_SCROLL_SPEED,
-} from '../components/hero/constants'
+} from '../components/features/home/hero/constants'
 
 /**
  * stepHeroFrame

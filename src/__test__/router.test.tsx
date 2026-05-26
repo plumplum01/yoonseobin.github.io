@@ -8,12 +8,9 @@ describe('router config', () => {
     expect(new Set(paths).size).toBe(paths.length)
   })
 
-  it('maps page routes into the root layout children', () => {
-    expect(routes[0]?.children).toEqual(
-      pageRoutes.map(({ path, element }) => ({
-        path,
-        element,
-      })),
+  it('maps page route paths into the root layout children', () => {
+    expect(routes[0]?.children?.map((route) => route.path)).toEqual(
+      pageRoutes.map((route) => route.path),
     )
   })
 
@@ -22,6 +19,15 @@ describe('router config', () => {
       expect.arrayContaining([
         expect.objectContaining({ id: 'home', path: '/', title: 'Home' }),
         expect.objectContaining({ id: 'about', path: '/about', title: 'About' }),
+      ]),
+    )
+  })
+
+  it('controls smooth scroll per page route', () => {
+    expect(pageRoutes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: 'home', smoothScroll: true }),
+        expect.objectContaining({ id: 'about', smoothScroll: false }),
       ]),
     )
   })

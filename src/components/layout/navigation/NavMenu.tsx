@@ -9,8 +9,8 @@
 
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import site from '../../content/data/site.json'
-import ThemeToggle from '../ThemeToggle'
+import { site } from '../../../registry/site'
+import ThemeToggle from '../../features/theme/ThemeToggle'
 import styles from './NavMenu.module.css'
 
 interface Props {

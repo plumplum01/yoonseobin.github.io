@@ -2,10 +2,10 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import type { Project, SceneVideo } from '../lib/content/projects'
-import site from '../content/data/site.json'
-import Toast from './Toast'
-import { useIsMobile } from '../hooks/useIsMobile'
+import { site } from '../../../registry/site'
+import type { Project, SceneVideo } from '../../../registry/projects'
+import Toast from '../feedback/Toast'
+import { useIsMobile } from '../../../hooks/useIsMobile'
 import styles from './ContentContainer.module.css'
 
 const ICON_SIZE = 16
@@ -181,14 +181,16 @@ export default function ContentContainer({ project, onClose }: Props) {
           {/* 설명 */}
           <div data-section="description" className={styles.descriptionBlock}>
             <p className={`t-content-label ${styles.descriptionLabel}`}>설명</p>
-            <p className={`t-content-body ${styles.descriptionBody} ${descriptionBodySizeClass}`}>
+            <p
+              className={`t-content-body text-cjk ${styles.descriptionBody} ${descriptionBodySizeClass}`}
+            >
               {project.description}
             </p>
 
             {/* 토스 캠프 프로젝트 한정 안내 */}
             {project.client === site.tossCampClient && (
               <p
-                className={`t-content-body ${styles.descriptionBody} ${descriptionBodySizeClass} ${styles.tossNote}`}
+                className={`t-content-body text-cjk ${styles.descriptionBody} ${descriptionBodySizeClass} ${styles.tossNote}`}
               >
                 {site.tossCampNote}
               </p>

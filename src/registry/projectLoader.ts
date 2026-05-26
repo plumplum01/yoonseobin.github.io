@@ -9,7 +9,7 @@ import type { Project, ProjectData, Scene } from '@portfolio/types'
 /**
  * glob 경로에서 마지막 디렉토리/파일명 토큰을 추출한다.
  *
- * 예: '../assets/projects/watt-a-lot/watt 1.webp'
+ * 예: '../data/media/projects/watt-a-lot/watt 1.webp'
  *   → { projectId: 'watt-a-lot', filename: 'watt 1.webp' }
  */
 function parseProjectPath(path: string): { projectId: string; filename: string } | null {
@@ -21,7 +21,7 @@ function parseProjectPath(path: string): { projectId: string; filename: string }
 /**
  * full/ 하위 scene 경로에서 프로젝트 id와 파일명을 추출한다.
  *
- * 예: '../assets/projects/watt-a-lot/full/Main.webp'
+ * 예: '../data/media/projects/watt-a-lot/full/Main.webp'
  *   → { projectId: 'watt-a-lot', filename: 'Main.webp' }
  */
 function parseScenePath(path: string): { projectId: string; filename: string } | null {

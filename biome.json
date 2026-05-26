@@ -39,6 +39,12 @@
       "trailingCommas": "none"
     }
   },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true,
+      "cssModules": true
+    }
+  },
   "linter": {
     "enabled": true,
     "rules": {

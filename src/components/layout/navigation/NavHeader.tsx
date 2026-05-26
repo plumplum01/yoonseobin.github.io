@@ -13,7 +13,7 @@
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import site from '../../content/data/site.json'
+import { site } from '../../../registry/site'
 import styles from './NavHeader.module.css'
 
 const MotionX = motion.create(X)

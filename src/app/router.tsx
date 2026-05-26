@@ -8,7 +8,8 @@ type AppPageRoute = {
   id: string
   path: string
   title: string
-  element: ReactNode
+  smoothScroll: boolean
+  render: (options: { smoothScrollEnabled: boolean }) => ReactNode
 }
 
 export const pageRoutes: AppPageRoute[] = [
@@ -16,22 +17,24 @@ export const pageRoutes: AppPageRoute[] = [
     id: 'home',
     path: '/',
     title: 'Home',
-    element: <Home />,
+    smoothScroll: true,
+    render: ({ smoothScrollEnabled }) => <Home smoothScrollEnabled={smoothScrollEnabled} />,
   },
   {
     id: 'about',
     path: '/about',
     title: 'About',
-    element: <About />,
+    smoothScroll: false,
+    render: () => <About />,
   },
 ]
 
 export const routes: RouteObject[] = [
   {
     element: <RootLayout />,
-    children: pageRoutes.map(({ path, element }) => ({
+    children: pageRoutes.map(({ path, smoothScroll, render }) => ({
       path,
-      element,
+      element: render({ smoothScrollEnabled: smoothScroll }),
     })),
   },
 ]

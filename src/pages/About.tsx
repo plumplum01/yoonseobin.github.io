@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import aboutData from '../content/data/about.json'
+import { about as aboutData } from '../registry/about'
 import styles from './About.module.css'
 
 const { heading, paragraphs, education, awards, links } = aboutData
@@ -35,7 +35,11 @@ export default function About() {
         {/* 본문 단락 */}
         <div className={styles.intro}>
           {paragraphs.map((p, i) => (
-            <motion.p key={i} variants={fadeUp} className={`t-body ${styles.introParagraph}`}>
+            <motion.p
+              key={i}
+              variants={fadeUp}
+              className={`t-body text-cjk ${styles.introParagraph}`}
+            >
               {p}
             </motion.p>
           ))}
@@ -51,8 +55,12 @@ export default function About() {
           <div className={`${styles.list} ${styles.listEducation}`}>
             {education.map((e) => (
               <motion.div key={e.title} variants={fadeUp} className={styles.row}>
-                <span className={`t-list-title ${styles.eduTitle}`}>{e.title}</span>
-                <span className={`t-list-detail ${styles.eduDate}`}>{e.date}</span>
+                <span className={`text-body font-semibold leading-tight tracking-tight ${styles.eduTitle}`}>
+                  {e.title}
+                </span>
+                <span className={`text-body font-medium leading-tight tracking-tight ${styles.eduDate}`}>
+                  {e.date}
+                </span>
               </motion.div>
             ))}
           </div>
@@ -69,10 +77,16 @@ export default function About() {
             {awards.map((a) => (
               <motion.div key={a.title} variants={fadeUp} className={styles.row}>
                 <div className={styles.awardBody}>
-                  <span className={`t-list-title ${styles.awardTitle}`}>{a.title}</span>
-                  <span className={`t-list-detail ${styles.awardDesc}`}>{a.desc}</span>
+                  <span className={`text-body font-semibold leading-tight tracking-tight ${styles.awardTitle}`}>
+                    {a.title}
+                  </span>
+                  <span className={`text-body font-medium leading-tight tracking-tight ${styles.awardDesc}`}>
+                    {a.desc}
+                  </span>
                 </div>
-                <span className={`t-list-detail ${styles.awardDate}`}>{a.date}</span>
+                <span className={`text-body font-medium leading-tight tracking-tight ${styles.awardDate}`}>
+                  {a.date}
+                </span>
               </motion.div>
             ))}
           </div>

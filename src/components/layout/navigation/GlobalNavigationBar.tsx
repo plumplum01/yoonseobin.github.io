@@ -9,8 +9,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useScrollLock } from '../../hooks/useScrollLock'
-import { useIsMobile } from '../../hooks/useIsMobile'
+import { useScrollLock } from '../../../hooks/useScrollLock'
+import { useIsMobile } from '../../../hooks/useIsMobile'
 import NavHeader from './NavHeader'
 import NavMenu from './NavMenu'
 import styles from './GlobalNavigationBar.module.css'

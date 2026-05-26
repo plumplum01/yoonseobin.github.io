@@ -6,7 +6,7 @@
  * ProjectCard에 위임한다.
  */
 
-import { projects } from '../../lib/content/projects'
+import { projects } from '../../../registry/projects'
 import ProjectCard from './ProjectCard'
 import styles from './MobileCard.module.css'
 

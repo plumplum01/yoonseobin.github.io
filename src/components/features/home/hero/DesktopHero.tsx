@@ -13,13 +13,14 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
-import Lenis from 'lenis'
 import { X } from 'lucide-react'
-import { projects } from '../../lib/content/projects'
-import ContentContainer from '../ContentContainer'
-import Footer from '../Footer'
-import DesktopCard from '../project/DesktopCard'
-import { useScrollLock } from '../../hooks/useScrollLock'
+import { projects } from '../../../../registry/projects'
+import ContentContainer from '../../projects/ContentContainer'
+import Footer from '../../../layout/Footer'
+import DesktopCard from '../../projects/DesktopCard'
+import { useScrollLock } from '../../../../hooks/useScrollLock'
+import { useMediaPreload } from '../../../../hooks/useMediaPreload'
+import { useSmoothScroll } from '../../../../hooks/useSmoothScroll'
 
 const ICON_SIZE = 16
 import {
@@ -33,7 +34,13 @@ import {
 } from './constants'
 import styles from './DesktopHero.module.css'
 
-export default function DesktopHero() {
+const projectThumbnailUrls = projects.map((project) => project.thumbnail)
+
+type Props = {
+  smoothScrollEnabled: boolean
+}
+
+export default function DesktopHero({ smoothScrollEnabled }: Props) {
   // ─── 슬라이더 상태 ────────────────────────────────────────────────────────
 
   /** 슬라이더의 현재 X 위치 (framer-motion MotionValue) */
@@ -59,14 +66,17 @@ export default function DesktopHero() {
    */
   const lenisContentRef = useRef<HTMLDivElement>(null)
 
-  /**
-   * Lenis 인스턴스 ref. 단일 RAF 루프에서 `lenis.raf(time)`으로 수동 tick
-   * 하기 위해 ref에 저장한다 (autoRaf: false).
-   */
-  const lenisRef = useRef<Lenis | null>(null)
-
-  /** Lenis가 마지막으로 관측한 scroll 값 — 매 프레임 delta 계산용 */
-  const lastLenisScrollRef = useRef(0)
+  const { readScrollDelta } = useSmoothScroll({
+    enabled: smoothScrollEnabled,
+    wrapperRef: lenisWrapperRef,
+    contentRef: lenisContentRef,
+    eventsTargetRef: sectionRef,
+    orientation: 'horizontal',
+    gestureOrientation: 'vertical',
+    smoothWheel: true,
+    wheelMultiplier: WHEEL_SENSITIVITY,
+    lerp: 0.08,
+  })
 
   // ─── 오버레이 상태 ────────────────────────────────────────────────────────
 
@@ -102,16 +112,9 @@ export default function DesktopHero() {
   // decode 지연으로 빈 프레임이 보이는 현상을 방지하려고, 마운트 시점에
   // 모든 썸네일을 강제로 decode 요청해 브라우저 decoded bitmap 캐시에 올려둔다.
 
-  useEffect(() => {
-    projects.forEach((project) => {
-      if (!project.thumbnail) return
-      const img = new Image()
-      img.src = project.thumbnail
-      img.decode().catch(() => {
-        /* decode 실패는 무시 — 최악의 경우 기존 동작과 동일 */
-      })
-    })
-  }, [])
+  useMediaPreload({
+    images: projectThumbnailUrls,
+  })
 
   // ─── 슬라이더 초기화 및 리사이즈 대응 ────────────────────────────────────
 
@@ -141,14 +144,7 @@ export default function DesktopHero() {
   // RAF 루프는 Lenis tick과 MotionValue I/O만 담당.
 
   useAnimationFrame((time) => {
-    const lenis = lenisRef.current
-    let lenisDelta = 0
-    if (lenis) {
-      lenis.raf(time)
-      const current = lenis.scroll
-      lenisDelta = current - lastLenisScrollRef.current
-      lastLenisScrollRef.current = current
-    }
+    const lenisDelta = readScrollDelta(time)
 
     const next = stepHeroFrame({
       x: x.get(),
@@ -175,46 +171,6 @@ export default function DesktopHero() {
     if (selectedCard) lock()
     else unlock()
   }, [selectedCard, lock, unlock])
-
-  // ─── Lenis 인스턴스 생성 (autoRaf: false) ──────────────────────────────
-  // Lenis는 hero section의 wheel 이벤트를 lerp 기반 가상 스크롤로 변환만
-  // 담당한다. RAF tick은 위의 단일 useAnimationFrame에서 수동으로 돌린다.
-  //
-  // - orientation: 'horizontal' + gestureOrientation: 'vertical'
-  //   → 세로 휠 입력이 가로 가상 스크롤로 매핑
-  // - smoothWheel + lerp: 0.08 → 부드러운 감속
-  // - wheelMultiplier: WHEEL_SENSITIVITY → 튜닝된 민감도
-  // - autoRaf: false → 단일 RAF 루프에서 lenis.raf(time) 수동 호출
-  //
-  // ref에 저장해 RAF 루프가 접근할 수 있게 한다. x는 의존성에 없어도
-  // RAF 루프가 closure로 접근하므로 재구독 필요 없음.
-
-  useEffect(() => {
-    const section = sectionRef.current
-    const wrapper = lenisWrapperRef.current
-    const content = lenisContentRef.current
-    if (!section || !wrapper || !content) return
-
-    const lenis = new Lenis({
-      wrapper,
-      content,
-      eventsTarget: section,
-      orientation: 'horizontal',
-      gestureOrientation: 'vertical',
-      smoothWheel: true,
-      wheelMultiplier: WHEEL_SENSITIVITY,
-      lerp: 0.08,
-      autoRaf: false,
-    })
-
-    lenisRef.current = lenis
-    lastLenisScrollRef.current = lenis.scroll
-
-    return () => {
-      lenis.destroy()
-      lenisRef.current = null
-    }
-  }, [])
 
   // ─── 렌더 ─────────────────────────────────────────────────────────────────
 

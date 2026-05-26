@@ -1,4 +1,4 @@
-import site from '../content/data/site.json'
+import { site } from '../../registry/site'
 import styles from './Footer.module.css'
 
 interface FooterProps {
@@ -12,7 +12,7 @@ export default function Footer({ variant }: FooterProps) {
   const emailOrder = isMobile ? 'order-first' : 'order-last'
 
   return (
-    <footer className={`t-footer ${wrapperStyle}`}>
+    <footer className={`text-body font-medium tracking-tight ${wrapperStyle}`}>
       <div>
         <span>{site.nameDisplay}</span>
       </div>

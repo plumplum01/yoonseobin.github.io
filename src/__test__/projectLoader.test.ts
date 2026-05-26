@@ -2,7 +2,7 @@ import {
   buildProjects,
   groupImagesByProject,
   groupScenesByProject,
-} from '../lib/content/projectLoader'
+} from '../registry/projectLoader'
 import type { ProjectData } from '@portfolio/types'
 
 describe('groupImagesByProject', () => {

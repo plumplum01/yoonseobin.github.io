@@ -13,9 +13,13 @@
 
 import DesktopHero from './DesktopHero'
 import MobileHero from './MobileHero'
-import { useIsMobile } from '../../hooks/useIsMobile'
+import { useIsMobile } from '../../../../hooks/useIsMobile'
 
-export default function Hero() {
+type Props = {
+  smoothScrollEnabled: boolean
+}
+
+export default function Hero({ smoothScrollEnabled }: Props) {
   const isMobile = useIsMobile()
-  return isMobile ? <MobileHero /> : <DesktopHero />
+  return isMobile ? <MobileHero /> : <DesktopHero smoothScrollEnabled={smoothScrollEnabled} />
 }
