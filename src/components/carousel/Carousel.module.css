@@ -1,0 +1,70 @@
+.root {
+  position: relative;
+  width: 100%;
+}
+
+.viewport {
+  overflow: hidden;
+  width: 100%;
+}
+
+.container {
+  display: flex;
+  touch-action: pan-y pinch-zoom;
+}
+
+.slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.image {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--border-muted, rgba(128, 128, 128, 0.35));
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: transparent;
+}
+
+.button:disabled {
+  opacity: 0.35;
+}
+
+.dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: var(--text-primary);
+  opacity: 0.24;
+}
+
+.dotActive {
+  opacity: 1;
+}
