@@ -151,7 +151,7 @@ return (
 
 ### Unit (TDD)
 
-**파일:** `src/test/heroScroll.test.ts` (신규)
+**파일:** `src/__test__/heroScroll.test.ts` (신규)
 
 ```ts
 import { wheelDeltaToX } from '../components/hero/constants'
@@ -200,7 +200,7 @@ describe('wheelDeltaToX', () => {
 |---|---|---|
 | `src/components/hero/constants.ts` | 수정 | `WHEEL_SENSITIVITY` 상수 + `wheelDeltaToX` 순수 함수 추가 |
 | `src/components/hero/DesktopHero.tsx` | 수정 | `sectionRef` 선언 + `<section>`에 ref 연결 + wheel `useEffect` 추가 |
-| `src/test/heroScroll.test.ts` | 신규 | `wheelDeltaToX` 단위 테스트 5개 |
+| `src/__test__/heroScroll.test.ts` | 신규 | `wheelDeltaToX` 단위 테스트 5개 |
 
 기존 로직(auto-scroll useEffect, 경계 순간이동, 드래그 핸들러, 오버레이)은 **전혀 수정하지 않는다**.
 

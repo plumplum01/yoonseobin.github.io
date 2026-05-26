@@ -5,6 +5,37 @@
 - 브랜치를 닫을 때는 항상 기능 리뷰 및 테스트를 진행한 후 머지한다
 - 커밋 전에는 항상 `npm run test:run`과 `npx vite build`로 회귀 없음을 확인한다
 
+## 콘텐츠 구조 및 CMS 전환 계획
+
+- `packages/types`를 콘텐츠 타입의 SSOT로 둔다
+- `packages/sanity`는 Sanity schema, query, client를 관리하는 CMS 패키지로 둔다
+- `src/data`는 Sanity로 완전히 통합하기 전까지 사용하는 임시 로컬 원본 데이터/미디어 영역이다
+- `src/data/media`는 로컬 미디어 asset을 보관한다
+- 앱 컴포넌트는 `src/data`나 Sanity에 직접 의존하지 않고 `src/registry`를 통해 데이터를 사용한다
+- `src/registry`는 현재 앱 데이터 registry 역할이며, 추후 DOT(Data Orchestration/Translation) 계층으로 변경될 예정이다
+- Sanity 통합 시에는 `src/registry`의 데이터 소스만 Sanity query 기반으로 교체하고, 앱 타입은 `packages/types` 기준을 유지한다
+- Sanity asset CDN으로 전환되면 `src/data/media`는 점진적으로 축소하거나 제거한다
+
+## 앱 구조 규칙
+
+- `src/app/router.tsx`에서 앱 페이지 모델(`pageRoutes`)과 React Router 변환 결과(`routes`)를 관리한다
+- 페이지별 smooth scroll 사용 여부는 `pageRoutes[].smoothScroll`에서 관리한다
+- `src/app/layouts/RootLayout.tsx`는 전역 레이아웃이며 `GlobalNavigationBar`, `Cursor`, `Outlet`을 렌더링한다
+- `src/pages`는 라우트 단위 화면을 보관하고, 파일명과 컴포넌트명은 `Home`, `About`처럼 페이지 이름을 그대로 사용한다
+- `src/components/ui`는 shadcn 같은 외부 UI primitive 도입을 위한 예약 영역으로 둔다
+- `src/components/layout`은 전역 앱 셸과 레이아웃성 컴포넌트를 보관한다
+- `src/components/layout/navigation/GlobalNavigationBar.tsx`는 전역 네비게이션 컴포넌트이다
+- `src/components/blocks`는 CMS block renderer처럼 콘텐츠 블록 단위로 재사용될 컴포넌트를 보관한다
+- `src/components/features`는 home, projects, theme처럼 기능/도메인 의도가 있는 UI 컴포넌트를 보관한다
+- `*.module.css`는 deprecated로 간주하고, 신규 스타일은 cva + Tailwind utility 기반으로 작성한다
+- 기존 `*.module.css`는 기능 개발 과정에서 점진적으로 제거한다
+- 커스텀 typography utility였던 `src/styles/typography.css`는 제거되었고, Tailwind text utility와 `@theme` 토큰으로 대체한다
+- 한국어/일본어/중국어처럼 CJK 본문 줄바꿈이 필요한 긴 텍스트에는 `text-cjk` 유틸리티를 사용한다
+- `src/components/ui`에는 cva 기반 primitive를 두고, class 조합은 `src/lib/cn.ts`의 `cn` 유틸리티를 사용한다
+- `src/features`는 UI 컴포넌트가 아니라 상태, store, 비즈니스 로직 등 기능 단위 로직을 보관한다
+- unit/integration 테스트는 `src/__test__`, E2E 테스트는 `tests/e2e`에 둔다
+- 루트에는 Vite 엔트리인 `index.html`만 두고, 독립 개발용 HTML은 유지하지 않는다
+
 ## 기능 크기별 작업 모드
 
 1인 포트폴리오라는 맥락에서 "스펙 → 플랜 → subagent TDD → 2단계 리뷰" 풀 체인은

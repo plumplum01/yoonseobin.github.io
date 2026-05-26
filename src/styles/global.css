@@ -1,6 +1,12 @@
 @import "tailwindcss";
 @import "./tokens.css";
-@import "./typography.css";
+
+@utility text-cjk {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  line-break: strict;
+  text-wrap: pretty;
+}
 
 /* ─── 폰트 페이스 ──────────────────────────────────────────────────────── */
 
