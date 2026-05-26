@@ -7,22 +7,18 @@
  * components/ 최상위에 둔다.
  */
 
-import { Sun, Moon } from "lucide-react";
-import { useThemeStore } from "../store/themeStore";
-import styles from "./ThemeToggle.module.css";
+import { Moon, Sun } from 'lucide-react'
+import { useThemeStore } from '../store/themeStore'
+import styles from './ThemeToggle.module.css'
 
-const ICON_SIZE = 16;
+const ICON_SIZE = 16
 
 export default function ThemeToggle() {
-    const { isDark, toggleTheme } = useThemeStore();
+  const { isDark, toggleTheme } = useThemeStore()
 
-    return (
-        <button
-            className={styles.root}
-            aria-label="모드 전환"
-            onClick={toggleTheme}
-        >
-            {isDark ? <Moon size={ICON_SIZE} /> : <Sun size={ICON_SIZE} />}
-        </button>
-    );
+  return (
+    <button type="button" className={styles.root} aria-label="모드 전환" onClick={toggleTheme}>
+      {isDark ? <Moon size={ICON_SIZE} /> : <Sun size={ICON_SIZE} />}
+    </button>
+  )
 }

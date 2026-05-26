@@ -11,7 +11,9 @@
     "build": "npm run build:types && npm run build:sanity && tsc -b && vite build",
     "build:sanity": "tsc -p packages/sanity/tsconfig.json",
     "build:types": "tsc -p packages/types/tsconfig.json",
-    "lint": "eslint .",
+    "check": "biome check --formatter-enabled=false --assist-enabled=false .",
+    "format": "biome format --write .",
+    "lint": "biome lint .",
     "preview": "vite preview",
     "sanity:build": "npm --workspace @portfolio/sanity run studio:build",
     "sanity:deploy": "npm --workspace @portfolio/sanity run deploy",
@@ -31,7 +33,7 @@
     "zustand": "^5.0.12"
   },
   "devDependencies": {
-    "@eslint/js": "^9.39.4",
+    "@biomejs/biome": "2.4.15",
     "@tailwindcss/vite": "^4.2.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
@@ -40,14 +42,9 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
-    "eslint": "^9.39.4",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.5.2",
-    "globals": "^17.4.0",
     "jsdom": "^29.0.2",
     "tailwindcss": "^4.2.2",
     "typescript": "~5.9.3",
-    "typescript-eslint": "^8.57.0",
     "vite": "^8.0.1",
     "vitest": "^4.1.4"
   }
