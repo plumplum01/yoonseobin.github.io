@@ -1,14 +1,10 @@
+import type { CarouselImage } from '@portfolio/types'
 import useEmblaCarousel, { type UseEmblaCarouselType } from 'embla-carousel-react'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Children, type ReactNode, useCallback, useEffect, useState } from 'react'
 import styles from './Carousel.module.css'
 
 type EmblaApi = UseEmblaCarouselType[1]
-
-export interface CarouselImage {
-  src: string
-  alt?: string
-}
 
 interface CarouselProps {
   ariaLabel?: string
