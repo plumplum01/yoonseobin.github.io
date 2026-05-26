@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import aboutData from '../data/about.json'
+import aboutData from '../content/data/about.json'
 import styles from './AboutPage.module.css'
 
 const { heading, paragraphs, education, awards, links } = aboutData
@@ -26,13 +26,7 @@ const fadeUp = {
 export default function AboutPage() {
   return (
     <section className={styles.section}>
-      <motion.div
-        className={styles.container}
-        variants={container}
-        initial="hidden"
-        animate="show"
-      >
-
+      <motion.div className={styles.container} variants={container} initial="hidden" animate="show">
         {/* 페이지 헤딩 */}
         <motion.h1 variants={fadeUp} className={`t-section-heading ${styles.heading}`}>
           {heading}
@@ -57,12 +51,8 @@ export default function AboutPage() {
           <div className={`${styles.list} ${styles.listEducation}`}>
             {education.map((e) => (
               <motion.div key={e.title} variants={fadeUp} className={styles.row}>
-                <span className={`t-list-title ${styles.eduTitle}`}>
-                  {e.title}
-                </span>
-                <span className={`t-list-detail ${styles.eduDate}`}>
-                  {e.date}
-                </span>
+                <span className={`t-list-title ${styles.eduTitle}`}>{e.title}</span>
+                <span className={`t-list-detail ${styles.eduDate}`}>{e.date}</span>
               </motion.div>
             ))}
           </div>
@@ -79,16 +69,10 @@ export default function AboutPage() {
             {awards.map((a) => (
               <motion.div key={a.title} variants={fadeUp} className={styles.row}>
                 <div className={styles.awardBody}>
-                  <span className={`t-list-title ${styles.awardTitle}`}>
-                    {a.title}
-                  </span>
-                  <span className={`t-list-detail ${styles.awardDesc}`}>
-                    {a.desc}
-                  </span>
+                  <span className={`t-list-title ${styles.awardTitle}`}>{a.title}</span>
+                  <span className={`t-list-detail ${styles.awardDesc}`}>{a.desc}</span>
                 </div>
-                <span className={`t-list-detail ${styles.awardDate}`}>
-                  {a.date}
-                </span>
+                <span className={`t-list-detail ${styles.awardDate}`}>{a.date}</span>
               </motion.div>
             ))}
           </div>
@@ -110,7 +94,6 @@ export default function AboutPage() {
             </a>
           ))}
         </motion.div>
-
       </motion.div>
     </section>
   )

@@ -34,9 +34,7 @@ function parseScenePath(path: string): { projectId: string; filename: string } |
  * 이미지 glob 결과를 프로젝트 id 기준으로 그룹화한다.
  * 각 그룹은 파일명 숫자 순으로 정렬된다.
  */
-export function groupImagesByProject(
-  glob: Record<string, unknown>,
-): Record<string, string[]> {
+export function groupImagesByProject(glob: Record<string, unknown>): Record<string, string[]> {
   const groups: Record<string, Array<{ filename: string; url: string }>> = {}
 
   for (const [path, value] of Object.entries(glob)) {
@@ -93,9 +91,7 @@ export function buildProjects(
     const sceneAssets = scenesByProject[p.id] ?? []
 
     const scenes: Scene[] | undefined = p.scenes?.map((s) => {
-      const image = s.imageKey
-        ? sceneAssets.find((a) => a.name === s.imageKey)?.image
-        : undefined
+      const image = s.imageKey ? sceneAssets.find((a) => a.name === s.imageKey)?.image : undefined
       return {
         name: s.name,
         image,

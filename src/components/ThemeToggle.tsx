@@ -8,7 +8,7 @@
  */
 
 import { Moon, Sun } from 'lucide-react'
-import { useThemeStore } from '../store/themeStore'
+import { useThemeStore } from '../features/theme/themeStore'
 import styles from './ThemeToggle.module.css'
 
 const ICON_SIZE = 16

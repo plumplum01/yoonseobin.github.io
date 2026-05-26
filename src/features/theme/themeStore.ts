@@ -11,7 +11,7 @@ interface ThemeState {
  * isDark 변경 시 DOM 클래스와 localStorage를 동기화합니다.
  * ThemeContext 대신 이 스토어를 사용하세요.
  *
- *   import { useThemeStore } from '../store/themeStore'
+ *   import { useThemeStore } from '../features/theme/themeStore'
  *   const { isDark, toggleTheme } = useThemeStore()
  */
 function getInitialIsDark(): boolean {

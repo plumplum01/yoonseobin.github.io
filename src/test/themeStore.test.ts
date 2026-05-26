@@ -1,5 +1,5 @@
 import { act, renderHook } from '@testing-library/react'
-import { useThemeStore } from '../store/themeStore'
+import { useThemeStore } from '../features/theme/themeStore'
 
 describe('useThemeStore', () => {
   beforeEach(() => {
@@ -21,7 +21,10 @@ describe('useThemeStore', () => {
 
   it('toggleTheme 두 번 호출 시 원래 상태로 돌아온다', () => {
     const { result } = renderHook(() => useThemeStore())
-    act(() => { result.current.toggleTheme(); result.current.toggleTheme() })
+    act(() => {
+      result.current.toggleTheme()
+      result.current.toggleTheme()
+    })
     expect(result.current.isDark).toBe(false)
   })
 
@@ -47,7 +50,10 @@ describe('useThemeStore', () => {
 
   it('toggleTheme 두 번 호출 시 localStorage에 "light"가 저장된다', () => {
     const { result } = renderHook(() => useThemeStore())
-    act(() => { result.current.toggleTheme(); result.current.toggleTheme() })
+    act(() => {
+      result.current.toggleTheme()
+      result.current.toggleTheme()
+    })
     expect(localStorage.getItem('theme')).toBe('light')
   })
 })

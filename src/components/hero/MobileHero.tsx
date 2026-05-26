@@ -9,15 +9,15 @@
  * - 콘텐츠 오버레이: 카드를 탭하면 블러 배경 위로 상세 패널이 열립니다.
  */
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { X } from 'lucide-react'
 import { useScrollLock } from '../../hooks/useScrollLock'
-import { projects } from '../../lib/projects'
+import { projects } from '../../lib/content/projects'
 import ContentContainer from '../ContentContainer'
 import Footer from '../Footer'
-import MobileCard from '../card/MobileCard'
+import MobileCard from '../project/MobileCard'
 import { ITEMS } from './constants'
 import styles from './MobileHero.module.css'
 
@@ -28,15 +28,17 @@ export default function MobileHero() {
   const [selectedN, setSelectedN] = useState<number | null>(null)
   const { lock, unlock } = useScrollLock()
 
-  const handleClose = () => setSelectedN(null)
+  const handleClose = useCallback(() => setSelectedN(null), [])
 
   // ─── ESC 키로 오버레이 닫기 ───────────────────────────────────────────────
 
   useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') handleClose() }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') handleClose()
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
-  }, [])
+  }, [handleClose])
 
   // ─── 오버레이 열릴 때 body 스크롤 잠금 ───────────────────────────────────
 
@@ -81,15 +83,21 @@ export default function MobileHero() {
                 key="mobile-scroll-overlay"
                 className={styles.overlay}
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0, transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] } }}
-                exit={{ opacity: 0, y: -80, transition: { duration: 0.35, ease: [0.4, 0, 0.6, 1] } }}
+                animate={{
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+                }}
+                exit={{
+                  opacity: 0,
+                  y: -80,
+                  transition: { duration: 0.35, ease: [0.4, 0, 0.6, 1] },
+                }}
                 onClick={handleClose}
               >
-                <motion.div
-                  className={styles.panel}
-                  onClick={(e) => e.stopPropagation()}
-                >
+                <motion.div className={styles.panel} onClick={(e) => e.stopPropagation()}>
                   <ContentContainer
+                    key={projects[(selectedN - 1) % projects.length].id}
                     project={projects[(selectedN - 1) % projects.length]}
                     onClose={handleClose}
                   />
@@ -99,7 +107,10 @@ export default function MobileHero() {
                 <div className={styles.closeWrapper}>
                   <button
                     className={styles.closeButton}
-                    onClick={(e) => { e.stopPropagation(); handleClose() }}
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleClose()
+                    }}
                   >
                     <X size={ICON_SIZE} />
                   </button>
@@ -108,7 +119,7 @@ export default function MobileHero() {
             )}
           </AnimatePresence>
         </>,
-        document.body
+        document.body,
       )}
     </section>
   )

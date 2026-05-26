@@ -2,7 +2,7 @@ import {
   buildProjects,
   groupImagesByProject,
   groupScenesByProject,
-} from '../lib/projectLoader'
+} from '../lib/content/projectLoader'
 import type { ProjectData } from '@portfolio/types'
 
 describe('groupImagesByProject', () => {
@@ -106,11 +106,7 @@ describe('buildProjects', () => {
       id: 'grounds',
       scenes: [{ name: 'GNB', videos: [{ src: 'g.mp4' }] }],
     }
-    const result = buildProjects(
-      [data],
-      { grounds: ['g1'] },
-      { grounds: [] },
-    )
+    const result = buildProjects([data], { grounds: ['g1'] }, { grounds: [] })
     expect(result[0].scenes).toEqual([
       { name: 'GNB', image: undefined, videos: [{ src: 'g.mp4' }] },
     ])
@@ -138,10 +134,7 @@ describe('buildProjects', () => {
         {
           name: 'Q',
           imageKey: 'Q',
-          videos: [
-            { src: 'a.mp4' },
-            { src: 'b.mp4', delay: 4000 },
-          ],
+          videos: [{ src: 'a.mp4' }, { src: 'b.mp4', delay: 4000 }],
         },
       ],
     }
@@ -150,9 +143,6 @@ describe('buildProjects', () => {
       { watt: ['w1'] },
       { watt: [{ name: 'Q', image: 'q.webp' }] },
     )
-    expect(result[0].scenes![0].videos).toEqual([
-      { src: 'a.mp4' },
-      { src: 'b.mp4', delay: 4000 },
-    ])
+    expect(result[0].scenes![0].videos).toEqual([{ src: 'a.mp4' }, { src: 'b.mp4', delay: 4000 }])
   })
 })
