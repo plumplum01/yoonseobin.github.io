@@ -8,14 +8,19 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:types && tsc -b && vite build",
+    "build": "npm run build:types && npm run build:sanity && tsc -b && vite build",
+    "build:sanity": "tsc -p packages/sanity/tsconfig.json",
     "build:types": "tsc -p packages/types/tsconfig.json",
     "lint": "eslint .",
     "preview": "vite preview",
+    "sanity:build": "npm --workspace @portfolio/sanity run studio:build",
+    "sanity:deploy": "npm --workspace @portfolio/sanity run deploy",
+    "sanity:dev": "npm --workspace @portfolio/sanity run dev",
     "test": "vitest",
     "test:run": "vitest run"
   },
   "dependencies": {
+    "@portfolio/sanity": "file:packages/sanity",
     "@portfolio/types": "file:packages/types",
     "framer-motion": "^12.38.0",
     "lenis": "^1.3.21",
