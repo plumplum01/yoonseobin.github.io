@@ -2,8 +2,8 @@ import {
   buildProjects,
   groupImagesByProject,
   groupScenesByProject,
-  type ProjectData,
 } from '../lib/projectLoader'
+import type { ProjectData } from '@portfolio/types'
 
 describe('groupImagesByProject', () => {
   it('경로를 프로젝트 id 기준으로 그룹화하고 숫자 순으로 정렬한다', () => {

@@ -3,15 +3,20 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "workspaces": [
+    "packages/*"
+  ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "npm run build:types && tsc -b && vite build",
+    "build:types": "tsc -p packages/types/tsconfig.json",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest",
     "test:run": "vitest run"
   },
   "dependencies": {
+    "@portfolio/types": "file:packages/types",
     "framer-motion": "^12.38.0",
     "lenis": "^1.3.21",
     "lucide-react": "^1.8.0",

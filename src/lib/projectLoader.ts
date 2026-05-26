@@ -1,51 +1,10 @@
+import type { Project, ProjectData, Scene } from '@portfolio/types'
+
 /**
  * projects.json과 Vite glob 결과를 합쳐 완전한 Project 배열을 만든다.
  *
  * JSON에는 순수 데이터만 담기고, 이미지 URL은 런타임에 glob으로 해석된다.
  */
-
-export interface SceneVideo {
-  src: string
-  delay?: number
-}
-
-export interface SceneData {
-  name: string
-  imageKey?: string
-  videos?: SceneVideo[]
-}
-
-export interface ProjectData {
-  id: string
-  title: string
-  subtitle: string
-  period: string
-  role: string
-  client: string
-  tools: string
-  description: string
-  scenes?: SceneData[]
-}
-
-export interface Scene {
-  name: string
-  image?: string
-  videos?: SceneVideo[]
-}
-
-export interface Project {
-  id: string
-  title: string
-  subtitle: string
-  period: string
-  role: string
-  client: string
-  tools: string
-  description: string
-  thumbnail: string
-  images: string[]
-  scenes?: Scene[]
-}
 
 /**
  * glob 경로에서 마지막 디렉토리/파일명 토큰을 추출한다.

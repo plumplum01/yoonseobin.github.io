@@ -10,10 +10,10 @@ import {
   buildProjects,
   groupImagesByProject,
   groupScenesByProject,
-  type ProjectData,
 } from './projectLoader'
+import type { ProjectData } from '@portfolio/types'
 
-export type { Project, Scene, SceneVideo } from './projectLoader'
+export type { Project, Scene, SceneVideo } from '@portfolio/types'
 
 // Vite가 정적 분석할 수 있도록 glob 인자는 리터럴 문자열이어야 한다.
 const projectImagesGlob = import.meta.glob('../assets/projects/*/*.webp', {
