@@ -16,6 +16,15 @@
 - Sanity 통합 시에는 `src/lib/content`의 데이터 소스만 Sanity query 기반으로 교체하고, 앱 타입은 `packages/types` 기준을 유지한다
 - Sanity asset CDN으로 전환되면 `src/content/assets`는 점진적으로 축소하거나 제거한다
 
+## 앱 구조 규칙
+
+- `src/app/router.tsx`에서 앱 페이지 모델(`pageRoutes`)과 React Router 변환 결과(`routes`)를 관리한다
+- `src/app/layouts/RootLayout.tsx`는 전역 레이아웃이며 `GlobalNavigationBar`, `Cursor`, `Outlet`을 렌더링한다
+- `src/pages`는 라우트 단위 화면을 보관하고, 파일명과 컴포넌트명은 `Home`, `About`처럼 페이지 이름을 그대로 사용한다
+- `src/components/navigation/GlobalNavigationBar.tsx`는 전역 네비게이션 컴포넌트이다
+- unit/integration 테스트는 `src/__test__`, E2E 테스트는 `tests/e2e`에 둔다
+- 루트에는 Vite 엔트리인 `index.html`만 두고, 독립 개발용 HTML은 유지하지 않는다
+
 ## 기능 크기별 작업 모드
 
 1인 포트폴리오라는 맥락에서 "스펙 → 플랜 → subagent TDD → 2단계 리뷰" 풀 체인은

@@ -1,73 +1,85 @@
-# React + TypeScript + Vite
+# yoonseobin.github.io
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+React, TypeScript, Vite 기반의 포트폴리오 사이트입니다.
 
-Currently, two official plugins are available:
+## Tech Stack
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- React 19
+- TypeScript
+- Vite
+- React Router
+- Zustand
+- Framer Motion
+- Embla Carousel
+- Biome
+- Vitest
+- Playwright
+- Sanity 준비 패키지
 
-## React Compiler
+## Project Structure
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+```txt
+src/
+  app/
+    App.tsx
+    router.tsx
+    layouts/
+      RootLayout.tsx
+  pages/
+    Home.tsx
+    About.tsx
+  components/
+    navigation/
+      GlobalNavigationBar.tsx
+    hero/
+    project/
+    carousel/
+  content/
+    data/
+    assets/
+  lib/
+    content/
+  features/
+    theme/
+  hooks/
+  styles/
+  __test__/
 
-## Expanding the ESLint configuration
+packages/
+  types/
+  sanity/
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
-
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+tests/
+  e2e/
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## Architecture Notes
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+- `src/app/router.tsx`에서 앱 페이지 모델인 `pageRoutes`를 관리하고, React Router의 `RouteObject[]`로 변환합니다.
+- `src/app/layouts/RootLayout.tsx`는 전역 레이아웃입니다. `GlobalNavigationBar`, `Cursor`, `Outlet`을 렌더링합니다.
+- `src/pages`는 라우트 단위 화면을 보관합니다.
+- `src/components`는 라우트에 종속되지 않는 UI 컴포넌트를 보관합니다.
+- `src/content`는 Sanity로 완전히 통합하기 전까지 사용하는 임시 로컬 콘텐츠 영역입니다.
+- `src/lib/content`는 현재 content loader/adapter 역할이며, 추후 DOT(Data Orchestration/Translation) 계층으로 전환할 예정입니다.
+- `packages/types`는 콘텐츠 타입 SSOT입니다.
+- `packages/sanity`는 Sanity schema, query, client를 관리합니다.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+## Scripts
+
+```sh
+npm run dev
+npm run check
+npm run test:run
+npm run test:e2e
+npm run build
 ```
+
+## Testing
+
+- Unit/integration tests: `src/__test__`
+- E2E tests: `tests/e2e`
+- Vitest setup: `src/__test__/setup.ts`
+
+## Content Migration Plan
+
+현재는 `src/content/data`와 `src/content/assets`를 사용합니다. 이후 CMS가 Sanity로 통합되면 앱 컴포넌트는 그대로 두고, `src/lib/content` 내부의 데이터 소스를 Sanity query 기반으로 교체합니다.

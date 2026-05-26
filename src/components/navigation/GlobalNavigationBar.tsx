@@ -1,5 +1,5 @@
 /**
- * Navbar — 네비게이션 최상위 컨테이너
+ * GlobalNavigationBar — 전역 네비게이션 최상위 컨테이너
  *
  * 상태(열림 여부) 관리, 반응형 클래스 선택, 스크롤 잠금, 패널 wrapper와
  * 배경 blur overlay 렌더만 담당한다. 실제 내용은 NavHeader(항상)와
@@ -13,13 +13,13 @@ import { useScrollLock } from '../../hooks/useScrollLock'
 import { useIsMobile } from '../../hooks/useIsMobile'
 import NavHeader from './NavHeader'
 import NavMenu from './NavMenu'
-import styles from './Navbar.module.css'
+import styles from './GlobalNavigationBar.module.css'
 
 // ─── 패널 지오메트리 (framer-motion spring) ──────────────────────────────
 // CSS는 색상·outline·블러·padding만 담당하고, width/height/border-radius는
 // 아래 값을 타겟으로 JS-driven spring으로 애니메이션된다.
 //
-// ⚠ PANEL_CLOSED_HEIGHT(47) 는 Navbar.module.css 의 --nav-header-height 와
+// ⚠ PANEL_CLOSED_HEIGHT(47) 는 GlobalNavigationBar.module.css 의 --nav-header-height 와
 //    중복이다. 둘 중 하나를 수정하면 반드시 나머지도 맞춰야 한다
 //    (NavHeader / NavMenu 가 CSS 변수 쪽을 cascade 로 참조 중).
 
@@ -36,7 +36,7 @@ const panelSpring = {
   duration: 0.6,
 } as const
 
-export default function Navbar() {
+export default function GlobalNavigationBar() {
   const [isOpen, setIsOpen] = useState(false)
   const isMobile = useIsMobile()
   const { lock, unlock } = useScrollLock()

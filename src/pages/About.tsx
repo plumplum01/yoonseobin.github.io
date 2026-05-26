@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 import aboutData from '../content/data/about.json'
-import styles from './AboutPage.module.css'
+import styles from './About.module.css'
 
 const { heading, paragraphs, education, awards, links } = aboutData
 
@@ -23,7 +23,7 @@ const fadeUp = {
   },
 }
 
-export default function AboutPage() {
+export default function About() {
   return (
     <section className={styles.section}>
       <motion.div className={styles.container} variants={container} initial="hidden" animate="show">

@@ -20,7 +20,7 @@
 |---|---|---|
 | `src/components/hero/constants.ts` | `WHEEL_SENSITIVITY` 상수 + `wheelDeltaToX` 순수 함수 추가 | 수정 |
 | `src/components/hero/DesktopHero.tsx` | `sectionRef` 선언 + `<section>`에 ref 연결 + wheel `useEffect` 추가 | 수정 |
-| `src/test/heroScroll.test.ts` | `wheelDeltaToX` 단위 테스트 5개 | 신규 |
+| `src/__test__/heroScroll.test.ts` | `wheelDeltaToX` 단위 테스트 5개 | 신규 |
 
 **Not modified:** 나머지 모든 파일. 특히 `DesktopHero.tsx`의 기존 drag 핸들러, `useAnimationFrame` auto-scroll, `selectedCardRef` 오버레이 로직은 손대지 않는다.
 
@@ -31,12 +31,12 @@
 휠 입력 → 카드 x 변위 변환 로직을 순수 함수로 격리하고 먼저 테스트를 작성한다. 방향 부호와 민감도 계산의 올바름을 이 테스트가 고정한다. 이 테스트는 추후 lenis 통합 시에도 동일한 계약으로 작동해야 한다.
 
 **Files:**
-- Create: `src/test/heroScroll.test.ts`
+- Create: `src/__test__/heroScroll.test.ts`
 - Modify: `src/components/hero/constants.ts` (line 46 끝에 append)
 
 - [ ] **Step 1: 실패하는 테스트 파일 작성**
 
-`src/test/heroScroll.test.ts` 생성:
+`src/__test__/heroScroll.test.ts` 생성:
 
 ```ts
 import { wheelDeltaToX, WHEEL_SENSITIVITY } from '../components/hero/constants'
@@ -72,7 +72,7 @@ describe('WHEEL_SENSITIVITY', () => {
 
 - [ ] **Step 2: 테스트 실패 확인**
 
-Run: `npm run test:run -- src/test/heroScroll.test.ts`
+Run: `npm run test:run -- src/__test__/heroScroll.test.ts`
 Expected: FAIL — `Failed to resolve import "../components/hero/constants"` 또는 `wheelDeltaToX is not exported` 에러.
 
 - [ ] **Step 3: `constants.ts`에 구현 추가**
@@ -107,7 +107,7 @@ export function wheelDeltaToX(deltaY: number, sensitivity: number): number {
 
 - [ ] **Step 4: 테스트 통과 확인**
 
-Run: `npm run test:run -- src/test/heroScroll.test.ts`
+Run: `npm run test:run -- src/__test__/heroScroll.test.ts`
 Expected: `Test Files  1 passed (1)` / `Tests  6 passed (6)`
 
 - [ ] **Step 5: 전체 테스트 스위트 회귀 확인**
@@ -123,7 +123,7 @@ Expected: 출력 없음 (에러 없음)
 - [ ] **Step 7: 커밋**
 
 ```bash
-git add src/components/hero/constants.ts src/test/heroScroll.test.ts
+git add src/components/hero/constants.ts src/__test__/heroScroll.test.ts
 git commit -m "$(cat <<'EOF'
 feat: add wheelDeltaToX pure function for hero scroll conversion
 

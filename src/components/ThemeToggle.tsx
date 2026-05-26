@@ -2,7 +2,7 @@
  * ThemeToggle
  *
  * 다크/라이트 모드 전환 버튼. themeStore에 직접 구독하며
- * 상위에서 prop을 받지 않는다. Navbar에서 사용 중이지만 향후 다른
+ * 상위에서 prop을 받지 않는다. GlobalNavigationBar에서 사용 중이지만 향후 다른
  * 설정/프로필 UI에도 재사용 가능하도록 네비 전용 폴더 대신
  * components/ 최상위에 둔다.
  */
