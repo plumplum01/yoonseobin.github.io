@@ -10,8 +10,10 @@
     "includes": [
       "src/**",
       "packages/**",
+      "tests/**",
       "index.html",
       "package.json",
+      "playwright.config.ts",
       "tsconfig*.json",
       "vite.config.ts",
       "biome.json",

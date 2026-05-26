@@ -18,6 +18,8 @@
     "sanity:build": "npm --workspace @portfolio/sanity run studio:build",
     "sanity:deploy": "npm --workspace @portfolio/sanity run deploy",
     "sanity:dev": "npm --workspace @portfolio/sanity run dev",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "test": "vitest",
     "test:run": "vitest run"
   },
@@ -34,6 +36,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "2.4.15",
+    "@playwright/test": "^1.60.0",
     "@tailwindcss/vite": "^4.2.2",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
