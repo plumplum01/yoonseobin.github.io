@@ -39,7 +39,7 @@
 }
 
 .cardTitle {
-    color: var(--text-primary);
+    color: var(--color-text-primary);
     line-height: 1.375;
 }
 

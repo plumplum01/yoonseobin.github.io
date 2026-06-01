@@ -1,10 +1,11 @@
 import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { useLoaderData } from 'react-router-dom'
 import { BlockList } from '../features/post-block-renderer'
+import { formatKoDate } from '../lib/dateFormat'
 
 function formatPublishedDate(post: PostDetailModel): string | undefined {
   if (!post.publishedAt) return undefined
-  return new Intl.DateTimeFormat('ko-KR', { dateStyle: 'long' }).format(new Date(post.publishedAt))
+  return formatKoDate(post.publishedAt, 'long')
 }
 
 export default function PostDetail() {
@@ -20,7 +21,7 @@ export default function PostDetail() {
               {publishedDate}
             </p>
           )}
-          <h1 className="mt-4 text-section-heading font-semibold leading-tight tracking-heading text-cjk text-[var(--text-primary)]">
+          <h1 className="mt-4 text-section-heading font-semibold leading-tight tracking-heading text-cjk text-text-primary">
             {post.title}
           </h1>
           {post.summary && (

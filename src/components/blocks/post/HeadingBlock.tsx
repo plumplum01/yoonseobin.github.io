@@ -7,5 +7,5 @@ export function HeadingBlock({ block }: { block: Extract<PostBlock, { type: 'hea
       ? 'text-section-heading font-semibold leading-tight tracking-heading'
       : 'text-body font-semibold leading-tight tracking-tight'
 
-  return <HeadingTag className={`${className} text-cjk text-[var(--text-primary)]`}>{block.text}</HeadingTag>
+  return <HeadingTag className={`${className} text-cjk text-text-primary`}>{block.text}</HeadingTag>
 }

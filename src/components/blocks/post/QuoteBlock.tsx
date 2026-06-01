@@ -2,8 +2,8 @@ import type { PostBlock } from '@portfolio/types'
 
 export function QuoteBlock({ block }: { block: Extract<PostBlock, { type: 'quote' }> }) {
   return (
-    <figure className="border-l border-[var(--text-primary)]/30 pl-5">
-      <blockquote className="text-body font-medium leading-loose tracking-tight text-cjk text-[var(--text-primary)]">
+    <figure className="border-l border-text-primary/30 pl-5">
+      <blockquote className="text-body font-medium leading-loose tracking-tight text-cjk text-text-primary">
         {block.text}
       </blockquote>
       {block.attribution && (
