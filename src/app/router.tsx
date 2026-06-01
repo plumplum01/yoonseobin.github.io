@@ -1,33 +1,20 @@
 import type { ReactNode } from 'react'
-import {
-  createBrowserRouter,
-  type LoaderFunctionArgs,
-  type RouteObject,
-} from 'react-router-dom'
+import { createBrowserRouter, type LoaderFunction, type RouteObject } from 'react-router-dom'
+import PageError from './boundaries/PageError'
 import RootLayout from './layouts/RootLayout'
-import PageError from './route-state/PageError'
+import { postDetailLoader, postsLoader, profileLoader } from './routes/routeLoaders'
 import About from '../pages/About'
 import Home from '../pages/Home'
 import PostDetail from '../pages/PostDetail'
 import Posts from '../pages/Posts'
-import { loadProfile } from '../registry/profile'
-import { loadPost, loadPosts } from '../registry/posts'
 
 type AppPageRoute = {
   id: string
   path: string
   title: string
   smoothScroll: boolean
-  loader?: (args: LoaderFunctionArgs) => unknown
+  loader?: LoaderFunction
   render: (options: { smoothScrollEnabled: boolean }) => ReactNode
-}
-
-function loadPostRoute({ params }: LoaderFunctionArgs) {
-  if (!params.slug) {
-    throw new Error('Post slug is missing')
-  }
-
-  return loadPost(params.slug)
 }
 
 export const pageRoutes = [
@@ -44,7 +31,7 @@ export const pageRoutes = [
     path: '/about',
     title: 'About',
     smoothScroll: false,
-    loader: () => loadProfile(),
+    loader: profileLoader,
     render: () => <About />,
   },
   {
@@ -52,7 +39,7 @@ export const pageRoutes = [
     path: '/posts',
     title: 'Posts',
     smoothScroll: false,
-    loader: () => loadPosts(),
+    loader: postsLoader,
     render: () => <Posts />,
   },
   {
@@ -60,7 +47,7 @@ export const pageRoutes = [
     path: '/posts/:slug',
     title: 'Post',
     smoothScroll: false,
-    loader: loadPostRoute,
+    loader: postDetailLoader,
     render: () => <PostDetail />,
   },
 ] as const satisfies readonly AppPageRoute[]
