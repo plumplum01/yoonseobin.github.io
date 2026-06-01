@@ -1,7 +1,7 @@
 import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import { Blocks } from '../components/blocks/renderer'
+import { BlockList } from '../features/post-block-renderer'
 import { getPostBySlug } from '../registry/posts'
 
 type PostState =
@@ -85,7 +85,7 @@ export default function PostDetail() {
           )}
         </header>
 
-        <Blocks blocks={postState.post.blocks} />
+        <BlockList blocks={postState.post.blocks} />
       </article>
     </main>
   )

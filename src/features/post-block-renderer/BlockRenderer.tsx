@@ -1,5 +1,5 @@
 import type { PostBlock } from '@portfolio/types'
-import { blockRegistry } from './block.registry'
+import { blockRegistry } from './blockRegistry'
 
 export function BlockRenderer({ block }: { block: PostBlock }) {
   const Component = blockRegistry[block.type]
