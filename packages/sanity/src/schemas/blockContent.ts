@@ -64,15 +64,23 @@ export const blockContentType = defineType({
       type: 'object',
       fields: [
         defineField({
-          name: 'image',
-          title: 'Image',
-          type: 'image',
-          options: { hotspot: true },
+          name: 'media',
+          title: 'Media',
+          type: 'reference',
+          to: [{ type: 'mediaAsset' }],
+          options: {
+            filter: 'type == $type',
+            filterParams: { type: 'image' },
+          },
           validation: (rule) => rule.required(),
         }),
-        defineField({ name: 'alt', title: 'Alt text', type: 'string' }),
-        defineField({ name: 'caption', title: 'Caption', type: 'string' }),
       ],
+      preview: {
+        select: {
+          title: 'media.title',
+          media: 'media.image',
+        },
+      },
     }),
     defineArrayMember({
       name: 'carouselBlock',
@@ -80,18 +88,18 @@ export const blockContentType = defineType({
       type: 'object',
       fields: [
         defineField({
-          name: 'images',
-          title: 'Images',
+          name: 'mediaItems',
+          title: 'Media items',
           type: 'array',
           of: [
-            {
-              type: 'image',
-              options: { hotspot: true },
-              fields: [
-                defineField({ name: 'alt', title: 'Alt text', type: 'string' }),
-                defineField({ name: 'caption', title: 'Caption', type: 'string' }),
-              ],
-            },
+            defineArrayMember({
+              type: 'reference',
+              to: [{ type: 'mediaAsset' }],
+              options: {
+                filter: 'type == $type',
+                filterParams: { type: 'image' },
+              },
+            }),
           ],
           validation: (rule) => rule.required().min(1),
         }),
@@ -103,15 +111,22 @@ export const blockContentType = defineType({
       type: 'object',
       fields: [
         defineField({
-          name: 'video',
-          title: 'Video file',
-          type: 'file',
-          options: { accept: 'video/*' },
+          name: 'media',
+          title: 'Media',
+          type: 'reference',
+          to: [{ type: 'mediaAsset' }],
+          options: {
+            filter: 'type == $type',
+            filterParams: { type: 'video' },
+          },
           validation: (rule) => rule.required(),
         }),
-        defineField({ name: 'caption', title: 'Caption', type: 'string' }),
-        defineField({ name: 'durationSeconds', title: 'Duration seconds', type: 'number' }),
       ],
+      preview: {
+        select: {
+          title: 'media.title',
+        },
+      },
     }),
   ],
 })

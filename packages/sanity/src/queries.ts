@@ -12,6 +12,21 @@ export const postProjection = `{
   "updatedAt": _updatedAt
 }`
 
+export const mediaAssetProjection = `{
+  "id": _id,
+  title,
+  type,
+  alt,
+  caption,
+  credit,
+  tags,
+  durationSeconds,
+  "imageUrl": image.asset->url,
+  "videoUrl": video.asset->url,
+  "createdAt": _createdAt,
+  "updatedAt": _updatedAt
+}`
+
 export const publishedPostsQuery = `*[
   _type == "post" &&
   status == "published"
@@ -29,18 +44,8 @@ export const postBySlugQuery = `*[
   "updatedAt": _updatedAt,
   blocks[] {
     ...,
-    image {
-      ...,
-      "url": asset->url
-    },
-    images[] {
-      ...,
-      "url": asset->url
-    },
-    video {
-      ...,
-      "url": asset->url
-    }
+    media-> ${mediaAssetProjection},
+    mediaItems[]-> ${mediaAssetProjection}
   }
 }`
 
