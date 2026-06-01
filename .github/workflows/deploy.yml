@@ -23,6 +23,11 @@ jobs:
           cache: npm
       - run: npm ci
       - run: npm run build
+        env:
+          VITE_SANITY_PROJECT_ID: ${{ vars.VITE_SANITY_PROJECT_ID || 'vetx6ewl' }}
+          VITE_SANITY_DATASET: ${{ vars.VITE_SANITY_DATASET || 'production' }}
+          VITE_SANITY_API_VERSION: ${{ vars.VITE_SANITY_API_VERSION || '2026-06-01' }}
+          VITE_SANITY_USE_CDN: ${{ vars.VITE_SANITY_USE_CDN || 'true' }}
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
