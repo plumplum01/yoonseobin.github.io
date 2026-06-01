@@ -123,33 +123,3 @@ export default function About() {
     </section>
   )
 }
-
-export default function About() {
-  const [profileState, setProfileState] = useState<ProfileState>({ status: 'loading' })
-
-  useEffect(() => {
-    let isActive = true
-
-    loadProfile()
-      .then((profile) => {
-        if (isActive) setProfileState({ status: 'success', profile })
-      })
-      .catch((error: unknown) => {
-        if (isActive) setProfileState({ status: 'error', message: getErrorMessage(error) })
-      })
-
-    return () => {
-      isActive = false
-    }
-  }, [])
-
-  if (profileState.status === 'loading') {
-    return <AboutStatus message="Profile loading..." />
-  }
-
-  if (profileState.status === 'error') {
-    return <AboutStatus message={profileState.message} />
-  }
-
-  return <ProfileContent profile={profileState.profile} />
-}
