@@ -101,9 +101,26 @@ export const blockContentType = defineType({
               },
             }),
           ],
-          validation: (rule) => rule.required().min(1),
+          validation: (rule) => rule.required().min(2),
         }),
       ],
+      preview: {
+        select: {
+          firstTitle: 'mediaItems.0.title',
+          secondTitle: 'mediaItems.1.title',
+          thirdTitle: 'mediaItems.2.title',
+          firstImage: 'mediaItems.0.image',
+        },
+        prepare: ({ firstTitle, secondTitle, thirdTitle, firstImage }) => {
+          const titles = [firstTitle, secondTitle, thirdTitle].filter(Boolean)
+
+          return {
+            title: 'Carousel',
+            subtitle: titles.length > 0 ? titles.join(', ') : 'Select at least two media items',
+            media: firstImage,
+          }
+        },
+      },
     }),
     defineArrayMember({
       name: 'videoBlock',
