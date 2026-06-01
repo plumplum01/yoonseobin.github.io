@@ -1,6 +1,6 @@
 import { postBySlugQuery, publishedPostsQuery } from '@portfolio/sanity/queries'
 import type { Post, PostDetail } from '@portfolio/types'
-import { assertClientPost, resolveClientPost, resolvePost } from './resolvers/postResolver'
+import { assertClientPost, mapClientPost, mapPost } from './mappers/postMapper'
 import { getSanityClient } from './sanityClient'
 
 function toPostSummary(postDetail: PostDetail): Post {
@@ -8,12 +8,12 @@ function toPostSummary(postDetail: PostDetail): Post {
   return post
 }
 
-export async function getPublishedPosts(): Promise<Post[]> {
+export async function loadPosts(): Promise<Post[]> {
   const rawPosts = await getSanityClient().fetch<unknown[]>(publishedPostsQuery)
 
-  return rawPosts.map((rawPost) => toPostSummary(resolveClientPost(assertClientPost(rawPost))))
+  return rawPosts.map((rawPost) => toPostSummary(mapClientPost(assertClientPost(rawPost))))
 }
 
-export async function getPostBySlug(slug: string): Promise<PostDetail> {
-  return resolvePost(await getSanityClient().fetch<unknown>(postBySlugQuery, { slug }))
+export async function loadPost(slug: string): Promise<PostDetail> {
+  return mapPost(await getSanityClient().fetch<unknown>(postBySlugQuery, { slug }))
 }

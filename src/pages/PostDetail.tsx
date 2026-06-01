@@ -2,7 +2,7 @@ import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { BlockList } from '../features/post-block-renderer'
-import { getPostBySlug } from '../registry/posts'
+import { loadPost } from '../registry/posts'
 
 type PostState =
   | { status: 'loading' }
@@ -48,7 +48,7 @@ export default function PostDetail() {
       }
     }
 
-    getPostBySlug(slug)
+    loadPost(slug)
       .then((post) => {
         if (isActive) setPostState({ status: 'success', post })
       })

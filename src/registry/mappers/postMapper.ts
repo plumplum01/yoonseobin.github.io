@@ -114,7 +114,7 @@ export function assertClientMediaAsset(raw: unknown): ClientMediaAsset {
   }
 }
 
-export function resolveClientMediaAsset(clientMedia: ClientMediaAsset): MediaAsset {
+export function mapClientMediaAsset(clientMedia: ClientMediaAsset): MediaAsset {
   const url = clientMedia.type === 'image' ? clientMedia.imageUrl : clientMedia.videoUrl
   if (!url) {
     throw new Error(
@@ -138,8 +138,8 @@ export function resolveClientMediaAsset(clientMedia: ClientMediaAsset): MediaAss
   }
 }
 
-export function resolveMediaAsset(raw: unknown): MediaAsset {
-  return resolveClientMediaAsset(assertClientMediaAsset(raw))
+export function mapMediaAsset(raw: unknown): MediaAsset {
+  return mapClientMediaAsset(assertClientMediaAsset(raw))
 }
 
 function assertClientTextBlock(raw: UnknownRecord): ClientTextPostBlock {
@@ -239,7 +239,7 @@ export function assertClientPost(raw: unknown): ClientPost {
   }
 }
 
-function resolveClientPostBlock(block: ClientPostBlock): PostBlock {
+function mapClientPostBlock(block: ClientPostBlock): PostBlock {
   switch (block._type) {
     case 'textBlock':
       return { type: 'text', body: block.body }
@@ -252,15 +252,15 @@ function resolveClientPostBlock(block: ClientPostBlock): PostBlock {
         ...(block.attribution ? { attribution: block.attribution } : {}),
       }
     case 'imageBlock':
-      return { type: 'image', media: resolveClientMediaAsset(block.media) }
+      return { type: 'image', media: mapClientMediaAsset(block.media) }
     case 'carouselBlock':
-      return { type: 'carousel', mediaItems: block.mediaItems.map(resolveClientMediaAsset) }
+      return { type: 'carousel', mediaItems: block.mediaItems.map(mapClientMediaAsset) }
     case 'videoBlock':
-      return { type: 'video', media: resolveClientMediaAsset(block.media) }
+      return { type: 'video', media: mapClientMediaAsset(block.media) }
   }
 }
 
-export function resolveClientPost(clientPost: ClientPost): PostDetail {
+export function mapClientPost(clientPost: ClientPost): PostDetail {
   return {
     id: clientPost.id,
     type: clientPost.type,
@@ -273,10 +273,10 @@ export function resolveClientPost(clientPost: ClientPost): PostDetail {
     ...(clientPost.publishedAt ? { publishedAt: clientPost.publishedAt } : {}),
     ...(clientPost.createdAt ? { createdAt: clientPost.createdAt } : {}),
     ...(clientPost.updatedAt ? { updatedAt: clientPost.updatedAt } : {}),
-    blocks: (clientPost.blocks ?? []).map(resolveClientPostBlock),
+    blocks: (clientPost.blocks ?? []).map(mapClientPostBlock),
   }
 }
 
-export function resolvePost(raw: unknown): PostDetail {
-  return resolveClientPost(assertClientPost(raw))
+export function mapPost(raw: unknown): PostDetail {
+  return mapClientPost(assertClientPost(raw))
 }

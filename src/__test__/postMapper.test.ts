@@ -1,4 +1,4 @@
-import { resolveMediaAsset, resolvePost } from '../registry/resolvers/postResolver'
+import { mapMediaAsset, mapPost } from '../registry/mappers/postMapper'
 
 const imageMedia = {
   id: 'media-1',
@@ -33,9 +33,9 @@ const postPayload = {
   ],
 }
 
-describe('resolveMediaAsset', () => {
+describe('mapMediaAsset', () => {
   it('caption을 alt로 받은 image media를 앱 MediaAsset으로 변환한다', () => {
-    expect(resolveMediaAsset(imageMedia)).toEqual({
+    expect(mapMediaAsset(imageMedia)).toEqual({
       id: 'media-1',
       title: 'Hero image',
       type: 'image',
@@ -47,7 +47,7 @@ describe('resolveMediaAsset', () => {
   })
 
   it('video media는 videoUrl을 url로 사용한다', () => {
-    expect(resolveMediaAsset(videoMedia)).toMatchObject({
+    expect(mapMediaAsset(videoMedia)).toMatchObject({
       id: 'media-2',
       type: 'video',
       url: 'https://cdn.sanity.io/video.mp4',
@@ -56,9 +56,9 @@ describe('resolveMediaAsset', () => {
   })
 })
 
-describe('resolvePost', () => {
+describe('mapPost', () => {
   it('Sanity post payload를 앱 PostDetail view model로 변환한다', () => {
-    const post = resolvePost(postPayload)
+    const post = mapPost(postPayload)
 
     expect(post).toMatchObject({
       id: 'post-1',
@@ -76,7 +76,7 @@ describe('resolvePost', () => {
 
   it('지원하지 않는 block type은 실패한다', () => {
     expect(() =>
-      resolvePost({
+      mapPost({
         ...postPayload,
         blocks: [{ _type: 'unknownBlock' }],
       }),
@@ -85,7 +85,7 @@ describe('resolvePost', () => {
 
   it('media reference가 펼쳐지지 않은 block은 실패한다', () => {
     expect(() =>
-      resolvePost({
+      mapPost({
         ...postPayload,
         blocks: [{ _type: 'imageBlock', media: { _ref: 'media-1' } }],
       }),

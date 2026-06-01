@@ -1,7 +1,7 @@
 import type { Post } from '@portfolio/types'
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getPublishedPosts } from '../registry/posts'
+import { loadPosts } from '../registry/posts'
 
 type PostsState =
   | { status: 'loading' }
@@ -33,7 +33,7 @@ export default function Posts() {
   useEffect(() => {
     let isActive = true
 
-    getPublishedPosts()
+    loadPosts()
       .then((posts) => {
         if (isActive) setPostsState({ status: 'success', posts })
       })

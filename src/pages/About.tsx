@@ -1,7 +1,7 @@
 import type { Profile } from '@portfolio/types'
 import { motion } from 'framer-motion'
 import { useEffect, useState } from 'react'
-import { getProfile } from '../registry/profile'
+import { loadProfile } from '../registry/profile'
 import styles from './About.module.css'
 
 const container = {
@@ -151,7 +151,7 @@ export default function About() {
   useEffect(() => {
     let isActive = true
 
-    getProfile()
+    loadProfile()
       .then((profile) => {
         if (isActive) setProfileState({ status: 'success', profile })
       })
