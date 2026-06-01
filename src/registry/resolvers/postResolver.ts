@@ -1,18 +1,20 @@
 import type {
-  CarouselPostBlock,
-  HeadingPostBlock,
-  ImagePostBlock,
+  ClientCarouselPostBlock,
+  ClientHeadingPostBlock,
+  ClientImagePostBlock,
+  ClientMediaAsset,
+  ClientMediaTag,
+  ClientPost,
+  ClientPostBlock,
+  ClientQuotePostBlock,
+  ClientTextPostBlock,
+  ClientVideoPostBlock,
   MediaAsset,
   MediaAssetType,
-  MediaTag,
-  Post,
   PostBlock,
   PostDetail,
   PostStatus,
   PostType,
-  QuotePostBlock,
-  TextPostBlock,
-  VideoPostBlock,
 } from '@portfolio/types'
 
 type UnknownRecord = Record<string, unknown>
@@ -78,7 +80,7 @@ function assertMediaType(value: string, context: string): MediaAssetType {
   throw new Error(`Invalid post payload: ${context}.type has unsupported media value`)
 }
 
-function resolveMediaTag(raw: UnknownRecord, index: number): MediaTag {
+function assertClientMediaTag(raw: UnknownRecord, index: number): ClientMediaTag {
   const context = `media.tags[${index}]`
   return {
     id: requireString(raw, 'id', context),
@@ -87,7 +89,7 @@ function resolveMediaTag(raw: UnknownRecord, index: number): MediaTag {
   }
 }
 
-export function resolveMediaAsset(raw: unknown): MediaAsset {
+export function assertClientMediaAsset(raw: unknown): ClientMediaAsset {
   if (!isRecord(raw)) {
     throw new Error('Invalid post payload: media asset is missing')
   }
@@ -95,92 +97,121 @@ export function resolveMediaAsset(raw: unknown): MediaAsset {
   const context = 'media'
   const id = requireString(raw, 'id', context)
   const type = assertMediaType(requireString(raw, 'type', context), context)
-  const urlKey = type === 'image' ? 'imageUrl' : 'videoUrl'
+  const tags = optionalRecordArray(raw, 'tags', context).map(assertClientMediaTag)
 
   return {
     id,
     title: requireString(raw, 'title', context),
     type,
-    url: requireString(raw, urlKey, context),
     ...(optionalString(raw, 'alt') ? { alt: optionalString(raw, 'alt') } : {}),
     ...(optionalString(raw, 'caption') ? { caption: optionalString(raw, 'caption') } : {}),
-    tags: optionalRecordArray(raw, 'tags', context).map(resolveMediaTag),
+    tags,
     ...(typeof raw.durationSeconds === 'number' ? { durationSeconds: raw.durationSeconds } : {}),
+    ...(optionalString(raw, 'imageUrl') ? { imageUrl: optionalString(raw, 'imageUrl') } : {}),
+    ...(optionalString(raw, 'videoUrl') ? { videoUrl: optionalString(raw, 'videoUrl') } : {}),
     ...(optionalString(raw, 'createdAt') ? { createdAt: optionalString(raw, 'createdAt') } : {}),
     ...(optionalString(raw, 'updatedAt') ? { updatedAt: optionalString(raw, 'updatedAt') } : {}),
   }
 }
 
-function resolveTextBlock(raw: UnknownRecord): TextPostBlock {
+export function resolveClientMediaAsset(clientMedia: ClientMediaAsset): MediaAsset {
+  const url = clientMedia.type === 'image' ? clientMedia.imageUrl : clientMedia.videoUrl
+  if (!url) {
+    throw new Error(
+      `Invalid post payload: media.${clientMedia.type === 'image' ? 'imageUrl' : 'videoUrl'} must be a non-empty string`,
+    )
+  }
+
+  return {
+    id: clientMedia.id,
+    title: clientMedia.title,
+    type: clientMedia.type,
+    url,
+    ...(clientMedia.alt ? { alt: clientMedia.alt } : {}),
+    ...(clientMedia.caption ? { caption: clientMedia.caption } : {}),
+    tags: clientMedia.tags ?? [],
+    ...(typeof clientMedia.durationSeconds === 'number'
+      ? { durationSeconds: clientMedia.durationSeconds }
+      : {}),
+    ...(clientMedia.createdAt ? { createdAt: clientMedia.createdAt } : {}),
+    ...(clientMedia.updatedAt ? { updatedAt: clientMedia.updatedAt } : {}),
+  }
+}
+
+export function resolveMediaAsset(raw: unknown): MediaAsset {
+  return resolveClientMediaAsset(assertClientMediaAsset(raw))
+}
+
+function assertClientTextBlock(raw: UnknownRecord): ClientTextPostBlock {
   const body = raw.body
   if (!Array.isArray(body)) {
     throw new Error('Invalid post payload: text block body must be an array')
   }
-  return { type: 'text', body }
+  return { _type: 'textBlock', body }
 }
 
-function resolveHeadingBlock(raw: UnknownRecord): HeadingPostBlock {
+function assertClientHeadingBlock(raw: UnknownRecord): ClientHeadingPostBlock {
   const level = raw.level
   if (level !== 2 && level !== 3 && level !== 4) {
     throw new Error('Invalid post payload: heading block level must be 2, 3, or 4')
   }
   return {
-    type: 'heading',
+    _type: 'headingBlock',
     level,
     text: requireString(raw, 'text', 'headingBlock'),
   }
 }
 
-function resolveQuoteBlock(raw: UnknownRecord): QuotePostBlock {
+function assertClientQuoteBlock(raw: UnknownRecord): ClientQuotePostBlock {
   return {
-    type: 'quote',
+    _type: 'quoteBlock',
     text: requireString(raw, 'text', 'quoteBlock'),
     ...(optionalString(raw, 'attribution') ? { attribution: optionalString(raw, 'attribution') } : {}),
   }
 }
 
-function resolveImageBlock(raw: UnknownRecord): ImagePostBlock {
+function assertClientImageBlock(raw: UnknownRecord): ClientImagePostBlock {
   return {
-    type: 'image',
-    media: resolveMediaAsset(requireRecord(raw, 'media', 'imageBlock')),
+    _type: 'imageBlock',
+    media: assertClientMediaAsset(requireRecord(raw, 'media', 'imageBlock')),
   }
 }
 
-function resolveCarouselBlock(raw: UnknownRecord): CarouselPostBlock {
+function assertClientCarouselBlock(raw: UnknownRecord): ClientCarouselPostBlock {
   return {
-    type: 'carousel',
-    mediaItems: requireRecordArray(raw, 'mediaItems', 'carouselBlock').map(resolveMediaAsset),
+    _type: 'carouselBlock',
+    mediaItems: requireRecordArray(raw, 'mediaItems', 'carouselBlock').map(assertClientMediaAsset),
   }
 }
 
-function resolveVideoBlock(raw: UnknownRecord): VideoPostBlock {
+function assertClientVideoBlock(raw: UnknownRecord): ClientVideoPostBlock {
   return {
-    type: 'video',
-    media: resolveMediaAsset(requireRecord(raw, 'media', 'videoBlock')),
+    _type: 'videoBlock',
+    media: assertClientMediaAsset(requireRecord(raw, 'media', 'videoBlock')),
   }
 }
 
-function resolvePostBlock(raw: UnknownRecord): PostBlock {
+function assertClientPostBlock(raw: UnknownRecord): ClientPostBlock {
   const type = requireString(raw, '_type', 'block')
   switch (type) {
     case 'textBlock':
-      return resolveTextBlock(raw)
+      return assertClientTextBlock(raw)
     case 'headingBlock':
-      return resolveHeadingBlock(raw)
+      return assertClientHeadingBlock(raw)
     case 'quoteBlock':
-      return resolveQuoteBlock(raw)
+      return assertClientQuoteBlock(raw)
     case 'imageBlock':
-      return resolveImageBlock(raw)
+      return assertClientImageBlock(raw)
     case 'carouselBlock':
-      return resolveCarouselBlock(raw)
+      return assertClientCarouselBlock(raw)
     case 'videoBlock':
-      return resolveVideoBlock(raw)
+      return assertClientVideoBlock(raw)
     default:
       throw new Error(`Invalid post payload: unsupported block type ${type}`)
   }
 }
 
-function resolvePostBase(raw: UnknownRecord): Post {
+function assertClientPostBase(raw: UnknownRecord): Omit<ClientPost, 'blocks'> {
   const context = 'post'
   return {
     id: requireString(raw, 'id', context),
@@ -197,13 +228,55 @@ function resolvePostBase(raw: UnknownRecord): Post {
   }
 }
 
-export function resolvePost(raw: unknown): PostDetail {
+export function assertClientPost(raw: unknown): ClientPost {
   if (!isRecord(raw)) {
     throw new Error('Invalid post payload: post document is missing')
   }
 
   return {
-    ...resolvePostBase(raw),
-    blocks: optionalRecordArray(raw, 'blocks', 'post').map(resolvePostBlock),
+    ...assertClientPostBase(raw),
+    blocks: optionalRecordArray(raw, 'blocks', 'post').map(assertClientPostBlock),
   }
+}
+
+function resolveClientPostBlock(block: ClientPostBlock): PostBlock {
+  switch (block._type) {
+    case 'textBlock':
+      return { type: 'text', body: block.body }
+    case 'headingBlock':
+      return { type: 'heading', level: block.level, text: block.text }
+    case 'quoteBlock':
+      return {
+        type: 'quote',
+        text: block.text,
+        ...(block.attribution ? { attribution: block.attribution } : {}),
+      }
+    case 'imageBlock':
+      return { type: 'image', media: resolveClientMediaAsset(block.media) }
+    case 'carouselBlock':
+      return { type: 'carousel', mediaItems: block.mediaItems.map(resolveClientMediaAsset) }
+    case 'videoBlock':
+      return { type: 'video', media: resolveClientMediaAsset(block.media) }
+  }
+}
+
+export function resolveClientPost(clientPost: ClientPost): PostDetail {
+  return {
+    id: clientPost.id,
+    type: clientPost.type,
+    slug: clientPost.slug,
+    title: clientPost.title,
+    ...(clientPost.subtitle ? { subtitle: clientPost.subtitle } : {}),
+    ...(clientPost.summary ? { summary: clientPost.summary } : {}),
+    ...(clientPost.thumbnailUrl ? { thumbnailUrl: clientPost.thumbnailUrl } : {}),
+    status: clientPost.status,
+    ...(clientPost.publishedAt ? { publishedAt: clientPost.publishedAt } : {}),
+    ...(clientPost.createdAt ? { createdAt: clientPost.createdAt } : {}),
+    ...(clientPost.updatedAt ? { updatedAt: clientPost.updatedAt } : {}),
+    blocks: (clientPost.blocks ?? []).map(resolveClientPostBlock),
+  }
+}
+
+export function resolvePost(raw: unknown): PostDetail {
+  return resolveClientPost(assertClientPost(raw))
 }

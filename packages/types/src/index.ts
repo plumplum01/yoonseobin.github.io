@@ -1,3 +1,4 @@
+export * from './client'
 export * from './content'
 export * from './media'
 export * from './profile'
