@@ -6,10 +6,10 @@ import type {
   TextPostBlock,
   VideoPostBlock,
 } from '@portfolio/types'
-import { PostCarousel } from './PostCarousel'
+import { CarouselBlock } from './CarouselBlock'
 import { getPortableTextParagraphs } from './portableText'
 
-function PostTextBlock({ block }: { block: TextPostBlock }) {
+function TextBlock({ block }: { block: TextPostBlock }) {
   const paragraphs = getPortableTextParagraphs(block.body)
 
   return (
@@ -26,7 +26,7 @@ function PostTextBlock({ block }: { block: TextPostBlock }) {
   )
 }
 
-function PostHeadingBlock({ block }: { block: HeadingPostBlock }) {
+function HeadingBlock({ block }: { block: HeadingPostBlock }) {
   const HeadingTag = `h${block.level}` as const
   const className =
     block.level === 2
@@ -36,7 +36,7 @@ function PostHeadingBlock({ block }: { block: HeadingPostBlock }) {
   return <HeadingTag className={`${className} text-cjk text-[var(--text-primary)]`}>{block.text}</HeadingTag>
 }
 
-function PostQuoteBlock({ block }: { block: QuotePostBlock }) {
+function QuoteBlock({ block }: { block: QuotePostBlock }) {
   return (
     <figure className="border-l border-[var(--text-primary)]/30 pl-5">
       <blockquote className="text-body font-medium leading-loose tracking-tight text-cjk text-[var(--text-primary)]">
@@ -51,7 +51,7 @@ function PostQuoteBlock({ block }: { block: QuotePostBlock }) {
   )
 }
 
-function PostImageBlock({ block }: { block: ImagePostBlock }) {
+function ImageBlock({ block }: { block: ImagePostBlock }) {
   return (
     <figure className="space-y-3">
       <img
@@ -69,7 +69,7 @@ function PostImageBlock({ block }: { block: ImagePostBlock }) {
   )
 }
 
-function PostVideoBlock({ block }: { block: VideoPostBlock }) {
+function VideoBlock({ block }: { block: VideoPostBlock }) {
   return (
     <figure className="space-y-3">
       <video className="w-full rounded-sm" src={block.media.url} controls playsInline preload="metadata">
@@ -84,19 +84,19 @@ function PostVideoBlock({ block }: { block: VideoPostBlock }) {
   )
 }
 
-export function PostBlockRenderer({ block }: { block: PostBlock }) {
+export function BlockRenderer({ block }: { block: PostBlock }) {
   switch (block.type) {
     case 'text':
-      return <PostTextBlock block={block} />
+      return <TextBlock block={block} />
     case 'heading':
-      return <PostHeadingBlock block={block} />
+      return <HeadingBlock block={block} />
     case 'quote':
-      return <PostQuoteBlock block={block} />
+      return <QuoteBlock block={block} />
     case 'image':
-      return <PostImageBlock block={block} />
+      return <ImageBlock block={block} />
     case 'carousel':
-      return <PostCarousel mediaItems={block.mediaItems} />
+      return <CarouselBlock mediaItems={block.mediaItems} />
     case 'video':
-      return <PostVideoBlock block={block} />
+      return <VideoBlock block={block} />
   }
 }

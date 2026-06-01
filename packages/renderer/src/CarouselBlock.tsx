@@ -2,11 +2,11 @@ import type { MediaAsset } from '@portfolio/types'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-type PostCarouselProps = {
+type CarouselBlockProps = {
   mediaItems: MediaAsset[]
 }
 
-export function PostCarousel({ mediaItems }: PostCarouselProps) {
+export function CarouselBlock({ mediaItems }: CarouselBlockProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [canScrollNext, setCanScrollNext] = useState(false)
   const [canScrollPrev, setCanScrollPrev] = useState(false)
