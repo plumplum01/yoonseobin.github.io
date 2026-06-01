@@ -1,5 +1,6 @@
 import type { Post } from '@portfolio/types'
 import { Link, useLoaderData } from 'react-router-dom'
+import { formatKoDate } from '../lib/dateFormat'
 
 function PostsStatus({ message }: { message: string }) {
 	return (
@@ -13,7 +14,7 @@ function PostsStatus({ message }: { message: string }) {
 
 function formatPostDate(post: Post): string {
 	if (!post.publishedAt) return 'Unpublished'
-	return new Intl.DateTimeFormat('ko-KR', { dateStyle: 'medium' }).format(new Date(post.publishedAt))
+	return formatKoDate(post.publishedAt, 'medium')
 }
 
 export default function Posts() {
