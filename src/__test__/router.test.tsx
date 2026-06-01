@@ -35,4 +35,20 @@ describe('router config', () => {
       ]),
     )
   })
+
+  it('loads data at route level for CMS-backed pages', () => {
+    expect(pageRoutes).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ id: 'home', loader: undefined }),
+        expect.objectContaining({ id: 'about', loader: expect.any(Function) }),
+        expect.objectContaining({ id: 'posts', loader: expect.any(Function) }),
+        expect.objectContaining({ id: 'post-detail', loader: expect.any(Function) }),
+      ]),
+    )
+  })
+
+  it('defines route-level error boundaries for outlet data loading', () => {
+    expect(routes[0]?.errorElement).toBeTruthy()
+    expect(routes[0]?.children?.every((route) => route.errorElement)).toBe(true)
+  })
 })
