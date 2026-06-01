@@ -12,6 +12,24 @@ export const postProjection = `{
   "updatedAt": _updatedAt
 }`
 
+export const mediaAssetProjection = `{
+  "id": _id,
+  title,
+  type,
+  "alt": caption,
+  caption,
+  tags[]-> {
+    "id": _id,
+    title,
+    "slug": slug.current
+  },
+  durationSeconds,
+  "imageUrl": image.asset->url,
+  "videoUrl": video.asset->url,
+  "createdAt": _createdAt,
+  "updatedAt": _updatedAt
+}`
+
 export const publishedPostsQuery = `*[
   _type == "post" &&
   status == "published"
@@ -29,17 +47,30 @@ export const postBySlugQuery = `*[
   "updatedAt": _updatedAt,
   blocks[] {
     ...,
-    image {
-      ...,
-      "url": asset->url
-    },
-    images[] {
-      ...,
-      "url": asset->url
-    },
-    video {
-      ...,
-      "url": asset->url
-    }
+    media-> ${mediaAssetProjection},
+    mediaItems[]-> ${mediaAssetProjection}
+  }
+}`
+
+export const profileQuery = `*[
+  _type == "profile" &&
+  _id == "profile"
+][0] {
+  heading,
+  paragraphs,
+  education[] {
+    title,
+    startDate,
+    endDate,
+    isCurrent
+  },
+  awards[] {
+    title,
+    desc,
+    awardedAt
+  },
+  links[] {
+    label,
+    href
   }
 }`

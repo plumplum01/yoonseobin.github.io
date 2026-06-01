@@ -5,6 +5,31 @@
 - 브랜치를 닫을 때는 항상 기능 리뷰 및 테스트를 진행한 후 머지한다
 - 커밋 전에는 항상 `npm run test:run`과 `npx vite build`로 회귀 없음을 확인한다
 
+## 브랜치 네이밍 규칙
+
+- 브랜치명은 `<type>/<kebab-case-summary>` 형식을 사용한다
+- 이슈 트래커를 사용하는 경우 `<type>/<issue-number>-<kebab-case-summary>` 형식을 사용할 수 있다
+- 작업자 개인 prefix(`codex/`, `seobin/` 등)는 기본적으로 사용하지 않는다
+- summary는 작업 의도를 짧고 구체적으로 작성하며, 공백 대신 하이픈을 사용한다
+- 허용하는 type은 아래를 기준으로 한다
+  - `feature`: 새 기능
+  - `fix`: 버그 수정
+  - `hotfix`: 운영 긴급 수정
+  - `release`: 릴리스 준비
+  - `chore`: 설정, 의존성, 빌드 등 기능 외 작업
+  - `refactor`: 동작 변경 없는 구조 개선
+  - `docs`: 문서 변경
+  - `test`: 테스트 추가 또는 수정
+  - `style`: 포맷, 스타일 등 비기능 변경
+  - `perf`: 성능 개선
+  - `ci`: CI/CD 설정 변경
+- 예시는 아래와 같다
+  - `feature/home-about-section`
+  - `fix/mobile-overlay-scroll`
+  - `chore/update-branch-guideline`
+  - `refactor/project-loader`
+  - `docs/content-migration-plan`
+
 ## 콘텐츠 구조 및 CMS 전환 계획
 
 - `packages/types`를 콘텐츠 타입의 SSOT로 둔다
@@ -13,6 +38,9 @@
 - `src/data/media`는 로컬 미디어 asset을 보관한다
 - 앱 컴포넌트는 `src/data`나 Sanity에 직접 의존하지 않고 `src/registry`를 통해 데이터를 사용한다
 - `src/registry`는 현재 앱 데이터 registry 역할이며, 추후 DOT(Data Orchestration/Translation) 계층으로 변경될 예정이다
+- 앱 컴포넌트는 Sanity client, GROQ query, Sanity 원본 필드 구조를 직접 알지 않는다
+- Sanity query 결과는 `src/registry/resolvers`에서 `packages/types`의 앱 view model로 변환한 뒤 소비한다
+- Sanity reference 해소는 GROQ projection에서 처리하고, 앱은 펼쳐진 결과를 resolver로 검증/정규화한다
 - Sanity 통합 시에는 `src/registry`의 데이터 소스만 Sanity query 기반으로 교체하고, 앱 타입은 `packages/types` 기준을 유지한다
 - Sanity asset CDN으로 전환되면 `src/data/media`는 점진적으로 축소하거나 제거한다
 

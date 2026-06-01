@@ -1,8 +1,8 @@
+import type { Profile } from '@portfolio/types'
 import { motion } from 'framer-motion'
-import { about as aboutData } from '../registry/about'
+import { useEffect, useState } from 'react'
+import { getProfile } from '../registry/profile'
 import styles from './About.module.css'
-
-const { heading, paragraphs, education, awards, links } = aboutData
 
 const container = {
   hidden: {},
@@ -23,7 +23,30 @@ const fadeUp = {
   },
 }
 
-export default function About() {
+type ProfileState =
+  | { status: 'loading' }
+  | { status: 'success'; profile: Profile }
+  | { status: 'error'; message: string }
+
+function getErrorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : 'Failed to load profile'
+}
+
+function AboutStatus({ message }: { message: string }) {
+  return (
+    <section className={styles.section}>
+      <div className={styles.container}>
+        <p className={`text-body font-medium leading-loose tracking-tight text-cjk ${styles.status}`}>
+          {message}
+        </p>
+      </div>
+    </section>
+  )
+}
+
+function ProfileContent({ profile }: { profile: Profile }) {
+  const { heading, paragraphs, education, awards, links } = profile
+
   return (
     <section className={styles.section}>
       <motion.div className={styles.container} variants={container} initial="hidden" animate="show">
@@ -65,7 +88,7 @@ export default function About() {
                   {e.title}
                 </span>
                 <span className={`text-body font-medium leading-tight tracking-tight ${styles.eduDate}`}>
-                  {e.date}
+                  {e.displayPeriod}
                 </span>
               </motion.div>
             ))}
@@ -94,7 +117,7 @@ export default function About() {
                   </span>
                 </div>
                 <span className={`text-body font-medium leading-tight tracking-tight ${styles.awardDate}`}>
-                  {a.date}
+                  {a.displayDate}
                 </span>
               </motion.div>
             ))}
@@ -120,4 +143,34 @@ export default function About() {
       </motion.div>
     </section>
   )
+}
+
+export default function About() {
+  const [profileState, setProfileState] = useState<ProfileState>({ status: 'loading' })
+
+  useEffect(() => {
+    let isActive = true
+
+    getProfile()
+      .then((profile) => {
+        if (isActive) setProfileState({ status: 'success', profile })
+      })
+      .catch((error: unknown) => {
+        if (isActive) setProfileState({ status: 'error', message: getErrorMessage(error) })
+      })
+
+    return () => {
+      isActive = false
+    }
+  }, [])
+
+  if (profileState.status === 'loading') {
+    return <AboutStatus message="Profile loading..." />
+  }
+
+  if (profileState.status === 'error') {
+    return <AboutStatus message={profileState.message} />
+  }
+
+  return <ProfileContent profile={profileState.profile} />
 }
