@@ -7,7 +7,7 @@ export type PostBlockType = 'text' | 'image' | 'carousel' | 'video' | 'heading' 
 export type MediaAssetType = 'image' | 'video'
 
 export interface Post {
-  id: number
+  id: string
   type: PostType
   slug: string
   title: string
@@ -20,30 +20,65 @@ export interface Post {
   updatedAt?: string
 }
 
-export interface PostBlock {
-  id: number
-  postId: number
-  orderIndex: number
-  type: PostBlockType
-  content?: Record<string, unknown>
-  createdAt?: string
+export interface MediaTag {
+  id: string
+  title: string
+  slug: string
 }
 
 export interface MediaAsset {
-  id: number
+  id: string
   type: MediaAssetType
+  title: string
   url: string
   alt?: string
   caption?: string
-  width?: number
-  height?: number
+  tags: MediaTag[]
   durationSeconds?: number
   createdAt?: string
+  updatedAt?: string
 }
 
-export interface BlockMedia {
-  id: number
-  blockId: number
-  mediaId: number
-  orderIndex: number
+export interface TextPostBlock {
+  type: 'text'
+  body: unknown[]
+}
+
+export interface HeadingPostBlock {
+  type: 'heading'
+  level: 2 | 3 | 4
+  text: string
+}
+
+export interface QuotePostBlock {
+  type: 'quote'
+  text: string
+  attribution?: string
+}
+
+export interface ImagePostBlock {
+  type: 'image'
+  media: MediaAsset
+}
+
+export interface CarouselPostBlock {
+  type: 'carousel'
+  mediaItems: MediaAsset[]
+}
+
+export interface VideoPostBlock {
+  type: 'video'
+  media: MediaAsset
+}
+
+export type PostBlock =
+  | TextPostBlock
+  | HeadingPostBlock
+  | QuotePostBlock
+  | ImagePostBlock
+  | CarouselPostBlock
+  | VideoPostBlock
+
+export interface PostDetail extends Post {
+  blocks: PostBlock[]
 }

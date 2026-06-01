@@ -38,6 +38,9 @@
 - `src/data/media`는 로컬 미디어 asset을 보관한다
 - 앱 컴포넌트는 `src/data`나 Sanity에 직접 의존하지 않고 `src/registry`를 통해 데이터를 사용한다
 - `src/registry`는 현재 앱 데이터 registry 역할이며, 추후 DOT(Data Orchestration/Translation) 계층으로 변경될 예정이다
+- 앱 컴포넌트는 Sanity client, GROQ query, Sanity 원본 필드 구조를 직접 알지 않는다
+- Sanity query 결과는 `src/registry/resolvers`에서 `packages/types`의 앱 view model로 변환한 뒤 소비한다
+- Sanity reference 해소는 GROQ projection에서 처리하고, 앱은 펼쳐진 결과를 resolver로 검증/정규화한다
 - Sanity 통합 시에는 `src/registry`의 데이터 소스만 Sanity query 기반으로 교체하고, 앱 타입은 `packages/types` 기준을 유지한다
 - Sanity asset CDN으로 전환되면 `src/data/media`는 점진적으로 축소하거나 제거한다
 
