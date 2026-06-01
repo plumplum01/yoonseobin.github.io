@@ -1,4 +1,4 @@
 export { BlockRenderer } from './BlockRenderer'
 export { Blocks } from './Blocks'
-export { CarouselBlock } from './CarouselBlock'
+export { blockRegistry } from './block.registry'
 export { getPortableTextParagraphs } from './portableText'
