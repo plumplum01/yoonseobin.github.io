@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { Blocks, getPortableTextParagraphs } from '../components/blocks/renderer'
+import { BlockList, getPortableTextParagraphs } from '../components/blocks/post'
 
 describe('block renderer', () => {
   it('extracts paragraphs from portable text blocks', () => {
@@ -16,7 +16,7 @@ describe('block renderer', () => {
 
   it('renders post blocks independently', () => {
     render(
-      <Blocks
+      <BlockList
         blocks={[
           { type: 'heading', level: 2, text: 'Heading' },
           {
