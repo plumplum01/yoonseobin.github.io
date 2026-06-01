@@ -11,9 +11,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import type { AppRoutePath } from '../../../app/router'
 import { cn } from '../../../lib/cn'
-import { site } from '../../../registry/site'
 import { buttonVariants } from '../../ui'
-import ThemeToggle from '../../features/theme/ThemeToggle'
 
 interface Props {
 	onClose: () => void
@@ -28,11 +26,11 @@ export default function NavMenu({ onClose }: Props) {
 		onClose()
 	}
 
-	const menuItemClassName = cn(buttonVariants({ variant: 'nav', size: 'navItem' }), 'rounded-sm font-white')
+	const menuItemClassName = cn(buttonVariants({ variant: 'nav', size: 'navItem' }), 'rounded-sm text-neutral-100')
 
 	return (
 		<motion.div
-			className="flex h-full flex-col box-border pt-[var(--nav-menu-top)] pb-2.5"
+			className="flex h-full flex-col box-border pt-(--nav-menu-top)"
 			initial={{
 				scale: 0.9,
 				opacity: 0,
@@ -52,7 +50,7 @@ export default function NavMenu({ onClose }: Props) {
 			transition={{ type: 'spring', bounce: 0.2, duration: 0.4 }}
 		>
 			{/* 페이지 이동 버튼 */}
-			<div className="flex flex-col gap-2 px-3">
+			<div className="flex flex-col gap-2 px-2">
 				{location.pathname !== '/' && (
 					<button
 						type="button"
@@ -81,24 +79,8 @@ export default function NavMenu({ onClose }: Props) {
 					</button>
 				)}
 
-				{/* 이메일 링크 */}
-				<a
-					href={`mailto:${site.email}`}
-					className={menuItemClassName}
-				>
-					Email
-				</a>
 			</div>
 
-			{/* 하단: 크레딧 + 다크모드 토글 */}
-			<footer className="mt-auto flex items-center">
-				<span className="min-w-0 flex-1 overflow-hidden text-ellipsis whitespace-nowrap pl-4 text-left text-caption leading-none tracking-caption text-[var(--caption-gray)] select-none">
-					{site.nameDisplay}
-				</span>
-				<div className="pr-1.5">
-					<ThemeToggle />
-				</div>
-			</footer>
 		</motion.div>
 	)
 }
