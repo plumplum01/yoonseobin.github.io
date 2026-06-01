@@ -1,4 +1,13 @@
-import type { Profile, ProfileAward, ProfileEducation, ProfileLink } from '@portfolio/types'
+import type {
+  ClientProfile,
+  ClientProfileAward,
+  ClientProfileEducation,
+  ClientProfileLink,
+  Profile,
+  ProfileAward,
+  ProfileEducation,
+  ProfileLink,
+} from '@portfolio/types'
 
 type UnknownRecord = Record<string, unknown>
 
@@ -82,6 +91,24 @@ function resolveEducation(item: UnknownRecord, index: number): ProfileEducation 
   }
 }
 
+function resolveClientEducation(item: ClientProfileEducation): ProfileEducation {
+  const isCurrent = item.isCurrent ?? false
+
+  if (!isCurrent && !item.endDate) {
+    throw new Error('Invalid profile payload: profile.education[].endDate must be provided')
+  }
+
+  return {
+    title: item.title,
+    startDate: item.startDate,
+    ...(item.endDate ? { endDate: item.endDate } : {}),
+    isCurrent,
+    displayPeriod: isCurrent
+      ? `${formatMonth(item.startDate)} – Present`
+      : `${formatMonth(item.startDate)} – ${formatMonth(item.endDate!)}`,
+  }
+}
+
 function resolveAward(item: UnknownRecord, index: number): ProfileAward {
   const context = `profile.awards[${index}]`
   const desc = optionalString(item, 'desc')
@@ -94,6 +121,15 @@ function resolveAward(item: UnknownRecord, index: number): ProfileAward {
   }
 }
 
+function resolveClientAward(item: ClientProfileAward): ProfileAward {
+  return {
+    title: item.title,
+    ...(item.desc ? { desc: item.desc } : {}),
+    awardedAt: item.awardedAt,
+    displayDate: formatMonth(item.awardedAt),
+  }
+}
+
 function resolveLink(item: UnknownRecord, index: number): ProfileLink {
   const context = `profile.links[${index}]`
   return {
@@ -102,7 +138,14 @@ function resolveLink(item: UnknownRecord, index: number): ProfileLink {
   }
 }
 
-export function resolveProfile(raw: unknown): Profile {
+function resolveClientLink(item: ClientProfileLink): ProfileLink {
+  return {
+    label: item.label,
+    href: item.href,
+  }
+}
+
+export function assertClientProfile(raw: unknown): ClientProfile {
   if (!isRecord(raw)) {
     throw new Error('Invalid profile payload: profile document is missing')
   }
@@ -110,8 +153,31 @@ export function resolveProfile(raw: unknown): Profile {
   return {
     heading: requireString(raw, 'heading', 'profile'),
     paragraphs: requireStringArray(raw, 'paragraphs', 'profile'),
-    education: requireObjectArray(raw, 'education', 'profile', resolveEducation),
-    awards: requireObjectArray(raw, 'awards', 'profile', resolveAward),
-    links: requireObjectArray(raw, 'links', 'profile', resolveLink),
+    education: requireObjectArray(raw, 'education', 'profile', (item, index) => {
+      resolveEducation(item, index)
+      return item as unknown as ClientProfileEducation
+    }),
+    awards: requireObjectArray(raw, 'awards', 'profile', (item, index) => {
+      resolveAward(item, index)
+      return item as unknown as ClientProfileAward
+    }),
+    links: requireObjectArray(raw, 'links', 'profile', (item, index) => {
+      resolveLink(item, index)
+      return item as unknown as ClientProfileLink
+    }),
   }
+}
+
+export function resolveClientProfile(clientProfile: ClientProfile): Profile {
+  return {
+    heading: clientProfile.heading,
+    paragraphs: clientProfile.paragraphs,
+    education: clientProfile.education.map(resolveClientEducation),
+    awards: clientProfile.awards.map(resolveClientAward),
+    links: clientProfile.links.map(resolveClientLink),
+  }
+}
+
+export function resolveProfile(raw: unknown): Profile {
+  return resolveClientProfile(assertClientProfile(raw))
 }
