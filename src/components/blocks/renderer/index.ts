@@ -1,4 +1,4 @@
-export { BlockList } from './BlockList'
 export { BlockRenderer } from './BlockRenderer'
-export { blockRegistry } from './blockRegistry'
+export { Blocks } from './Blocks'
+export { blockRegistry } from './block.registry'
 export { getPortableTextParagraphs } from './portableText'
