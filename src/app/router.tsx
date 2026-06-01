@@ -7,8 +7,6 @@ import About from '../pages/About'
 import Home from '../pages/Home'
 import PostDetail from '../pages/PostDetail'
 import Posts from '../pages/Posts'
-import { loadProfile } from '../registry/profile'
-import { loadPost, loadPosts } from '../registry/posts'
 
 type AppPageRoute = {
   id: string
@@ -17,14 +15,6 @@ type AppPageRoute = {
   smoothScroll: boolean
   loader?: LoaderFunction
   render: (options: { smoothScrollEnabled: boolean }) => ReactNode
-}
-
-function loadPostRoute({ params }: LoaderFunctionArgs) {
-  if (!params.slug) {
-    throw new Error('Post slug is missing')
-  }
-
-  return loadPost(params.slug)
 }
 
 export const pageRoutes = [
