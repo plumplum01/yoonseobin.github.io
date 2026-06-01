@@ -13,7 +13,17 @@ describe('block renderer', () => {
             body: [
               {
                 _type: 'block',
-                children: [{ text: 'Body copy' }],
+                _key: 'body-copy',
+                style: 'normal',
+                markDefs: [],
+                children: [
+                  {
+                    _key: 'body-copy-span',
+                    _type: 'span',
+                    marks: [],
+                    text: 'Body copy',
+                  },
+                ],
               },
             ],
           },

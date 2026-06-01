@@ -1,19 +1,32 @@
+import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { PostBlock } from '@portfolio/types'
-import { getPortableTextParagraphs } from '../../../features/post-block-renderer/helpers/portableText'
+
+const portableTextComponents: PortableTextComponents = {
+  block: {
+    normal: ({ children }) => (
+      <p className="text-body font-medium leading-loose tracking-tight text-cjk text-[var(--text-primary)]">
+        {children}
+      </p>
+    ),
+  },
+  marks: {
+    link: ({ children, value }) => (
+      <a
+        className="underline decoration-[var(--text-primary)]/30 underline-offset-4 hover:decoration-[var(--text-primary)]"
+        href={typeof value?.href === 'string' ? value.href : undefined}
+        rel="noreferrer"
+        target="_blank"
+      >
+        {children}
+      </a>
+    ),
+  },
+}
 
 export function TextBlock({ block }: { block: Extract<PostBlock, { type: 'text' }> }) {
-  const paragraphs = getPortableTextParagraphs(block.body)
-
   return (
-    <div className="space-y-5">
-      {paragraphs.map((paragraph, index) => (
-        <p
-          key={`${paragraph.slice(0, 24)}-${index}`}
-          className="text-body font-medium leading-loose tracking-tight text-cjk text-[var(--text-primary)]"
-        >
-          {paragraph}
-        </p>
-      ))}
+    <div className="flex flex-col gap-5">
+      <PortableText value={block.body} components={portableTextComponents} />
     </div>
   )
 }

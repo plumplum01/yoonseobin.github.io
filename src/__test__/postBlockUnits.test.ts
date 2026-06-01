@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { aspectRatioClassName } from '../components/blocks/post/MediaFrame'
 import { toCarouselSlide } from '../features/post-block-renderer/helpers/carouselSlides'
-import { getPortableTextParagraphs } from '../features/post-block-renderer/helpers/portableText'
 
 describe('post block unit helpers', () => {
   it('maps image media into a carousel slide with alt fallback', () => {
@@ -49,14 +48,4 @@ describe('post block unit helpers', () => {
     })
   })
 
-  it('extracts paragraph text from portable text blocks', () => {
-    expect(
-      getPortableTextParagraphs([
-        {
-          _type: 'block',
-          children: [{ text: 'Hello ' }, { text: 'post' }],
-        },
-      ]),
-    ).toEqual(['Hello post'])
-  })
 })
