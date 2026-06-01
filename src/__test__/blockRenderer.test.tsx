@@ -5,7 +5,7 @@ import { BlockList } from '../features/post-block-renderer'
 describe('block renderer', () => {
   it('renders post blocks independently', () => {
     render(
-      <Blocks
+      <BlockList
         blocks={[
           { type: 'heading', level: 2, text: 'Heading' },
           {
