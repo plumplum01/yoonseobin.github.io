@@ -1,5 +1,5 @@
 import type { PostBlock } from '@portfolio/types'
-import { getPortableTextParagraphs } from './portableText'
+import { getPortableTextParagraphs } from '../../../features/post-block-renderer/helpers/portableText'
 
 export function TextBlock({ block }: { block: Extract<PostBlock, { type: 'text' }> }) {
   const paragraphs = getPortableTextParagraphs(block.body)

@@ -5,7 +5,10 @@ import {
 	CarouselDots,
 	CarouselItem,
 } from '../../ui/carousel'
-import { type CarouselSlideModel, toCarouselSlide } from './carouselSlides'
+import {
+	type CarouselSlideModel,
+	toCarouselSlide,
+} from '../../../features/post-block-renderer/helpers/carouselSlides'
 
 type CarouselBlockProps = {
 	block: Extract<PostBlock, { type: 'carousel' }>
