@@ -1,75 +1,93 @@
-import type { PostBlock } from '@portfolio/types'
-import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import type { MediaAsset, PostBlock } from '@portfolio/types'
+import {
+	Carousel,
+	CarouselContent,
+	CarouselDots,
+	CarouselItem,
+} from '../../ui/carousel'
+
+type CarouselSlideModel =
+	| {
+		id: string
+		kind: 'image'
+		src: string
+		alt: string
+		caption?: string
+	}
+	| {
+		id: string
+		kind: 'video'
+		src: string
+		title: string
+		caption?: string
+	}
 
 type CarouselBlockProps = {
-  block: Extract<PostBlock, { type: 'carousel' }>
+	block: Extract<PostBlock, { type: 'carousel' }>
+}
+
+function toCarouselSlide(media: MediaAsset): CarouselSlideModel {
+	if (media.type === 'video') {
+		return {
+			id: media.id,
+			kind: 'video',
+			src: media.url,
+			title: media.title,
+			...(media.caption ? { caption: media.caption } : {}),
+		}
+	}
+
+	return {
+		id: media.id,
+		kind: 'image',
+		src: media.url,
+		alt: media.alt ?? media.caption ?? media.title,
+		...(media.caption ? { caption: media.caption } : {}),
+	}
+}
+
+function getCarouselSlides(block: CarouselBlockProps['block']): CarouselSlideModel[] {
+	return block.mediaItems.map(toCarouselSlide)
+}
+
+function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
+	return (
+		<CarouselItem className="pl-3">
+			<figure className="flex flex-col gap-2">
+				<div className="aspect-video w-full overflow-hidden rounded-sm">
+					{slide.kind === 'video' ? (
+						// biome-ignore lint/a11y/useMediaCaption: CMS media assets do not provide timed caption tracks yet.
+						<video className="size-full object-cover" controls src={slide.src} title={slide.title} />
+					) : (
+						<img className="size-full object-cover" src={slide.src} alt={slide.alt} loading="lazy" />
+					)}
+				</div>
+
+				{slide.caption && (
+					<figcaption className="text-caption font-medium leading-tight tracking-caption text-cjk text-[var(--caption-gray)]">
+						{/*{slide.caption}*/}
+					</figcaption>
+				)}
+			</figure>
+		</CarouselItem>
+	)
 }
 
 export function CarouselBlock({ block }: CarouselBlockProps) {
-  const scrollerRef = useRef<HTMLDivElement>(null)
-  const [canScrollNext, setCanScrollNext] = useState(false)
-  const [canScrollPrev, setCanScrollPrev] = useState(false)
+	const slideItems = getCarouselSlides(block).map((slide) => (
+		<CarouselSlide key={slide.id} slide={slide} />
+	))
 
-  const updateScrollState = useCallback(() => {
-    const scroller = scrollerRef.current
-    if (!scroller) return
-
-    setCanScrollPrev(scroller.scrollLeft > 0)
-    setCanScrollNext(scroller.scrollLeft + scroller.clientWidth < scroller.scrollWidth - 1)
-  }, [])
-
-  const scrollByPage = (direction: -1 | 1) => {
-    const scroller = scrollerRef.current
-    if (!scroller) return
-
-    scroller.scrollBy({ left: direction * scroller.clientWidth, behavior: 'smooth' })
-  }
-
-  useEffect(() => {
-    updateScrollState()
-  }, [updateScrollState])
-
-  return (
-    <figure className="space-y-3">
-      <div
-        ref={scrollerRef}
-        className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth"
-        onScroll={updateScrollState}
-      >
-        {block.mediaItems.map((media) => (
-          <img
-            key={media.id}
-            className="aspect-[4/3] w-full min-w-full snap-start rounded-sm object-cover"
-            src={media.url}
-            alt={media.alt ?? media.caption ?? media.title}
-            loading="lazy"
-          />
-        ))}
-      </div>
-
-      {block.mediaItems.length > 1 && (
-        <div className="flex items-center justify-end gap-2">
-          <button
-            type="button"
-            className="inline-flex size-9 items-center justify-center rounded-sm border border-[var(--text-primary)]/20 text-[var(--text-primary)] disabled:opacity-30"
-            aria-label="Previous slide"
-            disabled={!canScrollPrev}
-            onClick={() => scrollByPage(-1)}
-          >
-            <ChevronLeft size={16} />
-          </button>
-          <button
-            type="button"
-            className="inline-flex size-9 items-center justify-center rounded-sm border border-[var(--text-primary)]/20 text-[var(--text-primary)] disabled:opacity-30"
-            aria-label="Next slide"
-            disabled={!canScrollNext}
-            onClick={() => scrollByPage(1)}
-          >
-            <ChevronRight size={16} />
-          </button>
-        </div>
-      )}
-    </figure>
-  )
+	return (
+		<Carousel aria-label="Post media carousel" className="flex flex-col gap-1">
+			<CarouselContent className="-ml-3">{slideItems}</CarouselContent>
+			<div className="w-full justify-center flex items-center gap-3">
+				<CarouselDots />
+				{/*<div className="flex items-center gap-2">
+					<CarouselPrevious />
+					<CarouselNext />
+				</div>*/}
+			</div>
+		</Carousel>
+	)
 }

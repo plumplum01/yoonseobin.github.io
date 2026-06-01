@@ -1,5 +1,26 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
 
+const mediaAspectRatioOptions = [
+  { title: 'Square 1:1', value: 'square' },
+  { title: 'Video 16:9', value: 'video' },
+  { title: 'Portrait 4:5', value: 'portrait' },
+  { title: 'Wide 21:9', value: 'wide' },
+]
+
+function aspectRatioField() {
+  return defineField({
+    name: 'aspectRatio',
+    title: 'Aspect ratio',
+    type: 'string',
+    initialValue: 'video',
+    options: {
+      layout: 'radio',
+      list: mediaAspectRatioOptions,
+    },
+    validation: (rule) => rule.required(),
+  })
+}
+
 export const blockContentType = defineType({
   name: 'blockContent',
   title: 'Block content',
@@ -74,10 +95,12 @@ export const blockContentType = defineType({
           },
           validation: (rule) => rule.required(),
         }),
+        aspectRatioField(),
       ],
       preview: {
         select: {
           title: 'media.title',
+          subtitle: 'aspectRatio',
           media: 'media.image',
         },
       },
@@ -101,9 +124,26 @@ export const blockContentType = defineType({
               },
             }),
           ],
-          validation: (rule) => rule.required().min(1),
+          validation: (rule) => rule.required().min(2),
         }),
       ],
+      preview: {
+        select: {
+          firstTitle: 'mediaItems.0.title',
+          secondTitle: 'mediaItems.1.title',
+          thirdTitle: 'mediaItems.2.title',
+          firstImage: 'mediaItems.0.image',
+        },
+        prepare: ({ firstTitle, secondTitle, thirdTitle, firstImage }) => {
+          const titles = [firstTitle, secondTitle, thirdTitle].filter(Boolean)
+
+          return {
+            title: 'Carousel',
+            subtitle: titles.length > 0 ? titles.join(', ') : 'Select at least two media items',
+            media: firstImage,
+          }
+        },
+      },
     }),
     defineArrayMember({
       name: 'videoBlock',
@@ -121,10 +161,12 @@ export const blockContentType = defineType({
           },
           validation: (rule) => rule.required(),
         }),
+        aspectRatioField(),
       ],
       preview: {
         select: {
           title: 'media.title',
+          subtitle: 'aspectRatio',
         },
       },
     }),

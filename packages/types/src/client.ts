@@ -1,4 +1,4 @@
-import type { MediaAssetType, PostStatus, PostType } from './content'
+import type { MediaAspectRatio, MediaAssetType, PostStatus, PostType } from './content'
 
 export interface ClientProfileEducation {
   title: string
@@ -80,6 +80,7 @@ export interface ClientQuotePostBlock {
 export interface ClientImagePostBlock {
   _type: 'imageBlock'
   media: ClientMediaAsset
+  aspectRatio?: MediaAspectRatio
 }
 
 export interface ClientCarouselPostBlock {
@@ -90,6 +91,7 @@ export interface ClientCarouselPostBlock {
 export interface ClientVideoPostBlock {
   _type: 'videoBlock'
   media: ClientMediaAsset
+  aspectRatio?: MediaAspectRatio
 }
 
 export type ClientPostBlock =
