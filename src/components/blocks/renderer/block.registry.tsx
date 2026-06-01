@@ -1,15 +1,16 @@
-import type {
-  HeadingPostBlock,
-  ImagePostBlock,
-  PostBlock,
-  QuotePostBlock,
-  TextPostBlock,
-  VideoPostBlock,
-} from '@portfolio/types'
-import { CarouselBlock } from './CarouselBlock'
+import type { ComponentType } from 'react'
+import type { PostBlock } from '@portfolio/types'
+import { CarouselBlock } from '../post/CarouselBlock'
 import { getPortableTextParagraphs } from './portableText'
 
-function TextBlock({ block }: { block: TextPostBlock }) {
+type BlockComponent<TBlock extends PostBlock = PostBlock> = ComponentType<{ block: TBlock }>
+type RegisteredBlockComponent = ComponentType<{ block: PostBlock }>
+
+type BlockRegistry = {
+  [TType in PostBlock['type']]: BlockComponent<Extract<PostBlock, { type: TType }>>
+}
+
+function TextBlock({ block }: { block: Extract<PostBlock, { type: 'text' }> }) {
   const paragraphs = getPortableTextParagraphs(block.body)
 
   return (
@@ -26,7 +27,7 @@ function TextBlock({ block }: { block: TextPostBlock }) {
   )
 }
 
-function HeadingBlock({ block }: { block: HeadingPostBlock }) {
+function HeadingBlock({ block }: { block: Extract<PostBlock, { type: 'heading' }> }) {
   const HeadingTag = `h${block.level}` as const
   const className =
     block.level === 2
@@ -36,7 +37,7 @@ function HeadingBlock({ block }: { block: HeadingPostBlock }) {
   return <HeadingTag className={`${className} text-cjk text-[var(--text-primary)]`}>{block.text}</HeadingTag>
 }
 
-function QuoteBlock({ block }: { block: QuotePostBlock }) {
+function QuoteBlock({ block }: { block: Extract<PostBlock, { type: 'quote' }> }) {
   return (
     <figure className="border-l border-[var(--text-primary)]/30 pl-5">
       <blockquote className="text-body font-medium leading-loose tracking-tight text-cjk text-[var(--text-primary)]">
@@ -51,7 +52,7 @@ function QuoteBlock({ block }: { block: QuotePostBlock }) {
   )
 }
 
-function ImageBlock({ block }: { block: ImagePostBlock }) {
+function ImageBlock({ block }: { block: Extract<PostBlock, { type: 'image' }> }) {
   return (
     <figure className="space-y-3">
       <img
@@ -69,7 +70,7 @@ function ImageBlock({ block }: { block: ImagePostBlock }) {
   )
 }
 
-function VideoBlock({ block }: { block: VideoPostBlock }) {
+function VideoBlock({ block }: { block: Extract<PostBlock, { type: 'video' }> }) {
   return (
     <figure className="space-y-3">
       <video className="w-full rounded-sm" src={block.media.url} controls playsInline preload="metadata">
@@ -84,19 +85,11 @@ function VideoBlock({ block }: { block: VideoPostBlock }) {
   )
 }
 
-export function BlockRenderer({ block }: { block: PostBlock }) {
-  switch (block.type) {
-    case 'text':
-      return <TextBlock block={block} />
-    case 'heading':
-      return <HeadingBlock block={block} />
-    case 'quote':
-      return <QuoteBlock block={block} />
-    case 'image':
-      return <ImageBlock block={block} />
-    case 'carousel':
-      return <CarouselBlock mediaItems={block.mediaItems} />
-    case 'video':
-      return <VideoBlock block={block} />
-  }
-}
+export const blockRegistry = {
+  text: TextBlock as RegisteredBlockComponent,
+  heading: HeadingBlock as RegisteredBlockComponent,
+  quote: QuoteBlock as RegisteredBlockComponent,
+  image: ImageBlock as RegisteredBlockComponent,
+  carousel: CarouselBlock as RegisteredBlockComponent,
+  video: VideoBlock as RegisteredBlockComponent,
+} satisfies Record<keyof BlockRegistry, RegisteredBlockComponent>

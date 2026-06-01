@@ -1,12 +1,12 @@
-import type { MediaAsset } from '@portfolio/types'
+import type { PostBlock } from '@portfolio/types'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 
 type CarouselBlockProps = {
-  mediaItems: MediaAsset[]
+  block: Extract<PostBlock, { type: 'carousel' }>
 }
 
-export function CarouselBlock({ mediaItems }: CarouselBlockProps) {
+export function CarouselBlock({ block }: CarouselBlockProps) {
   const scrollerRef = useRef<HTMLDivElement>(null)
   const [canScrollNext, setCanScrollNext] = useState(false)
   const [canScrollPrev, setCanScrollPrev] = useState(false)
@@ -37,7 +37,7 @@ export function CarouselBlock({ mediaItems }: CarouselBlockProps) {
         className="flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-smooth"
         onScroll={updateScrollState}
       >
-        {mediaItems.map((media) => (
+        {block.mediaItems.map((media) => (
           <img
             key={media.id}
             className="aspect-[4/3] w-full min-w-full snap-start rounded-sm object-cover"
@@ -48,7 +48,7 @@ export function CarouselBlock({ mediaItems }: CarouselBlockProps) {
         ))}
       </div>
 
-      {mediaItems.length > 1 && (
+      {block.mediaItems.length > 1 && (
         <div className="flex items-center justify-end gap-2">
           <button
             type="button"

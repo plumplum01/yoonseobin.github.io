@@ -1,7 +1,7 @@
-import { Blocks } from '@portfolio/renderer'
 import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import { Blocks } from '../components/blocks/renderer'
 import { getPostBySlug } from '../registry/posts'
 
 type PostState =
