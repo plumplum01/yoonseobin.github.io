@@ -26,6 +26,7 @@
   --color-text-heading-dark: #ffffff;
   --color-text-primary-light: rgba(0, 0, 0, 0.7);
   --color-text-primary-dark: rgba(255, 255, 255, 0.7);
+  --color-text-primary: var(--color-text-primary-light);
   --color-text-secondary-light: rgba(0, 0, 0, 0.4);
   --color-text-secondary-dark: rgba(255, 255, 255, 0.4);
   --color-text-footer-light: rgba(0, 0, 0, 0.5);
@@ -126,13 +127,12 @@
 
   /* ─── 텍스트 ─────────────────────────────────────────────────────────── */
   --text-heading: var(--color-text-heading-light);
-  --text-primary: var(--color-text-primary-light);
   --text-secondary: var(--color-text-secondary-light);
   --text-footer: var(--color-text-footer-light);
   --divider: var(--color-divider-light);
 
   /* ─── 네비게이션/버튼 ───────────────────────────────────────────────── */
-  --nav-text: var(--text-primary);
+  --nav-text: var(--color-text-primary);
   --nav-text-open: var(--color-text-primary-dark);
   --nav-btn: var(--color-nav-btn-light);
   --nav-btn-hover: var(--color-nav-btn-hover-light);
@@ -184,9 +184,9 @@
   --bg-about: var(--color-bg-about-dark);
   --card-even: var(--color-card-even-dark);
   --card-odd: var(--color-card-odd-dark);
+  --color-text-primary: var(--color-text-primary-dark);
 
   --text-heading: var(--color-text-heading-dark);
-  --text-primary: var(--color-text-primary-dark);
   --text-secondary: var(--color-text-secondary-dark);
   --text-footer: var(--color-text-footer-dark);
   --divider: var(--color-divider-dark);

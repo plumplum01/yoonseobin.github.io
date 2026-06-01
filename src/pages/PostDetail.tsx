@@ -21,7 +21,7 @@ export default function PostDetail() {
               {publishedDate}
             </p>
           )}
-          <h1 className="mt-4 text-section-heading font-semibold leading-tight tracking-heading text-cjk text-[var(--text-primary)]">
+          <h1 className="mt-4 text-section-heading font-semibold leading-tight tracking-heading text-cjk text-text-primary">
             {post.title}
           </h1>
           {post.summary && (

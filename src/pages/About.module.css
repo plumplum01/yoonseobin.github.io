@@ -29,7 +29,7 @@
 }
 
 .introParagraph {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }
 
 .divider {
@@ -71,7 +71,7 @@
 }
 
 .eduDate {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   flex-shrink: 0;
 }
 
@@ -86,12 +86,12 @@
 }
 
 .awardDesc {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   white-space: pre-line;
 }
 
 .awardDate {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
   flex-shrink: 0;
 }
 
@@ -121,5 +121,5 @@
 }
 
 .status {
-  color: var(--text-primary);
+  color: var(--color-text-primary);
 }

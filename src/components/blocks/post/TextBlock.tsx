@@ -4,7 +4,7 @@ import type { PostBlock } from '@portfolio/types'
 const portableTextComponents: PortableTextComponents = {
   block: {
     normal: ({ children }) => (
-      <p className="text-body font-medium leading-loose tracking-tight text-cjk text-[var(--text-primary)]">
+      <p className="text-body font-medium leading-loose tracking-tight text-cjk text-text-primary">
         {children}
       </p>
     ),
@@ -12,7 +12,7 @@ const portableTextComponents: PortableTextComponents = {
   marks: {
     link: ({ children, value }) => (
       <a
-        className="underline decoration-[var(--text-primary)]/30 underline-offset-4 hover:decoration-[var(--text-primary)]"
+        className="underline decoration-text-primary/30 underline-offset-4 hover:decoration-text-primary"
         href={typeof value?.href === 'string' ? value.href : undefined}
         rel="noreferrer"
         target="_blank"

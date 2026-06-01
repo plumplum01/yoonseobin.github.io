@@ -7,7 +7,7 @@ export default function PageError() {
 
   return (
     <main className="mx-auto box-border min-h-screen w-full max-w-3xl px-6 pt-28 pb-20">
-      <h1 className="text-section-heading font-semibold leading-tight tracking-heading text-cjk text-[var(--text-primary)]">
+      <h1 className="text-section-heading font-semibold leading-tight tracking-heading text-cjk text-text-primary">
         {title}
       </h1>
       <p className="mt-5 text-body font-medium leading-loose tracking-tight text-cjk text-[var(--caption-gray)]">

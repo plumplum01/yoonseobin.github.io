@@ -166,7 +166,7 @@ function CarouselPrevious({ className, ...props }: ComponentProps<'button'>) {
 		<button
 			aria-label="Previous slide"
 			className={cn(
-				'inline-flex size-9 items-center justify-center rounded-sm border border-[var(--text-primary)]/20 text-[var(--text-primary)] transition-opacity disabled:pointer-events-none disabled:opacity-30',
+				'inline-flex size-9 items-center justify-center rounded-sm border border-text-primary/20 text-text-primary transition-opacity disabled:pointer-events-none disabled:opacity-30',
 				className,
 			)}
 			disabled={!canScrollPrev}
@@ -186,7 +186,7 @@ function CarouselNext({ className, ...props }: ComponentProps<'button'>) {
 		<button
 			aria-label="Next slide"
 			className={cn(
-				'inline-flex size-9 items-center justify-center rounded-sm border border-[var(--text-primary)]/20 text-[var(--text-primary)] transition-opacity disabled:pointer-events-none disabled:opacity-30',
+				'inline-flex size-9 items-center justify-center rounded-sm border border-text-primary/20 text-text-primary transition-opacity disabled:pointer-events-none disabled:opacity-30',
 				className,
 			)}
 			disabled={!canScrollNext}
@@ -211,7 +211,7 @@ function CarouselDots({ className, ...props }: HTMLAttributes<HTMLDivElement>) {
 					aria-current={selectedIndex === index}
 					aria-label={`Go to slide ${index + 1}`}
 					className={cn(
-						'size-1.5 rounded-full bg-[var(--text-primary)] opacity-25 transition-opacity',
+						'size-1.5 rounded-full bg-text-primary opacity-25 transition-opacity',
 						selectedIndex === index && 'opacity-100',
 					)}
 					key={index}
