@@ -52,7 +52,7 @@ export default function GlobalNavigationBar() {
 		'pointer-events-auto relative overflow-hidden bg-[var(--nav-closed)] outline-[var(--outline-width)] outline-[var(--panel-inset-border)]',
 		'shadow-[0_0_16px_rgba(0,0,0,var(--shadow-opacity))] backdrop-blur-[var(--blur)] [-webkit-backdrop-filter:blur(var(--blur))]',
 		'[--blur:24px] [--nav-fg:var(--nav-text)] [--nav-header-top:0px] [--nav-menu-top:calc(var(--nav-header-height)+7px)] [--outline-width:0px] [--shadow-opacity:0]',
-		'[corner-shape:squircle] transition-[background-color,box-shadow,outline-width] duration-[250ms] ease-in-out hover:[--outline-width:3px]',
+		'transition-[background-color,box-shadow,outline-width] duration-[250ms] ease-in-out hover:[--outline-width:3px]',
 		isOpen && 'bg-[var(--nav-open)] [--nav-fg:var(--nav-text-open)] [--shadow-opacity:0.2]',
 	)
 
@@ -89,7 +89,7 @@ export default function GlobalNavigationBar() {
 			/>
 
 			<motion.nav
-				className="pointer-events-none fixed inset-x-0 top-10 z-30 flex justify-center"
+				className="pointer-events-none fixed inset-x-0 z-30 flex justify-center"
 				initial={false}
 				animate={navAnimate}
 				transition={panelSpring}
