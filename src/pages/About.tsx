@@ -130,7 +130,7 @@ export default function About() {
   useEffect(() => {
     let isActive = true
 
-    getProfile()
+    loadProfile()
       .then((profile) => {
         if (isActive) setProfileState({ status: 'success', profile })
       })
