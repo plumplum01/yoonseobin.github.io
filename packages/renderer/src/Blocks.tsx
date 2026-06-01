@@ -1,12 +1,12 @@
 import type { PostBlock } from '@portfolio/types'
-import { PostBlockRenderer } from './PostBlockRenderer'
+import { BlockRenderer } from './BlockRenderer'
 
-export function PostBlocks({ blocks }: { blocks: PostBlock[] }) {
+export function Blocks({ blocks }: { blocks: PostBlock[] }) {
   return (
     <div className="space-y-10">
       {blocks.map((block, index) => (
         <section key={`${block.type}-${index}`} data-post-block={block.type}>
-          <PostBlockRenderer block={block} />
+          <BlockRenderer block={block} />
         </section>
       ))}
     </div>

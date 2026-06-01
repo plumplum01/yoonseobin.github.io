@@ -1,8 +1,8 @@
-import { PostBlocks, getPortableTextParagraphs } from '@portfolio/renderer'
+import { Blocks, getPortableTextParagraphs } from '@portfolio/renderer'
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
 
-describe('post renderer', () => {
+describe('block renderer', () => {
   it('extracts paragraphs from portable text blocks', () => {
     expect(
       getPortableTextParagraphs([
@@ -16,7 +16,7 @@ describe('post renderer', () => {
 
   it('renders post blocks independently', () => {
     render(
-      <PostBlocks
+      <Blocks
         blocks={[
           { type: 'heading', level: 2, text: 'Heading' },
           {
