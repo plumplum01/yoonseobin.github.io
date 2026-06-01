@@ -5,6 +5,31 @@
 - 브랜치를 닫을 때는 항상 기능 리뷰 및 테스트를 진행한 후 머지한다
 - 커밋 전에는 항상 `npm run test:run`과 `npx vite build`로 회귀 없음을 확인한다
 
+## 브랜치 네이밍 규칙
+
+- 브랜치명은 `<type>/<kebab-case-summary>` 형식을 사용한다
+- 이슈 트래커를 사용하는 경우 `<type>/<issue-number>-<kebab-case-summary>` 형식을 사용할 수 있다
+- 작업자 개인 prefix(`codex/`, `seobin/` 등)는 기본적으로 사용하지 않는다
+- summary는 작업 의도를 짧고 구체적으로 작성하며, 공백 대신 하이픈을 사용한다
+- 허용하는 type은 아래를 기준으로 한다
+  - `feature`: 새 기능
+  - `fix`: 버그 수정
+  - `hotfix`: 운영 긴급 수정
+  - `release`: 릴리스 준비
+  - `chore`: 설정, 의존성, 빌드 등 기능 외 작업
+  - `refactor`: 동작 변경 없는 구조 개선
+  - `docs`: 문서 변경
+  - `test`: 테스트 추가 또는 수정
+  - `style`: 포맷, 스타일 등 비기능 변경
+  - `perf`: 성능 개선
+  - `ci`: CI/CD 설정 변경
+- 예시는 아래와 같다
+  - `feature/home-about-section`
+  - `fix/mobile-overlay-scroll`
+  - `chore/update-branch-guideline`
+  - `refactor/project-loader`
+  - `docs/content-migration-plan`
+
 ## 콘텐츠 구조 및 CMS 전환 계획
 
 - `packages/types`를 콘텐츠 타입의 SSOT로 둔다

@@ -1,6 +1,7 @@
 import { blockContentType } from './blockContent'
 import { postType } from './post'
+import { profileType } from './profile'
 
-export const schemaTypes = [blockContentType, postType]
+export const schemaTypes = [blockContentType, postType, profileType]
 
-export { blockContentType, postType }
+export { blockContentType, postType, profileType }

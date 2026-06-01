@@ -119,3 +119,7 @@
 .linkButton:hover {
   background-color: var(--btn-hover);
 }
+
+.status {
+  color: var(--text-primary);
+}
