@@ -32,7 +32,8 @@
     "@portfolio/types": "file:../types",
     "@sanity/client": "^7.14.0",
     "@sanity/image-url": "^1.2.0",
-    "sanity": "^4.21.1"
+    "sanity": "^4.21.1",
+    "styled-components": "^6.4.2"
   },
   "devDependencies": {
     "typescript": "~5.9.3"

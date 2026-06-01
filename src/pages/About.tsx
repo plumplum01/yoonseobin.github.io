@@ -1,8 +1,7 @@
+import type { Profile } from '@portfolio/types'
 import { motion } from 'framer-motion'
-import { about as aboutData } from '../registry/about'
+import { useLoaderData } from 'react-router-dom'
 import styles from './About.module.css'
-
-const { heading, paragraphs, education, awards, links } = aboutData
 
 const container = {
   hidden: {},
@@ -24,6 +23,9 @@ const fadeUp = {
 }
 
 export default function About() {
+  const profile = useLoaderData() as Profile
+  const { heading, paragraphs, education, awards, links } = profile
+
   return (
     <section className={styles.section}>
       <motion.div className={styles.container} variants={container} initial="hidden" animate="show">
@@ -65,7 +67,7 @@ export default function About() {
                   {e.title}
                 </span>
                 <span className={`text-body font-medium leading-tight tracking-tight ${styles.eduDate}`}>
-                  {e.date}
+                  {e.displayPeriod}
                 </span>
               </motion.div>
             ))}
@@ -94,7 +96,7 @@ export default function About() {
                   </span>
                 </div>
                 <span className={`text-body font-medium leading-tight tracking-tight ${styles.awardDate}`}>
-                  {a.date}
+                  {a.displayDate}
                 </span>
               </motion.div>
             ))}
