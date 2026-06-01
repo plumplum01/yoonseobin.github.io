@@ -1,7 +1,7 @@
 import type { PostBlock } from '@portfolio/types'
 import { BlockRenderer } from './BlockRenderer'
 
-export function BlockList({ blocks }: { blocks: PostBlock[] }) {
+export function Blocks({ blocks }: { blocks: PostBlock[] }) {
   return (
     <div className="space-y-10">
       {blocks.map((block, index) => (
