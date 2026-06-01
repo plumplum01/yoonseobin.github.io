@@ -74,3 +74,26 @@ export const profileQuery = `*[
     href
   }
 }`
+
+export const profileQuery = `*[
+  _type == "profile" &&
+  _id == "profile"
+][0] {
+  heading,
+  paragraphs,
+  education[] {
+    title,
+    startDate,
+    endDate,
+    isCurrent
+  },
+  awards[] {
+    title,
+    desc,
+    awardedAt
+  },
+  links[] {
+    label,
+    href
+  }
+}`
