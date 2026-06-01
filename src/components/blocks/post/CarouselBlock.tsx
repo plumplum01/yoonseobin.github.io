@@ -4,8 +4,6 @@ import {
 	CarouselContent,
 	CarouselDots,
 	CarouselItem,
-	CarouselNext,
-	CarouselPrevious,
 } from '../../ui/carousel'
 
 type CarouselSlideModel =
@@ -54,7 +52,7 @@ function getCarouselSlides(block: CarouselBlockProps['block']): CarouselSlideMod
 
 function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 	return (
-		<CarouselItem>
+		<CarouselItem className="pl-3">
 			<figure className="flex flex-col gap-2">
 				<div className="aspect-video w-full overflow-hidden rounded-sm">
 					{slide.kind === 'video' ? (
@@ -67,7 +65,7 @@ function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 
 				{slide.caption && (
 					<figcaption className="text-caption font-medium leading-tight tracking-caption text-cjk text-[var(--caption-gray)]">
-						{slide.caption}
+						{/*{slide.caption}*/}
 					</figcaption>
 				)}
 			</figure>
@@ -81,15 +79,14 @@ export function CarouselBlock({ block }: CarouselBlockProps) {
 	))
 
 	return (
-		<Carousel aria-label="Post media carousel" className="flex flex-col gap-3">
-			<CarouselContent>{slideItems}</CarouselContent>
-
-			<div className="flex items-center justify-between gap-3">
+		<Carousel aria-label="Post media carousel" className="flex flex-col gap-1">
+			<CarouselContent className="-ml-3">{slideItems}</CarouselContent>
+			<div className="w-full justify-center flex items-center gap-3">
 				<CarouselDots />
-				<div className="flex items-center gap-2">
+				{/*<div className="flex items-center gap-2">
 					<CarouselPrevious />
 					<CarouselNext />
-				</div>
+				</div>*/}
 			</div>
 		</Carousel>
 	)

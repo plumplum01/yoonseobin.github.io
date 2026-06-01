@@ -9,6 +9,7 @@ import type {
   ClientQuotePostBlock,
   ClientTextPostBlock,
   ClientVideoPostBlock,
+  MediaAspectRatio,
   MediaAsset,
   MediaAssetType,
   PostBlock,
@@ -78,6 +79,14 @@ function assertPostStatus(value: string, context: string): PostStatus {
 function assertMediaType(value: string, context: string): MediaAssetType {
   if (value === 'image' || value === 'video') return value
   throw new Error(`Invalid post payload: ${context}.type has unsupported media value`)
+}
+
+function assertMediaAspectRatio(value: string | undefined, context: string): MediaAspectRatio {
+  if (!value) return 'video'
+  if (value === 'square' || value === 'video' || value === 'portrait' || value === 'wide') {
+    return value
+  }
+  throw new Error(`Invalid post payload: ${context}.aspectRatio has unsupported value`)
 }
 
 function assertClientMediaTag(raw: UnknownRecord, index: number): ClientMediaTag {
@@ -171,9 +180,11 @@ function assertClientQuoteBlock(raw: UnknownRecord): ClientQuotePostBlock {
 }
 
 function assertClientImageBlock(raw: UnknownRecord): ClientImagePostBlock {
+  const context = 'imageBlock'
   return {
     _type: 'imageBlock',
-    media: assertClientMediaAsset(requireRecord(raw, 'media', 'imageBlock')),
+    media: assertClientMediaAsset(requireRecord(raw, 'media', context)),
+    aspectRatio: assertMediaAspectRatio(optionalString(raw, 'aspectRatio'), context),
   }
 }
 
@@ -185,9 +196,11 @@ function assertClientCarouselBlock(raw: UnknownRecord): ClientCarouselPostBlock 
 }
 
 function assertClientVideoBlock(raw: UnknownRecord): ClientVideoPostBlock {
+  const context = 'videoBlock'
   return {
     _type: 'videoBlock',
-    media: assertClientMediaAsset(requireRecord(raw, 'media', 'videoBlock')),
+    media: assertClientMediaAsset(requireRecord(raw, 'media', context)),
+    aspectRatio: assertMediaAspectRatio(optionalString(raw, 'aspectRatio'), context),
   }
 }
 
@@ -252,11 +265,11 @@ function mapClientPostBlock(block: ClientPostBlock): PostBlock {
         ...(block.attribution ? { attribution: block.attribution } : {}),
       }
     case 'imageBlock':
-      return { type: 'image', media: mapClientMediaAsset(block.media) }
+      return { type: 'image', media: mapClientMediaAsset(block.media), aspectRatio: block.aspectRatio ?? 'video' }
     case 'carouselBlock':
       return { type: 'carousel', mediaItems: block.mediaItems.map(mapClientMediaAsset) }
     case 'videoBlock':
-      return { type: 'video', media: mapClientMediaAsset(block.media) }
+      return { type: 'video', media: mapClientMediaAsset(block.media), aspectRatio: block.aspectRatio ?? 'video' }
   }
 }
 

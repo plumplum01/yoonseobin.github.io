@@ -27,9 +27,9 @@ const postPayload = {
   status: 'published',
   blocks: [
     { _type: 'headingBlock', level: 2, text: 'Intro' },
-    { _type: 'imageBlock', media: imageMedia },
+    { _type: 'imageBlock', media: imageMedia, aspectRatio: 'portrait' },
     { _type: 'carouselBlock', mediaItems: [imageMedia] },
-    { _type: 'videoBlock', media: videoMedia },
+    { _type: 'videoBlock', media: videoMedia, aspectRatio: 'wide' },
   ],
 }
 
@@ -70,8 +70,36 @@ describe('mapPost', () => {
     expect(post.blocks).toHaveLength(4)
     expect(post.blocks[1]).toMatchObject({
       type: 'image',
+      aspectRatio: 'portrait',
       media: { id: 'media-1', url: 'https://cdn.sanity.io/image.webp' },
     })
+    expect(post.blocks[3]).toMatchObject({
+      type: 'video',
+      aspectRatio: 'wide',
+      media: { id: 'media-2', url: 'https://cdn.sanity.io/video.mp4' },
+    })
+  })
+
+  it('media block aspectRatio가 없으면 video 비율을 기본값으로 사용한다', () => {
+    const post = mapPost({
+      ...postPayload,
+      blocks: [
+        { _type: 'imageBlock', media: imageMedia },
+        { _type: 'videoBlock', media: videoMedia },
+      ],
+    })
+
+    expect(post.blocks[0]).toMatchObject({ type: 'image', aspectRatio: 'video' })
+    expect(post.blocks[1]).toMatchObject({ type: 'video', aspectRatio: 'video' })
+  })
+
+  it('지원하지 않는 media block aspectRatio는 실패한다', () => {
+    expect(() =>
+      mapPost({
+        ...postPayload,
+        blocks: [{ _type: 'imageBlock', media: imageMedia, aspectRatio: 'cinema' }],
+      }),
+    ).toThrow('imageBlock.aspectRatio has unsupported value')
   })
 
   it('지원하지 않는 block type은 실패한다', () => {
