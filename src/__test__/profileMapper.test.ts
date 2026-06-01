@@ -1,4 +1,4 @@
-import { resolveProfile } from '../registry/resolvers/profileResolver'
+import { mapProfile } from '../registry/mappers/profileMapper'
 
 const profilePayload = {
   heading: 'Heading',
@@ -8,9 +8,9 @@ const profilePayload = {
   links: [{ label: 'GitHub', href: 'https://github.com/example' }],
 }
 
-describe('resolveProfile', () => {
+describe('mapProfile', () => {
   it('Sanity profile payload를 앱 Profile view model로 변환한다', () => {
-    expect(resolveProfile(profilePayload)).toEqual({
+    expect(mapProfile(profilePayload)).toEqual({
       heading: 'Heading',
       paragraphs: ['First paragraph', 'Second paragraph'],
       education: [
@@ -35,7 +35,7 @@ describe('resolveProfile', () => {
   })
 
   it('desc가 없는 award도 허용한다', () => {
-    const result = resolveProfile({
+    const result = mapProfile({
       ...profilePayload,
       awards: [{ title: 'Award', awardedAt: '2024-12-01' }],
     })
@@ -46,7 +46,7 @@ describe('resolveProfile', () => {
   })
 
   it('현재 진행 중인 education은 endDate 없이 Present 표시를 만든다', () => {
-    const result = resolveProfile({
+    const result = mapProfile({
       ...profilePayload,
       education: [{ title: 'School', startDate: '2020-03-01', isCurrent: true }],
     })
@@ -59,30 +59,30 @@ describe('resolveProfile', () => {
   })
 
   it('profile 문서가 없으면 실패한다', () => {
-    expect(() => resolveProfile(null)).toThrow('profile document is missing')
+    expect(() => mapProfile(null)).toThrow('profile document is missing')
   })
 
   it('필수 string 필드가 비어 있으면 실패한다', () => {
-    expect(() => resolveProfile({ ...profilePayload, heading: '' })).toThrow(
+    expect(() => mapProfile({ ...profilePayload, heading: '' })).toThrow(
       'profile.heading must be a non-empty string',
     )
   })
 
   it('반복 object 배열이 아니면 실패한다', () => {
-    expect(() => resolveProfile({ ...profilePayload, education: ['School'] })).toThrow(
+    expect(() => mapProfile({ ...profilePayload, education: ['School'] })).toThrow(
       'profile.education must be an object array',
     )
   })
 
   it('중첩 필수 필드가 없으면 위치를 포함해 실패한다', () => {
-    expect(() => resolveProfile({ ...profilePayload, links: [{ label: 'GitHub' }] })).toThrow(
+    expect(() => mapProfile({ ...profilePayload, links: [{ label: 'GitHub' }] })).toThrow(
       'profile.links[0].href must be a non-empty string',
     )
   })
 
   it('종료된 education에 endDate가 없으면 실패한다', () => {
     expect(() =>
-      resolveProfile({
+      mapProfile({
         ...profilePayload,
         education: [{ title: 'School', startDate: '2020-03-01' }],
       }),
@@ -91,7 +91,7 @@ describe('resolveProfile', () => {
 
   it('날짜가 YYYY-MM-DD 형식이 아니면 실패한다', () => {
     expect(() =>
-      resolveProfile({
+      mapProfile({
         ...profilePayload,
         awards: [{ title: 'Award', awardedAt: '2024-12' }],
       }),

@@ -1,4 +1,13 @@
-import type { Profile, ProfileAward, ProfileEducation, ProfileLink } from '@portfolio/types'
+import type {
+  ClientProfile,
+  ClientProfileAward,
+  ClientProfileEducation,
+  ClientProfileLink,
+  Profile,
+  ProfileAward,
+  ProfileEducation,
+  ProfileLink,
+} from '@portfolio/types'
 
 type UnknownRecord = Record<string, unknown>
 
@@ -61,7 +70,7 @@ function requireObjectArray<T>(
   return value.map((item, index) => resolveItem(item, index))
 }
 
-function resolveEducation(item: UnknownRecord, index: number): ProfileEducation {
+function validateEducationPayload(item: UnknownRecord, index: number): void {
   const context = `profile.education[${index}]`
   const startDate = requireString(item, 'startDate', context)
   const endDate = optionalString(item, 'endDate')
@@ -71,38 +80,60 @@ function resolveEducation(item: UnknownRecord, index: number): ProfileEducation 
     throw new Error(`Invalid profile payload: ${context}.endDate must be provided`)
   }
 
+  requireString(item, 'title', context)
+  formatMonth(startDate)
+  if (endDate) formatMonth(endDate)
+}
+
+function mapClientEducation(item: ClientProfileEducation): ProfileEducation {
+  const isCurrent = item.isCurrent ?? false
+
+  if (!isCurrent && !item.endDate) {
+    throw new Error('Invalid profile payload: profile.education[].endDate must be provided')
+  }
+
   return {
-    title: requireString(item, 'title', context),
-    startDate,
-    ...(endDate ? { endDate } : {}),
+    title: item.title,
+    startDate: item.startDate,
+    ...(item.endDate ? { endDate: item.endDate } : {}),
     isCurrent,
     displayPeriod: isCurrent
-      ? `${formatMonth(startDate)} – Present`
-      : `${formatMonth(startDate)} – ${formatMonth(endDate!)}`,
+      ? `${formatMonth(item.startDate)} – Present`
+      : `${formatMonth(item.startDate)} – ${formatMonth(item.endDate!)}`,
   }
 }
 
-function resolveAward(item: UnknownRecord, index: number): ProfileAward {
+function validateAwardPayload(item: UnknownRecord, index: number): void {
   const context = `profile.awards[${index}]`
-  const desc = optionalString(item, 'desc')
   const awardedAt = requireString(item, 'awardedAt', context)
+  requireString(item, 'title', context)
+  optionalString(item, 'desc')
+  formatMonth(awardedAt)
+}
+
+function mapClientAward(item: ClientProfileAward): ProfileAward {
   return {
-    title: requireString(item, 'title', context),
-    ...(desc ? { desc } : {}),
-    awardedAt,
-    displayDate: formatMonth(awardedAt),
+    title: item.title,
+    ...(item.desc ? { desc: item.desc } : {}),
+    awardedAt: item.awardedAt,
+    displayDate: formatMonth(item.awardedAt),
   }
 }
 
-function resolveLink(item: UnknownRecord, index: number): ProfileLink {
+function validateLinkPayload(item: UnknownRecord, index: number): void {
   const context = `profile.links[${index}]`
+  requireString(item, 'label', context)
+  requireString(item, 'href', context)
+}
+
+function mapClientLink(item: ClientProfileLink): ProfileLink {
   return {
-    label: requireString(item, 'label', context),
-    href: requireString(item, 'href', context),
+    label: item.label,
+    href: item.href,
   }
 }
 
-export function resolveProfile(raw: unknown): Profile {
+export function assertClientProfile(raw: unknown): ClientProfile {
   if (!isRecord(raw)) {
     throw new Error('Invalid profile payload: profile document is missing')
   }
@@ -110,8 +141,31 @@ export function resolveProfile(raw: unknown): Profile {
   return {
     heading: requireString(raw, 'heading', 'profile'),
     paragraphs: requireStringArray(raw, 'paragraphs', 'profile'),
-    education: requireObjectArray(raw, 'education', 'profile', resolveEducation),
-    awards: requireObjectArray(raw, 'awards', 'profile', resolveAward),
-    links: requireObjectArray(raw, 'links', 'profile', resolveLink),
+    education: requireObjectArray(raw, 'education', 'profile', (item, index) => {
+      validateEducationPayload(item, index)
+      return item as unknown as ClientProfileEducation
+    }),
+    awards: requireObjectArray(raw, 'awards', 'profile', (item, index) => {
+      validateAwardPayload(item, index)
+      return item as unknown as ClientProfileAward
+    }),
+    links: requireObjectArray(raw, 'links', 'profile', (item, index) => {
+      validateLinkPayload(item, index)
+      return item as unknown as ClientProfileLink
+    }),
   }
+}
+
+export function mapClientProfile(clientProfile: ClientProfile): Profile {
+  return {
+    heading: clientProfile.heading,
+    paragraphs: clientProfile.paragraphs,
+    education: clientProfile.education.map(mapClientEducation),
+    awards: clientProfile.awards.map(mapClientAward),
+    links: clientProfile.links.map(mapClientLink),
+  }
+}
+
+export function mapProfile(raw: unknown): Profile {
+  return mapClientProfile(assertClientProfile(raw))
 }

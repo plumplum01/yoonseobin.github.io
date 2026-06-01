@@ -19,6 +19,8 @@ describe('router config', () => {
       expect.arrayContaining([
         expect.objectContaining({ id: 'home', path: '/', title: 'Home' }),
         expect.objectContaining({ id: 'about', path: '/about', title: 'About' }),
+        expect.objectContaining({ id: 'posts', path: '/posts', title: 'Posts' }),
+        expect.objectContaining({ id: 'post-detail', path: '/posts/:slug', title: 'Post' }),
       ]),
     )
   })
@@ -28,6 +30,8 @@ describe('router config', () => {
       expect.arrayContaining([
         expect.objectContaining({ id: 'home', smoothScroll: true }),
         expect.objectContaining({ id: 'about', smoothScroll: false }),
+        expect.objectContaining({ id: 'posts', smoothScroll: false }),
+        expect.objectContaining({ id: 'post-detail', smoothScroll: false }),
       ]),
     )
   })
