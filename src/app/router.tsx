@@ -3,6 +3,8 @@ import { createBrowserRouter, type RouteObject } from 'react-router-dom'
 import RootLayout from './layouts/RootLayout'
 import About from '../pages/About'
 import Home from '../pages/Home'
+import PostDetail from '../pages/PostDetail'
+import Posts from '../pages/Posts'
 
 type AppPageRoute = {
   id: string
@@ -26,6 +28,20 @@ export const pageRoutes = [
     title: 'About',
     smoothScroll: false,
     render: () => <About />,
+  },
+  {
+    id: 'posts',
+    path: '/posts',
+    title: 'Posts',
+    smoothScroll: false,
+    render: () => <Posts />,
+  },
+  {
+    id: 'post-detail',
+    path: '/posts/:slug',
+    title: 'Post',
+    smoothScroll: false,
+    render: () => <PostDetail />,
   },
 ] as const satisfies readonly AppPageRoute[]
 

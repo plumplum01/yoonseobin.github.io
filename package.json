@@ -8,7 +8,8 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "npm run build:types && npm run build:sanity && tsc -b && vite build",
+    "build": "npm run build:types && npm run build:renderer && npm run build:sanity && tsc -b && vite build",
+    "build:renderer": "tsc -p packages/renderer/tsconfig.json",
     "build:sanity": "tsc -p packages/sanity/tsconfig.json",
     "build:types": "tsc -p packages/types/tsconfig.json",
     "check": "biome check --formatter-enabled=false --assist-enabled=false .",
@@ -25,6 +26,7 @@
   },
   "dependencies": {
     "@portfolio/sanity": "file:packages/sanity",
+    "@portfolio/renderer": "file:packages/renderer",
     "@portfolio/types": "file:packages/types",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
