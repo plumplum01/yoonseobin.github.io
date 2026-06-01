@@ -1,7 +1,6 @@
 import type { Profile } from '@portfolio/types'
 import { motion } from 'framer-motion'
-import { useEffect, useState } from 'react'
-import { loadProfile } from '../registry/profile'
+import { useLoaderData } from 'react-router-dom'
 import styles from './About.module.css'
 
 const container = {
@@ -23,28 +22,8 @@ const fadeUp = {
   },
 }
 
-type ProfileState =
-  | { status: 'loading' }
-  | { status: 'success'; profile: Profile }
-  | { status: 'error'; message: string }
-
-function getErrorMessage(error: unknown): string {
-  return error instanceof Error ? error.message : 'Failed to load profile'
-}
-
-function AboutStatus({ message }: { message: string }) {
-  return (
-    <section className={styles.section}>
-      <div className={styles.container}>
-        <p className={`text-body font-medium leading-loose tracking-tight text-cjk ${styles.status}`}>
-          {message}
-        </p>
-      </div>
-    </section>
-  )
-}
-
-function ProfileContent({ profile }: { profile: Profile }) {
+export default function About() {
+  const profile = useLoaderData() as Profile
   const { heading, paragraphs, education, awards, links } = profile
 
   return (
@@ -143,34 +122,4 @@ function ProfileContent({ profile }: { profile: Profile }) {
       </motion.div>
     </section>
   )
-}
-
-export default function About() {
-  const [profileState, setProfileState] = useState<ProfileState>({ status: 'loading' })
-
-  useEffect(() => {
-    let isActive = true
-
-    loadProfile()
-      .then((profile) => {
-        if (isActive) setProfileState({ status: 'success', profile })
-      })
-      .catch((error: unknown) => {
-        if (isActive) setProfileState({ status: 'error', message: getErrorMessage(error) })
-      })
-
-    return () => {
-      isActive = false
-    }
-  }, [])
-
-  if (profileState.status === 'loading') {
-    return <AboutStatus message="Profile loading..." />
-  }
-
-  if (profileState.status === 'error') {
-    return <AboutStatus message={profileState.message} />
-  }
-
-  return <ProfileContent profile={profileState.profile} />
 }
