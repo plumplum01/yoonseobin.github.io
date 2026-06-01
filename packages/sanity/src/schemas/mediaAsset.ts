@@ -50,19 +50,8 @@ export const mediaAssetType = defineType({
         }),
     }),
     defineField({
-      name: 'alt',
-      title: 'Alt text',
-      type: 'string',
-      hidden: ({ document }) => document?.type !== 'image',
-    }),
-    defineField({
       name: 'caption',
       title: 'Caption',
-      type: 'string',
-    }),
-    defineField({
-      name: 'credit',
-      title: 'Credit',
       type: 'string',
     }),
     defineField({
@@ -76,8 +65,12 @@ export const mediaAssetType = defineType({
       name: 'tags',
       title: 'Tags',
       type: 'array',
-      of: [{ type: 'string' }],
-      options: { layout: 'tags' },
+      of: [
+        {
+          type: 'reference',
+          to: [{ type: 'mediaTag' }],
+        },
+      ],
     }),
   ],
   preview: {

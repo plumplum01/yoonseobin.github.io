@@ -16,10 +16,13 @@ export const mediaAssetProjection = `{
   "id": _id,
   title,
   type,
-  alt,
+  "alt": caption,
   caption,
-  credit,
-  tags,
+  tags[]-> {
+    "id": _id,
+    title,
+    "slug": slug.current
+  },
   durationSeconds,
   "imageUrl": image.asset->url,
   "videoUrl": video.asset->url,
