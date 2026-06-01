@@ -2,7 +2,7 @@ import type { MediaAspectRatio } from '@portfolio/types'
 import type { ReactNode } from 'react'
 import { cn } from '../../../lib/cn'
 
-const aspectRatioClassName: Record<MediaAspectRatio, string> = {
+export const aspectRatioClassName: Record<MediaAspectRatio, string> = {
   portrait: 'aspect-[4/5]',
   square: 'aspect-square',
   video: 'aspect-video',

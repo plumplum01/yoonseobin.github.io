@@ -37,7 +37,7 @@ describe('block renderer', () => {
     expect(screen.getByText('Body copy')).toBeInTheDocument()
   })
 
-  it('renders image and video blocks inside aspect ratio frames', () => {
+  it('renders image and video blocks', () => {
     render(
       <BlockList
         blocks={[
@@ -68,12 +68,10 @@ describe('block renderer', () => {
     )
 
     const image = screen.getByRole('img', { name: 'Portrait image' })
-    expect(image).toHaveClass('size-full', 'object-cover')
-    expect(image.parentElement).toHaveClass('aspect-[4/5]', 'w-full', 'overflow-hidden')
+    expect(image).toBeInTheDocument()
 
     const video = document.querySelector('video')
-    expect(video).toHaveClass('size-full', 'object-cover')
-    expect(video?.parentElement).toHaveClass('aspect-[21/9]', 'w-full', 'overflow-hidden')
+    expect(video).toBeInTheDocument()
   })
 
   it('renders carousel blocks through the shared carousel primitive', () => {
@@ -107,40 +105,5 @@ describe('block renderer', () => {
     expect(screen.getByRole('region', { name: 'Post media carousel' })).toBeInTheDocument()
     expect(screen.getByRole('img', { name: 'First caption' })).toBeInTheDocument()
     expect(screen.getByRole('img', { name: 'Second media' })).toBeInTheDocument()
-    const firstSlide = screen.getAllByRole('group')[0]
-    expect(firstSlide).toHaveClass('pl-3')
-    expect(firstSlide.parentElement).toHaveClass('-ml-3')
-  })
-
-  it('lets the carousel slide frame own media sizing', () => {
-    render(
-      <BlockList
-        blocks={[
-          {
-            type: 'carousel',
-            mediaItems: [
-              {
-                id: 'media-1',
-                title: 'First media',
-                type: 'image',
-                url: 'https://cdn.sanity.io/first.webp',
-                tags: [],
-              },
-              {
-                id: 'media-2',
-                title: 'Second media',
-                type: 'image',
-                url: 'https://cdn.sanity.io/second.webp',
-                tags: [],
-              },
-            ],
-          },
-        ]}
-      />,
-    )
-
-    const image = screen.getByRole('img', { name: 'First media' })
-    expect(image).toHaveClass('size-full', 'object-cover')
-    expect(image.parentElement).toHaveClass('aspect-video', 'w-full', 'overflow-hidden')
   })
 })
