@@ -27,8 +27,8 @@ export default function NavMenu({ onClose }: Props) {
 	}
 
 	const menuItemClassName = cn(
-		buttonVariants({ variant: 'nav', size: 'navItem' }),
-		'rounded-sm text-neutral-100',
+		buttonVariants({ variant: 'ghost', size: 'lg' }),
+		'h-11 w-full justify-start rounded-sm text-neutral-100 hover:bg-white/10 hover:text-neutral-100',
 	)
 
 	return (

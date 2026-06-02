@@ -1,4 +1,4 @@
-export { Button, buttonVariants, type ButtonProps } from './Button'
+export { Button, buttonVariants } from './button'
 export {
 	Carousel,
 	type CarouselApi,
