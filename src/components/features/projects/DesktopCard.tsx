@@ -12,36 +12,36 @@ import ProjectCard from './ProjectCard'
 import styles from './DesktopCard.module.css'
 
 interface DesktopCardProps {
-  index: number
-  n: number
-  onSelect: (card: SelectedCard) => void
+	index: number
+	n: number
+	onSelect: (card: SelectedCard) => void
 }
 
 export default function DesktopCard({ index, n, onSelect }: DesktopCardProps) {
-  const project = projects[(n - 1) % projects.length]
-  const isEven = n % 2 === 0
-  const bg = isEven ? 'var(--card-even)' : 'var(--card-odd)'
+	const project = projects[(n - 1) % projects.length]
+	const isEven = n % 2 === 0
+	const bg = isEven ? 'var(--card-even)' : 'var(--card-odd)'
 
-  return (
-    <ProjectCard
-      project={project}
-      className={styles.card}
-      style={{
-        width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
-        marginTop: isEven ? '17.7vh' : '30.2vh',
-      }}
-      imageClassName={styles.cardImage}
-      imageStyle={{
-        height: isEven ? '63.7vh' : '51.1vh',
-        backgroundColor: bg,
-      }}
-      textClassName={styles.cardText}
-      titleClassName={`text-nav font-semibold tracking-card ${styles.cardTitle}`}
-      subtitleClassName={`text-nav font-medium tracking-card ${styles.cardSubtitle}`}
-      imageLoading="eager"
-      imageDecoding="async"
-      onClick={() => onSelect({ index, n, bg })}
-      dataCursor="card"
-    />
-  )
+	return (
+		<ProjectCard
+			project={project}
+			className={styles.card}
+			style={{
+				width: `${DESKTOP_ITEM_WIDTH_VW}vw`,
+				marginTop: isEven ? '17.7vh' : '30.2vh',
+			}}
+			imageClassName={styles.cardImage}
+			imageStyle={{
+				height: isEven ? '63.7vh' : '51.1vh',
+				backgroundColor: bg,
+			}}
+			textClassName={styles.cardText}
+			titleClassName={`text-nav font-semibold tracking-card ${styles.cardTitle}`}
+			subtitleClassName={`text-nav font-medium tracking-card ${styles.cardSubtitle}`}
+			imageLoading="eager"
+			imageDecoding="async"
+			onClick={() => onSelect({ index, n, bg })}
+			dataCursor="card"
+		/>
+	)
 }

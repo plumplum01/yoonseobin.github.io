@@ -20,49 +20,49 @@ const MotionX = motion.create(X)
 const MotionMenu = motion.create(Menu)
 
 const iconMotion = {
-  initial: { opacity: 0, scale: 0.5, filter: 'blur(4px)' },
-  animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },
-  exit: { opacity: 0, scale: 0.5, filter: 'blur(4px)' },
+	initial: { opacity: 0, scale: 0.5, filter: 'blur(4px)' },
+	animate: { opacity: 1, scale: 1, filter: 'blur(0px)' },
+	exit: { opacity: 0, scale: 0.5, filter: 'blur(4px)' },
 }
 
 const ICON_SIZE = 16
 
 interface Props {
-  isOpen: boolean
-  onToggle: () => void
-  onClose: () => void
+	isOpen: boolean
+	onToggle: () => void
+	onClose: () => void
 }
 
 export default function NavHeader({ isOpen, onToggle, onClose }: Props) {
-  const navigate = useNavigate()
+	const navigate = useNavigate()
 
-  const goHome = () => {
-    navigate('/')
-    onClose()
-  }
+	const goHome = () => {
+		navigate('/')
+		onClose()
+	}
 
-  return (
-    <header className="absolute inset-x-0 top-[var(--nav-header-top)] z-[1] flex h-[var(--nav-header-height)] items-center justify-center">
-      <button
-        type="button"
-        className="cursor-pointer border-0 bg-transparent p-0 text-nav font-medium leading-none tracking-nav text-[var(--nav-fg)] transition-colors duration-[250ms] ease-in-out select-none"
-        onClick={goHome}
-      >
-        {site.name}
-      </button>
-      <IconButton
-        onClick={onToggle}
-        className="absolute right-1.5 grid text-[var(--nav-fg)] opacity-90 transition-colors duration-[250ms] ease-in-out [&>*]:[grid-area:1/1]"
-        aria-label={isOpen ? '메뉴 닫기' : '메뉴 열기'}
-      >
-        <AnimatePresence>
-          {isOpen ? (
-            <MotionX key="close" size={ICON_SIZE} {...iconMotion} />
-          ) : (
-            <MotionMenu key="menu" size={ICON_SIZE} {...iconMotion} />
-          )}
-        </AnimatePresence>
-      </IconButton>
-    </header>
-  )
+	return (
+		<header className="absolute inset-x-0 top-[var(--nav-header-top)] z-[1] flex h-[var(--nav-header-height)] items-center justify-center">
+			<button
+				type="button"
+				className="cursor-pointer border-0 bg-transparent p-0 text-nav font-medium leading-none tracking-nav text-[var(--nav-fg)] transition-colors duration-[250ms] ease-in-out select-none"
+				onClick={goHome}
+			>
+				{site.name}
+			</button>
+			<IconButton
+				onClick={onToggle}
+				className="absolute right-1.5 grid text-[var(--nav-fg)] opacity-90 transition-colors duration-[250ms] ease-in-out [&>*]:[grid-area:1/1]"
+				aria-label={isOpen ? '메뉴 닫기' : '메뉴 열기'}
+			>
+				<AnimatePresence>
+					{isOpen ? (
+						<MotionX key="close" size={ICON_SIZE} {...iconMotion} />
+					) : (
+						<MotionMenu key="menu" size={ICON_SIZE} {...iconMotion} />
+					)}
+				</AnimatePresence>
+			</IconButton>
+		</header>
+	)
 }

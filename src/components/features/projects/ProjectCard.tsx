@@ -10,51 +10,51 @@ import type { CSSProperties, MouseEventHandler } from 'react'
 import type { Project } from '../../../registry/projects'
 
 interface ProjectCardProps {
-  project: Project
-  className?: string
-  style?: CSSProperties
-  imageClassName?: string
-  imageStyle?: CSSProperties
-  textClassName?: string
-  titleClassName?: string
-  subtitleClassName?: string
-  imageLoading?: 'eager' | 'lazy'
-  imageDecoding?: 'async' | 'sync' | 'auto'
-  onClick?: MouseEventHandler<HTMLDivElement>
-  dataCursor?: string
+	project: Project
+	className?: string
+	style?: CSSProperties
+	imageClassName?: string
+	imageStyle?: CSSProperties
+	textClassName?: string
+	titleClassName?: string
+	subtitleClassName?: string
+	imageLoading?: 'eager' | 'lazy'
+	imageDecoding?: 'async' | 'sync' | 'auto'
+	onClick?: MouseEventHandler<HTMLDivElement>
+	dataCursor?: string
 }
 
 export default function ProjectCard({
-  project,
-  className,
-  style,
-  imageClassName,
-  imageStyle,
-  textClassName,
-  titleClassName,
-  subtitleClassName,
-  imageLoading,
-  imageDecoding,
-  onClick,
-  dataCursor,
+	project,
+	className,
+	style,
+	imageClassName,
+	imageStyle,
+	textClassName,
+	titleClassName,
+	subtitleClassName,
+	imageLoading,
+	imageDecoding,
+	onClick,
+	dataCursor,
 }: ProjectCardProps) {
-  return (
-    <div className={className} style={style} onClick={onClick} data-cursor={dataCursor}>
-      <div className={imageClassName} style={imageStyle}>
-        {project.thumbnail && (
-          <img
-            src={project.thumbnail}
-            alt={project.title}
-            loading={imageLoading}
-            decoding={imageDecoding}
-            draggable={false}
-          />
-        )}
-      </div>
-      <div className={textClassName}>
-        <p className={titleClassName}>{project.title}</p>
-        <p className={subtitleClassName}>{project.subtitle}</p>
-      </div>
-    </div>
-  )
+	return (
+		<div className={className} style={style} onClick={onClick} data-cursor={dataCursor}>
+			<div className={imageClassName} style={imageStyle}>
+				{project.thumbnail && (
+					<img
+						src={project.thumbnail}
+						alt={project.title}
+						loading={imageLoading}
+						decoding={imageDecoding}
+						draggable={false}
+					/>
+				)}
+			</div>
+			<div className={textClassName}>
+				<p className={titleClassName}>{project.title}</p>
+				<p className={subtitleClassName}>{project.subtitle}</p>
+			</div>
+		</div>
+	)
 }

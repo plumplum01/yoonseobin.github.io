@@ -1,87 +1,86 @@
 .section {
-    position: relative;
-    overflow: hidden;
-    text-align: left;
-    width: 100vw;
-    height: 100vh;
-    margin-left: calc((100% - 100vw) / 2);
-    background-color: var(--bg-page);
+	position: relative;
+	overflow: hidden;
+	text-align: left;
+	width: 100vw;
+	height: 100vh;
+	margin-left: calc((100% - 100vw) / 2);
+	background-color: var(--bg-page);
 }
 
 .sliderViewport {
-    position: absolute;
-    inset-inline: 0;
-    top: 0;
-    overflow: hidden;
-    height: 90vh;
+	position: absolute;
+	inset-inline: 0;
+	top: 0;
+	overflow: hidden;
+	height: 90vh;
 }
 
 .sliderTrack {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    display: flex;
-    align-items: flex-start;
-    user-select: none;
-    will-change: transform;
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	display: flex;
+	align-items: flex-start;
+	user-select: none;
+	will-change: transform;
 }
 
 /* ─── 오버레이 ──────────────────────────────────────────────────────── */
 
 .backdrop {
-    position: fixed;
-    inset: 0;
-    z-index: 40;
-    backdrop-filter: blur(8px);
-    -webkit-backdrop-filter: blur(8px);
-    background-color: var(--backdrop-panel);
-    will-change: opacity;
+	position: fixed;
+	inset: 0;
+	z-index: 40;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	background-color: var(--backdrop-panel);
+	will-change: opacity;
 }
 
 .overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 50;
-    overflow-y: auto;
+	position: fixed;
+	inset: 0;
+	z-index: 50;
+	overflow-y: auto;
 }
 
 .panel {
-    position: relative;
-    margin-inline: auto;
-    width: 100%;
-    max-width: 1120px;
-    margin-top: 100px;
-    border-radius: 40px; /* panel-specific 대형 반경 */
-    corner-shape: squircle;
-    overflow: hidden;
-    background-color: var(--panel);
-    will-change: transform, opacity;
+	position: relative;
+	margin-inline: auto;
+	width: 100%;
+	max-width: 1120px;
+	margin-top: 100px;
+	border-radius: 40px; /* panel-specific 대형 반경 */
+	corner-shape: squircle;
+	overflow: hidden;
+	background-color: var(--panel);
+	will-change: transform, opacity;
 }
 
 .closeWrapper {
-    display: flex;
-    justify-content: center;
-    padding-top: 60px;
-    padding-bottom: 100px;
+	display: flex;
+	justify-content: center;
+	padding-top: 60px;
+	padding-bottom: 100px;
 }
 
 .closeButton {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 48px;
-    height: 48px;
-    border-radius: var(--radius-full);
-    color: var(--on-dark-default);
-    background-color: var(--nav-btn);
-    transition: all 0.2s;
-    border: none;
-    cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border-radius: var(--radius-full);
+	color: var(--on-dark-default);
+	background-color: var(--nav-btn);
+	transition: all 0.2s;
+	border: none;
+	cursor: pointer;
 }
 
 .closeButton:hover {
-    color: var(--on-dark);
-    background-color: var(--nav-btn-hover);
+	color: var(--on-dark);
+	background-color: var(--nav-btn-hover);
 }
-

@@ -1,8 +1,8 @@
 import { create } from 'zustand'
 
 interface ThemeState {
-  isDark: boolean
-  toggleTheme: () => void
+	isDark: boolean
+	toggleTheme: () => void
 }
 
 /**
@@ -15,25 +15,25 @@ interface ThemeState {
  *   const { isDark, toggleTheme } = useTheme()
  */
 function getInitialIsDark(): boolean {
-  if (typeof window === 'undefined') return false
-  const stored = localStorage.getItem('theme')
-  if (stored !== null) return stored === 'dark'
-  return window.matchMedia('(prefers-color-scheme: dark)').matches
+	if (typeof window === 'undefined') return false
+	const stored = localStorage.getItem('theme')
+	if (stored !== null) return stored === 'dark'
+	return window.matchMedia('(prefers-color-scheme: dark)').matches
 }
 
 export const useThemeStore = create<ThemeState>((set, get) => ({
-  isDark: getInitialIsDark(),
-  toggleTheme: () => {
-    const next = !get().isDark
-    set({ isDark: next })
-    if (typeof window !== 'undefined') {
-      document.documentElement.classList.toggle('dark', next)
-      localStorage.setItem('theme', next ? 'dark' : 'light')
-    }
-  },
+	isDark: getInitialIsDark(),
+	toggleTheme: () => {
+		const next = !get().isDark
+		set({ isDark: next })
+		if (typeof window !== 'undefined') {
+			document.documentElement.classList.toggle('dark', next)
+			localStorage.setItem('theme', next ? 'dark' : 'light')
+		}
+	},
 }))
 
 // 앱 시작 시 테마를 DOM에 즉시 적용
 if (typeof window !== 'undefined') {
-  document.documentElement.classList.toggle('dark', getInitialIsDark())
+	document.documentElement.classList.toggle('dark', getInitialIsDark())
 }

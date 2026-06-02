@@ -1,470 +1,497 @@
 .root {
-  width: 100%;
-  text-align: left;
-  background-color: var(--panel);
+	width: 100%;
+	text-align: left;
+	background-color: var(--panel);
 }
 
 /* ─── 닫기 버튼 ──────────────────────────────────────────────────────── */
 
 .closeButton {
-  position: absolute;
-  top: 20px;
-  right: 24px;
-  z-index: 50;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  border-radius: var(--radius-full);
-  background-color: var(--nav-btn);
-  color: var(--on-dark-default);
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s, color 0.15s;
+	position: absolute;
+	top: 20px;
+	right: 24px;
+	z-index: 50;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	border-radius: var(--radius-full);
+	background-color: var(--nav-btn);
+	color: var(--on-dark-default);
+	border: none;
+	cursor: pointer;
+	transition:
+		background-color 0.15s,
+		color 0.15s;
 }
 
 .closeButton:hover {
-  background-color: var(--nav-btn-hover);
-  color: var(--on-dark);
+	background-color: var(--nav-btn-hover);
+	color: var(--on-dark);
 }
 
 /* ─── 썸네일 ─────────────────────────────────────────────────────────── */
 
 .thumbnail {
-  width: 100%;
-  aspect-ratio: 954 / 546;
-  background: var(--skeleton-base);
-  background-image: linear-gradient(
-    90deg,
-    var(--skeleton-base) 0%,
-    var(--skeleton-shine) 50%,
-    var(--skeleton-base) 100%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+	width: 100%;
+	aspect-ratio: 954 / 546;
+	background: var(--skeleton-base);
+	background-image: linear-gradient(
+		90deg,
+		var(--skeleton-base) 0%,
+		var(--skeleton-shine) 50%,
+		var(--skeleton-base) 100%
+	);
+	background-size: 200% 100%;
+	animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
 
-.thumbnail[data-loaded='true'] {
-  background: none;
-  animation: none;
+.thumbnail[data-loaded="true"] {
+	background: none;
+	animation: none;
 }
 
 .thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
-.thumbnail[data-loaded='true'] img {
-  opacity: 1;
+.thumbnail[data-loaded="true"] img {
+	opacity: 1;
 }
 
 @keyframes skeleton-shimmer {
-  0%   { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
+	0% {
+		background-position: 100% 0;
+	}
+	100% {
+		background-position: -100% 0;
+	}
 }
 
 /* ─── 인포 영역 ──────────────────────────────────────────────────────── */
 
 .info {
-  padding-top: var(--cc-info-pt, 16px);
+	padding-top: var(--cc-info-pt, 16px);
 }
 
 .infoDesktop {
-  padding-left: var(--cc-info-pl, 54px);
-  padding-top: 48px;
+	padding-left: var(--cc-info-pl, 54px);
+	padding-top: 48px;
 }
-.infoMobile  { padding-left: var(--cc-info-pl-mobile, 16px); }
+.infoMobile {
+	padding-left: var(--cc-info-pl-mobile, 16px);
+}
 
 .titleBlock {
-  display: flex;
-  flex-direction: column;
-  line-height: 1.4;
-  padding-bottom: var(--cc-title-pb, 40px);
+	display: flex;
+	flex-direction: column;
+	line-height: 1.4;
+	padding-bottom: var(--cc-title-pb, 40px);
 }
 
 .title {
-  color: var(--panel-text);
+	color: var(--panel-text);
 }
 
 .subtitle {
-  color: var(--panel-muted);
+	color: var(--panel-muted);
 }
 
 .metaBlock {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cc-meta-gap, 12px);
-  padding-bottom: var(--cc-meta-pb, 40px);
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-meta-gap, 12px);
+	padding-bottom: var(--cc-meta-pb, 40px);
 }
 
 .metaLabel {
-  color: var(--panel-muted);
+	color: var(--panel-muted);
 }
 
 .metaGrid {
-  display: flex;
-  gap: var(--cc-meta-grid-gap, 24px);
+	display: flex;
+	gap: var(--cc-meta-grid-gap, 24px);
 }
 
 .metaGridMobile {
-  flex-direction: column;
-  gap: var(--cc-meta-col-gap, 8px);
+	flex-direction: column;
+	gap: var(--cc-meta-col-gap, 8px);
 }
 
 .metaColumn {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cc-meta-col-gap, 8px);
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-meta-col-gap, 8px);
 }
 
 .metaRow {
-  display: flex;
-  gap: var(--cc-meta-row-gap, 8px);
+	display: flex;
+	gap: var(--cc-meta-row-gap, 8px);
 }
 
 .metaKey {
-  color: var(--on-dark);
-  white-space: nowrap;
+	color: var(--on-dark);
+	white-space: nowrap;
 }
 
 .metaValue {
-  color: var(--panel-detail);
-  white-space: nowrap;
+	color: var(--panel-detail);
+	white-space: nowrap;
 }
 
 .descriptionBlock {
-  display: flex;
-  flex-direction: column;
-  gap: var(--cc-desc-gap, 12px);
-  padding-bottom: var(--cc-desc-pb, 100px);
+	display: flex;
+	flex-direction: column;
+	gap: var(--cc-desc-gap, 12px);
+	padding-bottom: var(--cc-desc-pb, 100px);
 }
 
 .descriptionLabel {
-  color: var(--panel-muted);
-  white-space: nowrap;
+	color: var(--panel-muted);
+	white-space: nowrap;
 }
 
 .descriptionBody {
-  color: var(--panel-text);
+	color: var(--panel-text);
 }
 
-.descriptionBodyDesktop { width: 438px; }
-.descriptionBodyMobile  { width: auto; padding-right: 16px; font-size: 13px; }
+.descriptionBodyDesktop {
+	width: 438px;
+}
+.descriptionBodyMobile {
+	width: auto;
+	padding-right: 16px;
+	font-size: 13px;
+}
 
 .tossNote {
-  opacity: 0.5;
-  margin-top: var(--cc-toss-mt, 36px);
+	opacity: 0.5;
+	margin-top: var(--cc-toss-mt, 36px);
 }
 
 /* ─── 탭 ─────────────────────────────────────────────────────────────── */
 
 .tabBar {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding-bottom: 20px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	padding-bottom: 20px;
 }
 
 .tabButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 10px;
-  border-radius: var(--radius-md);
-  corner-shape: squircle;
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.4;
-  color: var(--on-dark);
-  background-color: transparent;
-  opacity: 0.4;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.15s, opacity 0.15s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 10px;
+	border-radius: var(--radius-md);
+	corner-shape: squircle;
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1.4;
+	color: var(--on-dark);
+	background-color: transparent;
+	opacity: 0.4;
+	border: none;
+	cursor: pointer;
+	transition:
+		background-color 0.15s,
+		opacity 0.15s;
 }
 
-.tabButtonDesktop { width: 120px; }
-.tabButtonMobile  { width: auto; padding-inline: 12px; }
+.tabButtonDesktop {
+	width: 120px;
+}
+.tabButtonMobile {
+	width: auto;
+	padding-inline: 12px;
+}
 
 .tabButtonActive {
-  opacity: 1;
-  background-color: var(--ghost-1);
+	opacity: 1;
+	background-color: var(--ghost-1);
 }
 
 .sceneTabGroup {
-  display: flex;
-  align-items: center;
-  height: 42px;
-  padding: 2px 2px 2px 22px;
-  border-radius: var(--radius-md);
-  corner-shape: squircle;
-  gap: 27px;
-  background-color: transparent;
-  opacity: 0.4;
-  cursor: pointer;
-  transition: background-color 0.15s, opacity 0.15s;
+	display: flex;
+	align-items: center;
+	height: 42px;
+	padding: 2px 2px 2px 22px;
+	border-radius: var(--radius-md);
+	corner-shape: squircle;
+	gap: 27px;
+	background-color: transparent;
+	opacity: 0.4;
+	cursor: pointer;
+	transition:
+		background-color 0.15s,
+		opacity 0.15s;
 }
 
 .sceneTabGroupMobile {
-  padding-left: 14px;
-  gap: 12px;
+	padding-left: 14px;
+	gap: 12px;
 }
 
 .sceneTabGroupActive {
-  opacity: 1;
-  background-color: var(--ghost-2);
+	opacity: 1;
+	background-color: var(--ghost-2);
 }
 
 .sceneTabLabel {
-  font-size: 16px;
-  font-weight: 400;
-  line-height: 1.4;
-  color: var(--on-dark);
+	font-size: 16px;
+	font-weight: 400;
+	line-height: 1.4;
+	color: var(--on-dark);
 }
 
 .sceneSubTabs {
-  display: flex;
-  align-items: center;
-  background-color: var(--panel-sunken);
-  padding: 2px;
-  border-radius: var(--radius-sm);
-  corner-shape: squircle;
-  gap: 6px;
+	display: flex;
+	align-items: center;
+	background-color: var(--panel-sunken);
+	padding: 2px;
+	border-radius: var(--radius-sm);
+	corner-shape: squircle;
+	gap: 6px;
 }
 
 .sceneSubTab {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 61px;
-  padding: 8px 10px;
-  border-radius: var(--radius-md);
-  corner-shape: squircle;
-  font-size: 12px;
-  font-weight: 500;
-  line-height: 1.4;
-  color: var(--on-dark);
-  background-color: transparent;
-  opacity: 0.2;
-  border: 0.5px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 61px;
+	padding: 8px 10px;
+	border-radius: var(--radius-md);
+	corner-shape: squircle;
+	font-size: 12px;
+	font-weight: 500;
+	line-height: 1.4;
+	color: var(--on-dark);
+	background-color: transparent;
+	opacity: 0.2;
+	border: 0.5px solid transparent;
+	cursor: pointer;
+	transition: all 0.2s;
 }
 
 .sceneSubTabActive {
-  opacity: 1;
-  border-radius: 6px;
-  corner-shape: squircle;
-  background-color: var(--ghost-1);
-  border-color: var(--ghost-2);
+	opacity: 1;
+	border-radius: 6px;
+	corner-shape: squircle;
+	background-color: var(--ghost-1);
+	border-color: var(--ghost-2);
 }
 
 /* ─── 탭 콘텐츠 ───────────────────────────────────────────────────────── */
 
 .tabContent {
-  margin-inline: 20px;
-  padding-bottom: 20px;
+	margin-inline: 20px;
+	padding-bottom: 20px;
 }
 
 .detailList {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
 
 .imageFrame {
-  width: 100%;
-  min-height: 200px;
-  border-radius: var(--radius-lg);
-  corner-shape: squircle;
-  overflow: hidden;
-  cursor: zoom-in;
-  background: var(--skeleton-base);
-  background-image: linear-gradient(
-    90deg,
-    var(--skeleton-base) 0%,
-    var(--skeleton-shine) 50%,
-    var(--skeleton-base) 100%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+	width: 100%;
+	min-height: 200px;
+	border-radius: var(--radius-lg);
+	corner-shape: squircle;
+	overflow: hidden;
+	cursor: zoom-in;
+	background: var(--skeleton-base);
+	background-image: linear-gradient(
+		90deg,
+		var(--skeleton-base) 0%,
+		var(--skeleton-shine) 50%,
+		var(--skeleton-base) 100%
+	);
+	background-size: 200% 100%;
+	animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
 
-.imageFrame[data-loaded='true'] {
-  background: none;
-  animation: none;
-  min-height: unset;
+.imageFrame[data-loaded="true"] {
+	background: none;
+	animation: none;
+	min-height: unset;
 }
 
 .imageFrame img {
-  width: 100%;
-  height: auto;
-  display: block;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+	width: 100%;
+	height: auto;
+	display: block;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
-.imageFrame[data-loaded='true'] img {
-  opacity: 1;
+.imageFrame[data-loaded="true"] img {
+	opacity: 1;
 }
 
 .sceneList {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
+	display: flex;
+	flex-direction: column;
+	gap: 20px;
 }
 
 .sceneListRow {
-  flex-direction: row;
-  gap: 14px;
-  width: 1080px;
+	flex-direction: row;
+	gap: 14px;
+	width: 1080px;
 }
 
 .sceneVideoFrame {
-  width: 100%;
-  border-radius: var(--radius-lg);
-  corner-shape: squircle;
-  overflow: hidden;
-  background-color: var(--panel-image-bg);
+	width: 100%;
+	border-radius: var(--radius-lg);
+	corner-shape: squircle;
+	overflow: hidden;
+	background-color: var(--panel-image-bg);
 }
 
 .sceneListRow .sceneVideoFrame {
-  flex: 1;
-  width: 0;
+	flex: 1;
+	width: 0;
 }
 
 .sceneVideoFrame video {
-  display: block;
-  width: 100%;
-  height: auto;
+	display: block;
+	width: 100%;
+	height: auto;
 }
 
 .sceneImageFrame {
-  width: 100%;
-  min-height: 200px;
-  border-radius: var(--radius-lg);
-  corner-shape: squircle;
-  overflow: hidden;
-  cursor: zoom-in;
-  background: var(--skeleton-base);
-  background-image: linear-gradient(
-    90deg,
-    var(--skeleton-base) 0%,
-    var(--skeleton-shine) 50%,
-    var(--skeleton-base) 100%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-shimmer 1.6s ease-in-out infinite;
+	width: 100%;
+	min-height: 200px;
+	border-radius: var(--radius-lg);
+	corner-shape: squircle;
+	overflow: hidden;
+	cursor: zoom-in;
+	background: var(--skeleton-base);
+	background-image: linear-gradient(
+		90deg,
+		var(--skeleton-base) 0%,
+		var(--skeleton-shine) 50%,
+		var(--skeleton-base) 100%
+	);
+	background-size: 200% 100%;
+	animation: skeleton-shimmer 1.6s ease-in-out infinite;
 }
 
-.sceneImageFrame[data-loaded='true'] {
-  background: none;
-  animation: none;
-  min-height: unset;
+.sceneImageFrame[data-loaded="true"] {
+	background: none;
+	animation: none;
+	min-height: unset;
 }
 
 .sceneImageFrame img {
-  width: 100%;
-  height: auto;
-  display: block;
-  pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+	width: 100%;
+	height: auto;
+	display: block;
+	pointer-events: none;
+	opacity: 0;
+	transition: opacity 0.3s ease;
 }
 
-.sceneImageFrame[data-loaded='true'] img {
-  opacity: 1;
+.sceneImageFrame[data-loaded="true"] img {
+	opacity: 1;
 }
 
 /* ─── 라이트박스 ──────────────────────────────────────────────────────── */
 
 .lightbox {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: var(--lightbox-bg);
+	position: fixed;
+	inset: 0;
+	z-index: 200;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background-color: var(--lightbox-bg);
 }
 
 .lightboxImage {
-  max-height: 90vh;
-  max-width: 90vw;
-  object-fit: contain;
-  border-radius: 12px;
-  corner-shape: squircle;
-  pointer-events: none;
+	max-height: 90vh;
+	max-width: 90vw;
+	object-fit: contain;
+	border-radius: 12px;
+	corner-shape: squircle;
+	pointer-events: none;
 }
 
 .lightboxCounter {
-  position: absolute;
-  bottom: 24px;
-  left: 50%;
-  transform: translateX(-50%);
-  color: var(--on-dark-mid);
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  pointer-events: none;
+	position: absolute;
+	bottom: 24px;
+	left: 50%;
+	transform: translateX(-50%);
+	color: var(--on-dark-mid);
+	font-size: 13px;
+	letter-spacing: 0.1em;
+	pointer-events: none;
 }
 
 .lightboxClose {
-  position: absolute;
-  top: 24px;
-  right: 32px;
-  color: var(--on-dark-mid);
-  font-size: 13px;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  background: none;
-  border: none;
-  cursor: pointer;
-  transition: color 0.15s;
+	position: absolute;
+	top: 24px;
+	right: 32px;
+	color: var(--on-dark-mid);
+	font-size: 13px;
+	letter-spacing: 0.1em;
+	text-transform: uppercase;
+	background: none;
+	border: none;
+	cursor: pointer;
+	transition: color 0.15s;
 }
 
 .lightboxClose:hover {
-  color: var(--on-dark);
+	color: var(--on-dark);
 }
 
 .lightboxNav {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-full);
-  color: var(--on-dark-weak);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: 32px;
-  line-height: 1;
-  transition: all 0.2s;
+	position: absolute;
+	top: 50%;
+	transform: translateY(-50%);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border-radius: var(--radius-full);
+	color: var(--on-dark-weak);
+	background: none;
+	border: none;
+	cursor: pointer;
+	font-size: 32px;
+	line-height: 1;
+	transition: all 0.2s;
 }
 
 .lightboxNav:hover {
-  color: var(--on-dark);
-  background-color: var(--ghost-1);
+	color: var(--on-dark);
+	background-color: var(--ghost-1);
 }
 
-.lightboxPrev { left: 16px; }
-.lightboxNext { right: 16px; }
+.lightboxPrev {
+	left: 16px;
+}
+.lightboxNext {
+	right: 16px;
+}
 
 .lightboxPrev > span {
-  display: inline-block;
-  transform: translate(-1px, -2px);
+	display: inline-block;
+	transform: translate(-1px, -2px);
 }
 
 .lightboxNext > span {
-  display: inline-block;
-  transform: translate(1px, -2px);
+	display: inline-block;
+	transform: translate(1px, -2px);
 }

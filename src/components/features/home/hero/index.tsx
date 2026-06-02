@@ -16,10 +16,10 @@ import MobileHero from './MobileHero'
 import { useIsMobile } from '../../../../hooks/useIsMobile'
 
 type Props = {
-  smoothScrollEnabled: boolean
+	smoothScrollEnabled: boolean
 }
 
 export default function Hero({ smoothScrollEnabled }: Props) {
-  const isMobile = useIsMobile()
-  return isMobile ? <MobileHero /> : <DesktopHero smoothScrollEnabled={smoothScrollEnabled} />
+	const isMobile = useIsMobile()
+	return isMobile ? <MobileHero /> : <DesktopHero smoothScrollEnabled={smoothScrollEnabled} />
 }

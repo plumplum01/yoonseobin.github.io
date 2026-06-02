@@ -1,41 +1,41 @@
 {
-  "name": "@portfolio/sanity",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "types": "./src/index.ts",
-  "exports": {
-    ".": {
-      "types": "./src/index.ts",
-      "default": "./src/index.ts"
-    },
-    "./client": {
-      "types": "./src/client.ts",
-      "default": "./src/client.ts"
-    },
-    "./queries": {
-      "types": "./src/queries.ts",
-      "default": "./src/queries.ts"
-    },
-    "./schemas": {
-      "types": "./src/schemas/index.ts",
-      "default": "./src/schemas/index.ts"
-    }
-  },
-  "scripts": {
-    "build": "tsc -p tsconfig.json",
-    "deploy": "sanity deploy --config sanity.config.ts",
-    "dev": "sanity dev --config sanity.config.ts",
-    "studio:build": "sanity build --config sanity.config.ts"
-  },
-  "dependencies": {
-    "@portfolio/types": "file:../types",
-    "@sanity/client": "^7.14.0",
-    "@sanity/image-url": "^1.2.0",
-    "sanity": "^4.21.1",
-    "styled-components": "^6.4.2"
-  },
-  "devDependencies": {
-    "typescript": "~5.9.3"
-  }
+	"name": "@portfolio/sanity",
+	"private": true,
+	"version": "0.0.0",
+	"type": "module",
+	"types": "./src/index.ts",
+	"exports": {
+		".": {
+			"types": "./src/index.ts",
+			"default": "./src/index.ts"
+		},
+		"./client": {
+			"types": "./src/client.ts",
+			"default": "./src/client.ts"
+		},
+		"./queries": {
+			"types": "./src/queries.ts",
+			"default": "./src/queries.ts"
+		},
+		"./schemas": {
+			"types": "./src/schemas/index.ts",
+			"default": "./src/schemas/index.ts"
+		}
+	},
+	"scripts": {
+		"build": "tsc -p tsconfig.json",
+		"deploy": "sanity deploy --config sanity.config.ts",
+		"dev": "sanity dev --config sanity.config.ts",
+		"studio:build": "sanity build --config sanity.config.ts"
+	},
+	"dependencies": {
+		"@portfolio/types": "file:../types",
+		"@sanity/client": "^7.14.0",
+		"@sanity/image-url": "^1.2.0",
+		"sanity": "^4.21.1",
+		"styled-components": "^6.4.2"
+	},
+	"devDependencies": {
+		"typescript": "~5.9.3"
+	}
 }

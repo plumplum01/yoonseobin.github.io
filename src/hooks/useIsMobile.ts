@@ -14,24 +14,24 @@
  * 브레이크포인트는 Tailwind의 기본 `md` 값(768px)과 일치시킨다.
  */
 
-import { useEffect, useState } from "react";
+import { useEffect, useState } from 'react'
 
-export const MOBILE_BREAKPOINT_PX = 768;
+export const MOBILE_BREAKPOINT_PX = 768
 
-const MOBILE_QUERY = `(max-width: ${MOBILE_BREAKPOINT_PX - 1}px)`;
+const MOBILE_QUERY = `(max-width: ${MOBILE_BREAKPOINT_PX - 1}px)`
 
 export function useIsMobile(): boolean {
-    const [isMobile, setIsMobile] = useState(() => {
-        if (typeof window === "undefined") return false;
-        return window.matchMedia(MOBILE_QUERY).matches;
-    });
+	const [isMobile, setIsMobile] = useState(() => {
+		if (typeof window === 'undefined') return false
+		return window.matchMedia(MOBILE_QUERY).matches
+	})
 
-    useEffect(() => {
-        const mql = window.matchMedia(MOBILE_QUERY);
-        const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches);
-        mql.addEventListener("change", onChange);
-        return () => mql.removeEventListener("change", onChange);
-    }, []);
+	useEffect(() => {
+		const mql = window.matchMedia(MOBILE_QUERY)
+		const onChange = (e: MediaQueryListEvent) => setIsMobile(e.matches)
+		mql.addEventListener('change', onChange)
+		return () => mql.removeEventListener('change', onChange)
+	}, [])
 
-    return isMobile;
+	return isMobile
 }

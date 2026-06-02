@@ -1,75 +1,75 @@
 .section {
-  padding-top: 112px;
-  padding-bottom: 40px;
-  background-color: var(--bg-page);
-  text-align: left;
-  position: relative;
+	padding-top: 112px;
+	padding-bottom: 40px;
+	background-color: var(--bg-page);
+	text-align: left;
+	position: relative;
 }
 
 .cardList {
-  display: flex;
-  flex-direction: column;
-  margin-left: 12px;
-  gap: 18px;
+	display: flex;
+	flex-direction: column;
+	margin-left: 12px;
+	gap: 18px;
 }
 
 .spacer {
-  height: 40px;
+	height: 40px;
 }
 
 /* ─── 오버레이 ──────────────────────────────────────────────────────── */
 
 .backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 40;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  background-color: var(--backdrop-panel);
-  will-change: opacity;
+	position: fixed;
+	inset: 0;
+	z-index: 40;
+	backdrop-filter: blur(8px);
+	-webkit-backdrop-filter: blur(8px);
+	background-color: var(--backdrop-panel);
+	will-change: opacity;
 }
 
 .overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 50;
-  overflow-y: auto;
+	position: fixed;
+	inset: 0;
+	z-index: 50;
+	overflow-y: auto;
 }
 
 .panel {
-  position: relative;
-  margin-inline: auto;
-  width: calc(100vw - 24px);
-  margin-top: 40px;
-  border-radius: 20px;
-  corner-shape: squircle;
-  overflow: hidden;
-  background-color: var(--panel);
-  will-change: transform, opacity;
+	position: relative;
+	margin-inline: auto;
+	width: calc(100vw - 24px);
+	margin-top: 40px;
+	border-radius: 20px;
+	corner-shape: squircle;
+	overflow: hidden;
+	background-color: var(--panel);
+	will-change: transform, opacity;
 }
 
 .closeWrapper {
-  display: flex;
-  justify-content: center;
-  padding-top: 48px;
-  padding-bottom: 80px;
+	display: flex;
+	justify-content: center;
+	padding-top: 48px;
+	padding-bottom: 80px;
 }
 
 .closeButton {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 48px;
-  height: 48px;
-  border-radius: var(--radius-full);
-  color: var(--on-dark-default);
-  background-color: var(--nav-btn);
-  transition: all 0.2s;
-  border: none;
-  cursor: pointer;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 48px;
+	height: 48px;
+	border-radius: var(--radius-full);
+	color: var(--on-dark-default);
+	background-color: var(--nav-btn);
+	transition: all 0.2s;
+	border: none;
+	cursor: pointer;
 }
 
 .closeButton:hover {
-  color: var(--on-dark);
-  background-color: var(--nav-btn-hover);
+	color: var(--on-dark);
+	background-color: var(--nav-btn-hover);
 }

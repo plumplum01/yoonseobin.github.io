@@ -26,7 +26,10 @@ export default function NavMenu({ onClose }: Props) {
 		onClose()
 	}
 
-	const menuItemClassName = cn(buttonVariants({ variant: 'nav', size: 'navItem' }), 'rounded-sm text-neutral-100')
+	const menuItemClassName = cn(
+		buttonVariants({ variant: 'nav', size: 'navItem' }),
+		'rounded-sm text-neutral-100',
+	)
 
 	return (
 		<motion.div
@@ -52,11 +55,7 @@ export default function NavMenu({ onClose }: Props) {
 			{/* 페이지 이동 버튼 */}
 			<div className="flex flex-col gap-2 px-2">
 				{location.pathname !== '/' && (
-					<button
-						type="button"
-						className={menuItemClassName}
-						onClick={() => goTo('/')}
-					>
+					<button type="button" className={menuItemClassName} onClick={() => goTo('/')}>
 						Home
 					</button>
 				)}
@@ -78,9 +77,7 @@ export default function NavMenu({ onClose }: Props) {
 						About
 					</button>
 				)}
-
 			</div>
-
 		</motion.div>
 	)
 }

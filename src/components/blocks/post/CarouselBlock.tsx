@@ -1,10 +1,5 @@
 import type { PostBlock } from '@portfolio/types'
-import {
-	Carousel,
-	CarouselContent,
-	CarouselDots,
-	CarouselItem,
-} from '../../ui/carousel'
+import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '../../ui/carousel'
 import {
 	type CarouselSlideModel,
 	toCarouselSlide,
@@ -25,9 +20,19 @@ function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 				<div className="aspect-video w-full overflow-hidden rounded-sm">
 					{slide.kind === 'video' ? (
 						// biome-ignore lint/a11y/useMediaCaption: CMS media assets do not provide timed caption tracks yet.
-						<video className="size-full object-cover" controls src={slide.src} title={slide.title} />
+						<video
+							className="size-full object-cover"
+							controls
+							src={slide.src}
+							title={slide.title}
+						/>
 					) : (
-						<img className="size-full object-cover" src={slide.src} alt={slide.alt} loading="lazy" />
+						<img
+							className="size-full object-cover"
+							src={slide.src}
+							alt={slide.alt}
+							loading="lazy"
+						/>
 					)}
 				</div>
 

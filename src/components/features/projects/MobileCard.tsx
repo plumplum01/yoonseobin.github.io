@@ -11,23 +11,23 @@ import ProjectCard from './ProjectCard'
 import styles from './MobileCard.module.css'
 
 interface MobileCardProps {
-  n: number
-  onSelect: (n: number) => void
+	n: number
+	onSelect: (n: number) => void
 }
 
 export default function MobileCard({ n, onSelect }: MobileCardProps) {
-  const project = projects[(n - 1) % projects.length]
+	const project = projects[(n - 1) % projects.length]
 
-  return (
-    <ProjectCard
-      project={project}
-      className={styles.card}
-      imageClassName={styles.cardImage}
-      textClassName={styles.cardText}
-      titleClassName={`text-nav font-semibold tracking-card ${styles.cardTitle}`}
-      subtitleClassName={`text-nav font-medium tracking-card ${styles.cardSubtitle}`}
-      imageLoading="lazy"
-      onClick={() => onSelect(n)}
-    />
-  )
+	return (
+		<ProjectCard
+			project={project}
+			className={styles.card}
+			imageClassName={styles.cardImage}
+			textClassName={styles.cardText}
+			titleClassName={`text-nav font-semibold tracking-card ${styles.cardTitle}`}
+			subtitleClassName={`text-nav font-medium tracking-card ${styles.cardSubtitle}`}
+			imageLoading="lazy"
+			onClick={() => onSelect(n)}
+		/>
+	)
 }

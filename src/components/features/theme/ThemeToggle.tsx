@@ -14,16 +14,16 @@ import { useTheme } from '../../../hooks/useTheme'
 const ICON_SIZE = 16
 
 export default function ThemeToggle() {
-  const { isDark, toggleTheme } = useTheme()
+	const { isDark, toggleTheme } = useTheme()
 
-  return (
-    <IconButton
-      type="button"
-      className="mb-0.5 text-[var(--on-dark-default)]"
-      aria-label="모드 전환"
-      onClick={toggleTheme}
-    >
-      {isDark ? <Moon size={ICON_SIZE} /> : <Sun size={ICON_SIZE} />}
-    </IconButton>
-  )
+	return (
+		<IconButton
+			type="button"
+			className="mb-0.5 text-[var(--on-dark-default)]"
+			aria-label="모드 전환"
+			onClick={toggleTheme}
+		>
+			{isDark ? <Moon size={ICON_SIZE} /> : <Sun size={ICON_SIZE} />}
+		</IconButton>
+	)
 }

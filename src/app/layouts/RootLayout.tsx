@@ -4,15 +4,15 @@ import GlobalNavigationBar from '../../components/layout/navigation/GlobalNaviga
 import PagePending from '../boundaries/PagePending'
 
 export default function RootLayout() {
-  const navigation = useNavigation()
-  const isPending = navigation.state === 'loading'
+	const navigation = useNavigation()
+	const isPending = navigation.state === 'loading'
 
-  return (
-    <>
-      <Cursor />
-      <GlobalNavigationBar />
-      {isPending && <PagePending />}
-      <Outlet />
-    </>
-  )
+	return (
+		<>
+			<Cursor />
+			<GlobalNavigationBar />
+			{isPending && <PagePending />}
+			<Outlet />
+		</>
+	)
 }

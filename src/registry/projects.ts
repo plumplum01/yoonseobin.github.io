@@ -13,20 +13,20 @@ export type { Project, Scene, SceneVideo } from '@portfolio/types'
 
 // Vite가 정적 분석할 수 있도록 glob 인자는 리터럴 문자열이어야 한다.
 const projectImagesGlob = import.meta.glob('../data/media/projects/*/*.webp', {
-  eager: true,
-  import: 'default',
+	eager: true,
+	import: 'default',
 })
 
 const sceneImagesGlob = import.meta.glob('../data/media/projects/*/full/*.webp', {
-  eager: true,
-  import: 'default',
+	eager: true,
+	import: 'default',
 })
 
 const imagesByProject = groupImagesByProject(projectImagesGlob)
 const scenesByProject = groupScenesByProject(sceneImagesGlob)
 
 export const projects = buildProjects(
-  projectsData as ProjectData[],
-  imagesByProject,
-  scenesByProject,
+	projectsData as ProjectData[],
+	imagesByProject,
+	scenesByProject,
 )
