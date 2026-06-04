@@ -33,7 +33,7 @@ export default function NavMenu({ onClose }: Props) {
 
 	return (
 		<motion.div
-			className="flex h-full flex-col box-border pt-(--nav-menu-top)"
+			className="flex h-full flex-col box-border pt-14"
 			initial={{
 				scale: 0.9,
 				opacity: 0,

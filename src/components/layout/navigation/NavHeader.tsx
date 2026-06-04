@@ -42,7 +42,7 @@ export default function NavHeader({ isOpen, onToggle, onClose }: Props) {
 	}
 
 	return (
-		<header className="absolute inset-x-0 top-[var(--nav-header-top)] z-1 flex h-[var(--nav-header-height)] items-center justify-center">
+		<header className="absolute inset-x-0 top-0 z-1 flex h-12 items-center justify-center">
 			<button
 				type="button"
 				className="cursor-pointer border-0 bg-transparent text-nav tracking-nav text-[var(--nav-fg)] ease-in-out select-none"

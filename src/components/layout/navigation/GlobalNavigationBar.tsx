@@ -7,7 +7,7 @@
  * 독립적으로 정의할 수 있도록 경계를 긋는다.
  */
 
-import { useState, useEffect, type CSSProperties } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useScrollLock } from '../../../hooks/useScrollLock'
 import { useIsMobile } from '../../../hooks/useIsMobile'
@@ -17,8 +17,8 @@ import NavMenu from './NavMenu'
 
 // ─── 패널 지오메트리 (framer-motion spring) ──────────────────────────────
 // CSS는 색상·outline·블러·padding만 담당하고, width/height/border-radius는
-// 아래 값을 타겟으로 JS-driven spring으로 애니메이션된다. 닫힌 높이는
-// NavHeader/NavMenu가 참조하는 CSS 변수까지 같은 상수에서 공급한다.
+// 아래 값을 타겟으로 JS-driven spring으로 애니메이션된다. 닫힌 높이(~47px)는
+// NavHeader가 h-12(48px), NavMenu가 pt-14(56px) Tailwind 유틸리티로 맞춘다.
 
 const PANEL_WIDTH = { desktop: 300, mobile: 280 } as const
 const PANEL_EXPAND = { desktop: 120, mobile: 30 } as const
@@ -51,7 +51,7 @@ export default function GlobalNavigationBar() {
 	const panelClassName = cn(
 		'pointer-events-auto relative overflow-hidden bg-[var(--nav-closed)] outline-[var(--outline-width)] outline-[var(--panel-inset-border)]',
 		'shadow-[0_0_16px_rgba(0,0,0,var(--shadow-opacity))] backdrop-blur-[var(--blur)] [-webkit-backdrop-filter:blur(var(--blur))]',
-		'[--blur:24px] [--nav-fg:var(--nav-text)] [--nav-header-top:0px] [--nav-menu-top:calc(var(--nav-header-height)+7px)] [--outline-width:0px] [--shadow-opacity:0]',
+		'[--blur:24px] [--nav-fg:var(--nav-text)] [--outline-width:0px] [--shadow-opacity:0]',
 		'transition-[background-color,box-shadow,outline-width] duration-[250ms] ease-in-out hover:[--outline-width:3px]',
 		isOpen && 'bg-[var(--nav-open)] [--nav-fg:var(--nav-text-open)] [--shadow-opacity:0.2]',
 	)
@@ -69,9 +69,6 @@ export default function GlobalNavigationBar() {
 		height: isOpen ? PANEL_OPEN_HEIGHT : PANEL_CLOSED_HEIGHT,
 		borderRadius: isOpen ? PANEL_OPEN_RADIUS : PANEL_CLOSED_RADIUS,
 	}
-	const panelStyle = {
-		'--nav-header-height': `${PANEL_CLOSED_HEIGHT}px`,
-	} as CSSProperties
 
 	const closeMenu = () => setIsOpen(false)
 	const toggleMenu = () => setIsOpen((o) => !o)
@@ -96,7 +93,6 @@ export default function GlobalNavigationBar() {
 			>
 				<motion.div
 					className={panelClassName}
-					style={panelStyle}
 					initial={false}
 					animate={panelAnimate}
 					transition={panelSpring}
