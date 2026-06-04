@@ -42,17 +42,17 @@ export default function NavHeader({ isOpen, onToggle, onClose }: Props) {
 	}
 
 	return (
-		<header className="absolute inset-x-0 top-[var(--nav-header-top)] z-[1] flex h-[var(--nav-header-height)] items-center justify-center">
+		<header className="absolute inset-x-0 top-[var(--nav-header-top)] z-1 flex h-[var(--nav-header-height)] items-center justify-center">
 			<button
 				type="button"
-				className="cursor-pointer border-0 bg-transparent p-0 text-nav font-medium leading-none tracking-nav text-[var(--nav-fg)] transition-colors duration-[250ms] ease-in-out select-none"
+				className="cursor-pointer border-0 bg-transparent text-nav tracking-nav text-[var(--nav-fg)] ease-in-out select-none"
 				onClick={goHome}
 			>
 				{site.name}
 			</button>
 			<IconButton
 				onClick={onToggle}
-				className="absolute right-1.5 grid text-[var(--nav-fg)] opacity-90 transition-colors duration-[250ms] ease-in-out [&>*]:[grid-area:1/1]"
+				className="absolute right-2 grid text-[var(--nav-fg)] opacity-90 transition-colors duration-250 ease-in-out *:[grid-area:1/1]"
 				aria-label={isOpen ? '메뉴 닫기' : '메뉴 열기'}
 			>
 				<AnimatePresence>
