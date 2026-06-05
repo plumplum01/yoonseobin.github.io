@@ -1,5 +1,5 @@
-import { cn } from '../../lib/cn'
-import { site } from '../../registry/site'
+import { cn } from '@/lib/cn'
+import { site } from '@/registry/site'
 
 export default function Footer() {
 	return (

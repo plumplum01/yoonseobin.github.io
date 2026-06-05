@@ -6,10 +6,10 @@
  * 구성 등 데스크탑 고유 로직을 담당하고 실제 렌더링은 ProjectCard에 위임한다.
  */
 
-import { projects } from '../../../registry/projects'
-import { DESKTOP_ITEM_WIDTH_VW, type SelectedCard } from '../home/hero/constants'
-import ProjectCard from './ProjectCard'
-import styles from './DesktopCard.module.css'
+import { projects } from '@/registry/projects'
+import { DESKTOP_ITEM_WIDTH_VW, type SelectedCard } from '@/components/features/home/hero/constants'
+import ProjectCard from '@/components/features/projects/ProjectCard'
+import styles from '@/components/features/projects/DesktopCard.module.css'
 
 interface DesktopCardProps {
 	index: number

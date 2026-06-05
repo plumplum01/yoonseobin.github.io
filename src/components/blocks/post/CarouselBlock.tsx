@@ -1,9 +1,9 @@
 import type { PostBlock } from '@portfolio/types'
-import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '../../ui/carousel'
+import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
 import {
 	type CarouselSlideModel,
 	toCarouselSlide,
-} from '../../../features/post-block-renderer/helpers/carouselSlides'
+} from '@/features/post-block-renderer/helpers/carouselSlides'
 
 type CarouselBlockProps = {
 	block: Extract<PostBlock, { type: 'carousel' }>

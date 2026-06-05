@@ -1,5 +1,5 @@
 import { Link, useRouteError } from 'react-router-dom'
-import { getRouteErrorView } from '../routes/routeErrors'
+import { getRouteErrorView } from '@/app/routes/routeErrors'
 
 export default function PageError() {
 	const error = useRouteError()

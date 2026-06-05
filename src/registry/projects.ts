@@ -5,8 +5,8 @@
  * 이후 Sanity 전환 시 이 파일의 source만 Sanity query 기반으로 교체한다.
  */
 
-import projectsData from '../data/projects.json'
-import { buildProjects, groupImagesByProject, groupScenesByProject } from './projectLoader'
+import projectsData from '@/data/projects.json'
+import { buildProjects, groupImagesByProject, groupScenesByProject } from '@/registry/projectLoader'
 import type { ProjectData } from '@portfolio/types'
 
 export type { Project, Scene, SceneVideo } from '@portfolio/types'

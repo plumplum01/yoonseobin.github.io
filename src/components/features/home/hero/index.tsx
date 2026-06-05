@@ -11,9 +11,9 @@
  * useIsMobile 훅으로 조건부 마운트하여 이 낭비를 제거한다.
  */
 
-import DesktopHero from './DesktopHero'
-import MobileHero from './MobileHero'
-import { useIsMobile } from '../../../../hooks/useIsMobile'
+import DesktopHero from '@/components/features/home/hero/DesktopHero'
+import MobileHero from '@/components/features/home/hero/MobileHero'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 type Props = {
 	smoothScrollEnabled: boolean

@@ -1,4 +1,4 @@
-import { mapProfile } from '../registry/mappers/profileMapper'
+import { mapProfile } from '@/registry/mappers/profileMapper'
 
 const profilePayload = {
 	heading: 'Heading',

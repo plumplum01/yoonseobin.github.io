@@ -1,12 +1,12 @@
 import type { ReactNode } from 'react'
 import { createBrowserRouter, type LoaderFunction, type RouteObject } from 'react-router-dom'
-import PageError from './boundaries/PageError'
-import RootLayout from './layouts/RootLayout'
-import { postDetailLoader, postsLoader, profileLoader } from './routes/routeLoaders'
-import About from '../pages/About'
-import Home from '../pages/Home'
-import PostDetail from '../pages/PostDetail'
-import Posts from '../pages/Posts'
+import PageError from '@/app/boundaries/PageError'
+import RootLayout from '@/app/layouts/RootLayout'
+import { postDetailLoader, postsLoader, profileLoader } from '@/app/routes/routeLoaders'
+import About from '@/pages/About'
+import Home from '@/pages/Home'
+import PostDetail from '@/pages/PostDetail'
+import Posts from '@/pages/Posts'
 
 type AppPageRoute = {
 	id: string

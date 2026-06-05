@@ -1,5 +1,5 @@
 import type { PostBlock } from '@portfolio/types'
-import { MediaFrame } from './MediaFrame'
+import { MediaFrame } from '@/components/blocks/post/MediaFrame'
 
 export function ImageBlock({ block }: { block: Extract<PostBlock, { type: 'image' }> }) {
 	return (

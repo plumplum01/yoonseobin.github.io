@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { pageRoutes, routes } from '../app/router'
+import { pageRoutes, routes } from '@/app/router'
 
 describe('router config', () => {
 	it('defines unique page route paths', () => {

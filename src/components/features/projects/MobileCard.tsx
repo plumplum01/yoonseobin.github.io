@@ -6,9 +6,9 @@
  * ProjectCard에 위임한다.
  */
 
-import { projects } from '../../../registry/projects'
-import ProjectCard from './ProjectCard'
-import styles from './MobileCard.module.css'
+import { projects } from '@/registry/projects'
+import ProjectCard from '@/components/features/projects/ProjectCard'
+import styles from '@/components/features/projects/MobileCard.module.css'
 
 interface MobileCardProps {
 	n: number

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { formatKoDate } from '../lib/dateFormat'
+import { formatKoDate } from '@/lib/dateFormat'
 
 describe('formatKoDate', () => {
 	it('formats medium Korean dates', () => {

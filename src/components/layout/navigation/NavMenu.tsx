@@ -9,9 +9,9 @@
 
 import { useNavigate, useLocation } from 'react-router-dom'
 import { motion } from 'framer-motion'
-import type { AppRoutePath } from '../../../app/router'
-import { cn } from '../../../lib/cn'
-import { buttonVariants } from '../../ui'
+import type { AppRoutePath } from '@/app/router'
+import { cn } from '@/lib/cn'
+import { buttonVariants } from '@/components/ui'
 
 interface Props {
 	onClose: () => void

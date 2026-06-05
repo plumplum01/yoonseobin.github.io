@@ -12,8 +12,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useScrollLock } from '@/hooks/useScrollLock'
 import { useIsMobile } from '@/hooks/useIsMobile'
 import { cn } from '@/lib/cn'
-import NavHeader from './NavHeader'
-import NavMenu from './NavMenu'
+import NavHeader from '@/components/layout/navigation/NavHeader'
+import NavMenu from '@/components/layout/navigation/NavMenu'
 
 // ─── 패널 지오메트리 (framer-motion spring) ──────────────────────────────
 // CSS는 색상·outline·블러·padding만 담당하고, width/height/border-radius는
@@ -74,32 +74,23 @@ export default function GlobalNavigationBar() {
 	const toggleMenu = () => setIsOpen((o) => !o)
 
 	return (
-		<>
-			{/* 배경 블러 오버레이 */}
+		<nav
+			className="pointer-events-none fixed top-10 inset-x-0 z-30 flex justify-center"
+		>
+			<div>
+				<span>Seobin Yoon</span>
+			</div>
 			<motion.div
-				className="fixed inset-0 z-20 bg-(--backdrop-nav) backdrop-blur-[6px] [-webkit-backdrop-filter:blur(6px)] will-change-[opacity]"
+				className={panelClassName}
 				initial={false}
-				animate={{ opacity: isOpen ? 1 : 0 }}
-				transition={{ duration: 0.2 }}
-				style={{ pointerEvents: isOpen ? 'auto' : 'none' }}
-				onClick={closeMenu}
-			/>
-
-			<nav
-				className="pointer-events-none fixed top-10 inset-x-0 z-30 flex justify-center"
+				animate={panelAnimate}
+				transition={panelSpring}
 			>
-				<motion.div
-					className={panelClassName}
-					initial={false}
-					animate={panelAnimate}
-					transition={panelSpring}
-				>
-					<NavHeader isOpen={isOpen} onToggle={toggleMenu} onClose={closeMenu} />
-					<AnimatePresence>
-						{isOpen && <NavMenu key="nav-menu" onClose={closeMenu} />}
-					</AnimatePresence>
-				</motion.div>
-			</nav>
-		</>
+				<NavHeader isOpen={isOpen} onToggle={toggleMenu} onClose={closeMenu} />
+				<AnimatePresence>
+					{isOpen && <NavMenu key="nav-menu" onClose={closeMenu} />}
+				</AnimatePresence>
+			</motion.div>
+		</nav>
 	)
 }

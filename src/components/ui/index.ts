@@ -1,4 +1,4 @@
-export { Button, buttonVariants } from './button'
+export { Button, buttonVariants } from '@/components/ui/button'
 export {
 	Carousel,
 	type CarouselApi,
@@ -7,6 +7,6 @@ export {
 	CarouselItem,
 	CarouselNext,
 	CarouselPrevious,
-} from './carousel'
-export { IconButton } from './IconButton'
-export { Text, textVariants } from './Text'
+} from '@/components/ui/carousel'
+export { IconButton } from '@/components/ui/IconButton'
+export { Text, textVariants } from '@/components/ui/Text'

@@ -1,7 +1,7 @@
 import { postBySlugQuery, publishedPostsQuery } from '@portfolio/sanity/queries'
 import type { Post, PostDetail } from '@portfolio/types'
-import { assertClientPost, mapClientPost, mapPost } from './mappers/postMapper'
-import { getSanityClient } from './sanityClient'
+import { assertClientPost, mapClientPost, mapPost } from '@/registry/mappers/postMapper'
+import { getSanityClient } from '@/registry/sanityClient'
 
 function toPostSummary(postDetail: PostDetail): Post {
 	const { blocks: _blocks, ...post } = postDetail

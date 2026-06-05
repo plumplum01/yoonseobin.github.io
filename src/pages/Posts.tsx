@@ -1,6 +1,6 @@
 import type { Post } from '@portfolio/types'
 import { Link, useLoaderData } from 'react-router-dom'
-import { formatKoDate } from '../lib/dateFormat'
+import { formatKoDate } from '@/lib/dateFormat'
 
 function formatPostDate(post: Post): string {
 	if (!post.publishedAt) return 'Unpublished'

@@ -2,11 +2,11 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
-import { site } from '../../../registry/site'
-import type { Project, SceneVideo } from '../../../registry/projects'
-import Toast from '../feedback/Toast'
-import { useIsMobile } from '../../../hooks/useIsMobile'
-import styles from './ContentContainer.module.css'
+import { site } from '@/registry/site'
+import type { Project, SceneVideo } from '@/registry/projects'
+import Toast from '@/components/features/feedback/Toast'
+import { useIsMobile } from '@/hooks/useIsMobile'
+import styles from '@/components/features/projects/ContentContainer.module.css'
 
 const ICON_SIZE = 16
 

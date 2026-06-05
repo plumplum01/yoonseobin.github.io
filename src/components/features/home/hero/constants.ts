@@ -5,7 +5,7 @@
  * 카드를 추가하거나 레이아웃을 조정할 때 이 파일을 수정하세요.
  */
 
-import { projects } from '../../../../registry/projects'
+import { projects } from '@/registry/projects'
 
 // ─── 카드 목록 ────────────────────────────────────────────────────────────────
 

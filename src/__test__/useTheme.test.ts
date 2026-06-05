@@ -1,6 +1,6 @@
 import { act, renderHook } from '@testing-library/react'
-import { useThemeStore } from '../features/theme/themeStore'
-import { useTheme } from '../hooks/useTheme'
+import { useThemeStore } from '@/features/theme/themeStore'
+import { useTheme } from '@/hooks/useTheme'
 
 describe('useTheme', () => {
 	beforeEach(() => {

@@ -1,9 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { LoaderFunctionArgs } from 'react-router-dom'
-import { AppRouteError } from '../app/errors/AppRouteError'
-import { postDetailLoader, postsLoader, profileLoader } from '../app/routes/routeLoaders'
-import { loadProfile } from '../registry/profile'
-import { loadPost, loadPosts } from '../registry/posts'
+import { AppRouteError } from '@/app/errors/AppRouteError'
+import { postDetailLoader, postsLoader, profileLoader } from '@/app/routes/routeLoaders'
+import { loadProfile } from '@/registry/profile'
+import { loadPost, loadPosts } from '@/registry/posts'
 
 vi.mock('../registry/profile', () => ({
 	loadProfile: vi.fn(),

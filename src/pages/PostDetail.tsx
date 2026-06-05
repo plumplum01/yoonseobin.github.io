@@ -1,7 +1,7 @@
 import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { useLoaderData } from 'react-router-dom'
-import { BlockList } from '../features/post-block-renderer'
-import { formatKoDate } from '../lib/dateFormat'
+import { BlockList } from '@/features/post-block-renderer'
+import { formatKoDate } from '@/lib/dateFormat'
 
 function formatPublishedDate(post: PostDetailModel): string | undefined {
 	if (!post.publishedAt) return undefined

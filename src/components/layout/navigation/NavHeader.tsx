@@ -13,8 +13,8 @@
 import { useNavigate } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Menu, X } from 'lucide-react'
-import { site } from '../../../registry/site'
-import { IconButton } from '../../ui'
+import { site } from '@/registry/site'
+import { IconButton } from '@/components/ui'
 
 const MotionX = motion.create(X)
 const MotionMenu = motion.create(Menu)

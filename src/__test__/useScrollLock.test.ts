@@ -1,5 +1,5 @@
 import { renderHook, act } from '@testing-library/react'
-import { useScrollLock } from '../hooks/useScrollLock'
+import { useScrollLock } from '@/hooks/useScrollLock'
 
 describe('useScrollLock', () => {
 	beforeEach(() => {

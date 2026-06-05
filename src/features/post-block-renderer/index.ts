@@ -1,3 +1,3 @@
-export { BlockList } from './BlockList'
-export { BlockRenderer } from './BlockRenderer'
-export { blockRegistry } from './blockRegistry'
+export { BlockList } from '@/features/post-block-renderer/BlockList'
+export { BlockRenderer } from '@/features/post-block-renderer/BlockRenderer'
+export { blockRegistry } from '@/features/post-block-renderer/blockRegistry'

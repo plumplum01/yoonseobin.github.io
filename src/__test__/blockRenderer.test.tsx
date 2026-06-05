@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { BlockList } from '../features/post-block-renderer'
+import { BlockList } from '@/features/post-block-renderer'
 
 describe('block renderer', () => {
 	it('renders post blocks independently', () => {

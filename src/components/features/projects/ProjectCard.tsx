@@ -7,7 +7,7 @@
  */
 
 import type { CSSProperties, MouseEventHandler } from 'react'
-import type { Project } from '../../../registry/projects'
+import type { Project } from '@/registry/projects'
 
 interface ProjectCardProps {
 	project: Project

@@ -8,8 +8,8 @@
  */
 
 import { Moon, Sun } from 'lucide-react'
-import { IconButton } from '../../ui'
-import { useTheme } from '../../../hooks/useTheme'
+import { IconButton } from '@/components/ui'
+import { useTheme } from '@/hooks/useTheme'
 
 const ICON_SIZE = 16
 

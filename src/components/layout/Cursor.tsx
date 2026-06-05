@@ -8,7 +8,7 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import styles from './Cursor.module.css'
+import styles from '@/components/layout/Cursor.module.css'
 
 type CursorState = 'default' | 'card' | 'link'
 

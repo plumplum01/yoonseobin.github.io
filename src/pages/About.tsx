@@ -1,7 +1,7 @@
 import type { Profile } from '@portfolio/types'
 import { motion } from 'framer-motion'
 import { useLoaderData } from 'react-router-dom'
-import styles from './About.module.css'
+import styles from '@/pages/About.module.css'
 
 const container = {
 	hidden: {},

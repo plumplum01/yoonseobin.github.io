@@ -11,7 +11,7 @@ import {
 	useEffect,
 	useState,
 } from 'react'
-import { cn } from '../../lib/cn'
+import { cn } from '@/lib/cn'
 
 type CarouselApi = UseEmblaCarouselType[1]
 type UseCarouselParameters = Parameters<typeof useEmblaCarousel>

@@ -11,7 +11,7 @@ interface ThemeState {
  * isDark 변경 시 DOM 클래스와 localStorage를 동기화합니다.
  * UI 컴포넌트에서는 이 스토어를 직접 구독하지 말고 useTheme 훅을 사용하세요.
  *
- *   import { useTheme } from '../hooks/useTheme'
+ *   import { useTheme } from '@/features/hooks/useTheme'
  *   const { isDark, toggleTheme } = useTheme()
  */
 function getInitialIsDark(): boolean {

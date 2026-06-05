@@ -7,7 +7,7 @@ import {
 	QuoteBlock,
 	TextBlock,
 	VideoBlock,
-} from '../../components/blocks/post'
+} from '@/components/blocks/post'
 
 type BlockComponent<TBlock extends PostBlock = PostBlock> = ComponentType<{ block: TBlock }>
 type RegisteredBlockComponent = ComponentType<{ block: PostBlock }>

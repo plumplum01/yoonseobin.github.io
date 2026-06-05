@@ -1,5 +1,5 @@
 import type { PostBlock } from '@portfolio/types'
-import { BlockRenderer } from './BlockRenderer'
+import { BlockRenderer } from '@/features/post-block-renderer/BlockRenderer'
 
 export function BlockList({ blocks }: { blocks: PostBlock[] }) {
 	return (

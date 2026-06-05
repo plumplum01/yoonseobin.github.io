@@ -14,13 +14,13 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
 import { X } from 'lucide-react'
-import { projects } from '../../../../registry/projects'
-import ContentContainer from '../../projects/ContentContainer'
-import Footer from '../../../layout/Footer'
-import DesktopCard from '../../projects/DesktopCard'
-import { useScrollLock } from '../../../../hooks/useScrollLock'
-import { useMediaPreload } from '../../../../hooks/useMediaPreload'
-import { useSmoothScroll } from '../../../../hooks/useSmoothScroll'
+import { projects } from '@/registry/projects'
+import ContentContainer from '@/components/features/projects/ContentContainer'
+import Footer from '@/components/layout/Footer'
+import DesktopCard from '@/components/features/projects/DesktopCard'
+import { useScrollLock } from '@/hooks/useScrollLock'
+import { useMediaPreload } from '@/hooks/useMediaPreload'
+import { useSmoothScroll } from '@/hooks/useSmoothScroll'
 
 const ICON_SIZE = 16
 import {
@@ -31,8 +31,8 @@ import {
 	WHEEL_SENSITIVITY,
 	stepHeroFrame,
 	type SelectedCard,
-} from './constants'
-import styles from './DesktopHero.module.css'
+} from '@/components/features/home/hero/constants'
+import styles from '@/components/features/home/hero/DesktopHero.module.css'
 
 const projectThumbnailUrls = projects.map((project) => project.thumbnail)
 

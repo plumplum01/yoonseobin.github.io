@@ -1,5 +1,5 @@
 import { isRouteErrorResponse } from 'react-router-dom'
-import { isAppRouteError } from '../errors/AppRouteError'
+import { isAppRouteError } from '@/app/errors/AppRouteError'
 
 export type RouteErrorView = {
 	title: string

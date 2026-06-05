@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { AppRouteError } from '../app/errors/AppRouteError'
-import { getRouteErrorView } from '../app/routes/routeErrors'
+import { AppRouteError } from '@/app/errors/AppRouteError'
+import { getRouteErrorView } from '@/app/routes/routeErrors'
 
 describe('route error views', () => {
 	it('normalizes missing posts into a user-facing not found message', () => {

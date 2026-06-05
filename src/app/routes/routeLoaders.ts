@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from 'react-router-dom'
-import { AppRouteError } from '../errors/AppRouteError'
-import { loadProfile } from '../../registry/profile'
-import { loadPost, loadPosts } from '../../registry/posts'
+import { AppRouteError } from '@/app/errors/AppRouteError'
+import { loadProfile } from '@/registry/profile'
+import { loadPost, loadPosts } from '@/registry/posts'
 
 function isMissingDocumentError(error: unknown): boolean {
 	return error instanceof Error && error.message.includes('document is missing')
