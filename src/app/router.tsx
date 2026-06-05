@@ -9,13 +9,13 @@
 import { createBrowserRouter, type RouteObject } from 'react-router-dom'
 import PageError from '@/app/boundaries/PageError'
 import RootLayout from '@/app/layouts/RootLayout'
-import { pageRoutes } from '@/app/routes/pageRoutes'
+import { PAGE_ROUTES } from '@/app/routes/pageRoutes'
 
 export const routes: RouteObject[] = [
 	{
 		element: <RootLayout />,
 		errorElement: <PageError />,
-		children: pageRoutes.map(({ path, smoothScroll, loader, render }) => ({
+		children: PAGE_ROUTES.map(({ path, smoothScroll, loader, render }) => ({
 			path,
 			loader,
 			errorElement: <PageError />,

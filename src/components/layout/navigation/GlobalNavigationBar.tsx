@@ -1,37 +1,49 @@
 /**
  * GlobalNavigationBar — 전역 네비게이션 최상위 컨테이너
- *
- * 상태(열림 여부) 관리, 반응형 클래스 선택, 스크롤 잠금, 패널 wrapper와
- * 배경 blur overlay 렌더만 담당한다. 실제 내용은 NavHeader(항상)와
- * NavMenu(열림 시) 서브컴포넌트로 위임하여, 각 섹션이 자체 모션을
- * 독립적으로 정의할 수 있도록 경계를 긋는다.
- */
+ * */
 
 import { useState, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
 import { useScrollLock } from '@/hooks/useScrollLock'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import { Link } from 'react-router-dom'
+import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/cn'
-import NavHeader from '@/components/layout/navigation/NavHeader'
-import NavMenu from '@/components/layout/navigation/NavMenu'
+import { NAVIGATION_ROUTES } from '@/app/routes/pageRoutes'
+import { AnimatePresence, motion } from 'framer-motion'
 
-// ─── 패널 지오메트리 (framer-motion spring) ──────────────────────────────
-// CSS는 색상·outline·블러·padding만 담당하고, width/height/border-radius는
-// 아래 값을 타겟으로 JS-driven spring으로 애니메이션된다. 닫힌 높이(~47px)는
-// NavHeader가 h-12(48px), NavMenu가 pt-14(56px) Tailwind 유틸리티로 맞춘다.
+const LINKS = Object.fromEntries(NAVIGATION_ROUTES.map(({ id, ...rest }) => ([id, rest])))
 
-const PANEL_WIDTH = { desktop: 300, mobile: 280 } as const
-const PANEL_EXPAND = { desktop: 120, mobile: 30 } as const
-const PANEL_CLOSED_HEIGHT = 47
-const PANEL_OPEN_HEIGHT = 200
-const PANEL_CLOSED_RADIUS = 100
-const PANEL_OPEN_RADIUS = 32
+function NavigationLink({ label, route }: { label: string; route: string }) {
+	const [hover, setHover] = useState(false)
 
-const panelSpring = {
-	type: 'spring',
-	bounce: 0.2,
-	duration: 0.6,
-} as const
+	return (
+		<Link to={route}>
+			<motion.div
+				onHoverStart={() => setHover(true)}
+				onHoverEnd={() => setHover(false)}
+				className="min-w-14 min-h-6 flex flex-col items-center justify-center relative gap-0.5"
+			>
+				<AnimatePresence mode="popLayout">
+					<motion.span layout className="text-xs font-bold">
+						{label}
+					</motion.span>
+					{hover && (
+						<motion.span
+							key="dot"
+							layout
+							initial={{ opacity: 0, y: 6, scale: 0.8 }}
+							animate={{ opacity: 1, y: 0, scale: 1.2 }}
+							exit={{ opacity: 0, y: 6, scale: 0.8 }}
+							transition={{ type: 'spring', bounce: 0.3, duration: 0.35 }}
+							className="min-w-1 min-h-1 rounded-full bg-black"
+						/>
+					)}
+				</AnimatePresence>
+			</motion.div>
+		</Link>
+	)
+}
+
 
 export default function GlobalNavigationBar() {
 	const [isOpen, setIsOpen] = useState(false)
@@ -44,53 +56,28 @@ export default function GlobalNavigationBar() {
 		else unlock()
 	}, [isOpen, lock, unlock])
 
-	const variant = isMobile ? 'mobile' : 'desktop'
-	const baseWidth = PANEL_WIDTH[variant]
-	const openWidth = baseWidth + PANEL_EXPAND[variant]
+	const badge = "px-5 py-1.5 pt-2 flex rounded-full"
 
-	const panelClassName = cn(
-		'pointer-events-auto relative overflow-hidden bg-[var(--nav-closed)] outline-[var(--outline-width)] outline-[var(--panel-inset-border)]',
-		'shadow-[0_0_16px_rgba(0,0,0,var(--shadow-opacity))] backdrop-blur-[var(--blur)] [-webkit-backdrop-filter:blur(var(--blur))]',
-		'[--blur:24px] [--nav-fg:var(--nav-text)] [--outline-width:0px] [--shadow-opacity:0]',
-		'transition-[background-color,box-shadow,outline-width] duration-[250ms] ease-in-out hover:[--outline-width:3px]',
-		isOpen && 'bg-[var(--nav-open)] [--nav-fg:var(--nav-text-open)] [--shadow-opacity:0.2]',
-	)
-
-	// 네비 본체는 닫힘 상태에서 translateY(40) 만큼 아래로 "숨어" 있다가
-	// 메뉴가 열릴 때 0 으로 올라온다. CSS 의 .nav { top: 40px } 와 합쳐
-	// 닫힘 = 80px, 열림 = 40px 의 위치가 된다. 열림 시 네비가 살짝
-	// "떠오르는" 느낌을 주기 위한 의도적 디자인.
-	const navAnimate = {
-		translateY: isOpen ? 0 : 40,
-	}
-
-	const panelAnimate = {
-		width: isOpen ? openWidth : baseWidth,
-		height: isOpen ? PANEL_OPEN_HEIGHT : PANEL_CLOSED_HEIGHT,
-		borderRadius: isOpen ? PANEL_OPEN_RADIUS : PANEL_CLOSED_RADIUS,
-	}
-
-	const closeMenu = () => setIsOpen(false)
-	const toggleMenu = () => setIsOpen((o) => !o)
 
 	return (
 		<nav
-			className="pointer-events-none fixed top-10 inset-x-0 z-30 flex justify-center"
+			className="fixed top-10 inset-x-0 z-30 flex justify-center isolate"
 		>
-			<div>
-				<span>Seobin Yoon</span>
-			</div>
-			<motion.div
-				className={panelClassName}
-				initial={false}
-				animate={panelAnimate}
-				transition={panelSpring}
-			>
-				<NavHeader isOpen={isOpen} onToggle={toggleMenu} onClose={closeMenu} />
-				<AnimatePresence>
-					{isOpen && <NavMenu key="nav-menu" onClose={closeMenu} />}
-				</AnimatePresence>
-			</motion.div>
+			<section className='flex items-center gap-1'>
+				<div className={cn(badge, 'backdrop-blur-md bg-neutral-400/10')}>
+					<NavigationLink label="Seobin" route={LINKS.home.path} />
+				</div>
+				<div className={cn(badge, 'gap-2.5 backdrop-blur-md bg-neutral-400/10')}>
+					<NavigationLink label="Articles" route={LINKS.posts.path} />
+					<Separator orientation="vertical" />
+					<NavigationLink label="Projects" route={LINKS.home.path} />
+					<Separator orientation="vertical" />
+					<NavigationLink label="Research" route={LINKS.home.path} />
+				</div>
+				<div className={cn(badge, 'bg-orange-500')}>
+					<NavigationLink label="About" route={LINKS.about.path} />
+				</div>
+			</section>
 		</nav>
 	)
 }

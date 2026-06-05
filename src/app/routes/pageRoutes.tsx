@@ -29,7 +29,7 @@ type AppPageRoute = {
 	render: (options: { smoothScrollEnabled: boolean }) => ReactNode
 }
 
-export const pageRoutes = [
+export const PAGE_ROUTES = [
 	{
 		id: 'home',
 		path: '/',
@@ -68,7 +68,7 @@ export const pageRoutes = [
 	},
 ] as const satisfies readonly AppPageRoute[]
 
-export type AppRoutePath = (typeof pageRoutes)[number]['path']
+export type AppRoutePath = (typeof PAGE_ROUTES)[number]['path']
 
 /** 전역 네비게이션 메뉴에 노출할 라우트 (선언 순서 = 메뉴 순서) */
-export const navRoutes = pageRoutes.filter((route) => route.nav)
+export const NAVIGATION_ROUTES = PAGE_ROUTES.filter((route) => route.nav)
