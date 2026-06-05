@@ -9,9 +9,9 @@
 
 import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { useScrollLock } from '../../../hooks/useScrollLock'
-import { useIsMobile } from '../../../hooks/useIsMobile'
-import { cn } from '../../../lib/cn'
+import { useScrollLock } from '@/hooks/useScrollLock'
+import { useIsMobile } from '@/hooks/useIsMobile'
+import { cn } from '@/lib/cn'
 import NavHeader from './NavHeader'
 import NavMenu from './NavMenu'
 
@@ -85,11 +85,8 @@ export default function GlobalNavigationBar() {
 				onClick={closeMenu}
 			/>
 
-			<motion.nav
-				className="pointer-events-none fixed inset-x-0 z-30 flex justify-center"
-				initial={false}
-				animate={navAnimate}
-				transition={panelSpring}
+			<nav
+				className="pointer-events-none fixed top-10 inset-x-0 z-30 flex justify-center"
 			>
 				<motion.div
 					className={panelClassName}
@@ -102,7 +99,7 @@ export default function GlobalNavigationBar() {
 						{isOpen && <NavMenu key="nav-menu" onClose={closeMenu} />}
 					</AnimatePresence>
 				</motion.div>
-			</motion.nav>
+			</nav>
 		</>
 	)
 }
