@@ -5,7 +5,7 @@ export default function Footer() {
 	return (
 		<footer
 			className={cn(
-				'text-body text-sm flex items-center',
+				'text-sm flex items-center',
 				'absolute inset-x-0 bottom-0 flex h-11 px-4',
 			)}
 		>
