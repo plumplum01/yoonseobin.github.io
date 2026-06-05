@@ -24,13 +24,14 @@ function NavigationLink({ label, route }: { label: string; route: string }) {
 				className="min-w-16 min-h-5 flex items-center justify-center relative gap-2"
 			>
 				<AnimatePresence mode="popLayout">
-					<motion.span layout className="text-xs font-bold">
+					<motion.span layout layoutDependency={hover} className="text-xs font-bold">
 						{label}
 					</motion.span>
 					{hover && (
 						<motion.span
 							key="dot"
 							layout
+							layoutDependency={hover}
 							initial={{ opacity: 0, y: 6, scale: 0.8 }}
 							animate={{ opacity: 1, y: 0, scale: 1.2 }}
 							exit={{ opacity: 0, y: 6, scale: 0.8 }}

@@ -9,7 +9,6 @@ function formatPostDate(post: Post): string {
 
 export default function Posts() {
 	const posts = useLoaderData() as Post[]
-	console.log(posts)
 	return (
 		<main className="box-border min-h-screen w-full pt-28 ">
 			<div className="grid grid-cols-1 gap-8">
