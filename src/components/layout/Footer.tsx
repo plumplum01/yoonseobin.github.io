@@ -1,17 +1,10 @@
-import { cn } from '@/lib/cn'
 import { site } from '@/registry/site'
 
 export default function Footer() {
 	return (
-		<footer
-			className={cn(
-				'text-sm flex items-center',
-				'absolute inset-x-0 bottom-0 flex h-11 px-4',
-			)}
-		>
-			<div className="flex w-full font-bold justify-center gap-1">
-				<span>ⓒ{site.year}</span>
-				<span>{site.name}</span>
+		<footer className="min-h-20 bg-neutral-900 w-screen text-white grid place-items-center">
+			<div className="flex w-full font-mono uppercase text-xs justify-center gap-1">
+				<span>ⓒ{site.year} All rights reserved, {site.name}. Busan, South Korea </span>
 			</div>
 		</footer>
 	)
