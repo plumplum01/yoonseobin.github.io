@@ -1,20 +1,17 @@
 import { cn } from '../../lib/cn'
+import { site } from '../../registry/site'
 
-interface FooterProps {
-	variant: 'desktop' | 'mobile'
-}
-
-export default function Footer({ variant }: FooterProps) {
-	const isMobile = variant === 'mobile'
+export default function Footer() {
 	return (
 		<footer
 			className={cn(
 				'text-body text-sm flex items-center',
-				isMobile ? 'mt-10 flex flex-col p-3' : 'absolute inset-x-0 bottom-0 flex h-11 px-4',
+				'absolute inset-x-0 bottom-0 flex h-11 px-4',
 			)}
 		>
-			<div className="flex w-full justify-center">
-				<span>ⓒ2026</span>
+			<div className="flex w-full justify-center gap-1">
+				<span>ⓒ{site.year}</span>
+				<span>{site.name}</span>
 			</div>
 		</footer>
 	)
