@@ -1,6 +1,0 @@
-export { CarouselBlock } from './CarouselBlock'
-export { HeadingBlock } from './HeadingBlock'
-export { ImageBlock } from './ImageBlock'
-export { QuoteBlock } from './QuoteBlock'
-export { TextBlock } from './TextBlock'
-export { VideoBlock } from './VideoBlock'
