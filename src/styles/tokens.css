@@ -84,6 +84,8 @@
 	/* ─── Typography ─────────────────────────────────────────────────────── */
 	--font-sans: "Hakgyoansim Bareondotum", sans-serif;
 
+	--text-xs: 13px; /* Tailwind 기본 text-xs(12px) 오버라이드 */
+
 	--text-caption: 10px;
 	--text-meta: 12px;
 	--text-body: 13px;
