@@ -2,7 +2,6 @@
 @import "./tokens.css";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
-@import "@fontsource-variable/geist";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -15,25 +14,23 @@
 
 /* ─── 폰트 페이스 ──────────────────────────────────────────────────────── */
 
-/* 영어(라틴) → Geist */
+/* 본문 전역 → 학교안심 바른돋움 (한글·라틴 공통)
+   정적 폰트(R/B 2종)라 가변 weight가 없으므로,
+   Regular은 400–500, Bold는 600–700 범위로 등록해 중간 weight 합성을 피한다. */
 @font-face {
-	font-family: "Geist";
-	src: url("https://cdn.jsdelivr.net/npm/geist/dist/fonts/geist-sans/Geist-Variable.woff2")
-		format("woff2");
-	unicode-range:
-		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
-	font-weight: 100 900;
+	font-family: "Hakgyoansim Bareondotum";
+	src: url("/fonts/HakgyoansimBareondotumR.woff2") format("woff2");
+	font-weight: 400 500;
 	font-style: normal;
+	font-display: swap;
 }
 
-/* 한국어 → Pretendard */
 @font-face {
-	font-family: "Pretendard";
-	src: url("https://cdn.jsdelivr.net/npm/pretendard@1.3.9/dist/web/variable/woff2/PretendardVariable.woff2")
-		format("woff2");
-	unicode-range: U+AC00-D7A3, U+1100-11FF, U+3130-318F, U+A960-A97F, U+D7B0-D7FF;
-	font-weight: 100 900;
+	font-family: "Hakgyoansim Bareondotum";
+	src: url("/fonts/HakgyoansimBareondotumB.woff2") format("woff2");
+	font-weight: 600 700;
 	font-style: normal;
+	font-display: swap;
 }
 
 /* ─── 루트 기본값 ──────────────────────────────────────────────────────── */
@@ -169,7 +166,7 @@ html {
 
 @theme inline {
 	--font-heading: var(--font-sans);
-	--font-sans: 'Geist Variable', 'Pretendard', sans-serif;
+	--font-sans: 'Hakgyoansim Bareondotum', sans-serif;
 	--color-sidebar-ring: var(--sidebar-ring);
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

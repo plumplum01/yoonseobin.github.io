@@ -24,7 +24,6 @@
 		"test:run": "vitest run"
 	},
 	"dependencies": {
-		"@fontsource-variable/geist": "^5.2.9",
 		"@portabletext/react": "^6.2.0",
 		"@portfolio/sanity": "file:packages/sanity",
 		"@portfolio/types": "file:packages/types",
