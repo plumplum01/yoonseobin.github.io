@@ -57,7 +57,7 @@
 - `src/components/features`는 home, projects, theme처럼 기능/도메인 의도가 있는 UI 컴포넌트를 보관한다
 - `*.module.css`는 deprecated로 간주하고, 신규 스타일은 cva + Tailwind utility 기반으로 작성한다
 - 기존 `*.module.css`는 기능 개발 과정에서 점진적으로 제거한다
-- 커스텀 typography utility였던 `src/styles/typography.css`는 제거되었고, Tailwind text utility와 `@theme` 토큰으로 대체한다
+- 커스텀 typography utility였던 `src/styles/typography.css`는 제거되었고, Tailwind text utility로 대체한다
 - 한국어/일본어/중국어처럼 CJK 본문 줄바꿈이 필요한 긴 텍스트에는 `text-cjk` 유틸리티를 사용한다
 - `src/components/ui`에는 cva 기반 primitive를 두고, class 조합은 `src/lib/cn.ts`의 `cn` 유틸리티를 사용한다
 - `src/features`는 UI 컴포넌트가 아니라 상태, store, 비즈니스 로직 등 기능 단위 로직을 보관한다
