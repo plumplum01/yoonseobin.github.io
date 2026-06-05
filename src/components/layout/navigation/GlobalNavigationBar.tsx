@@ -21,7 +21,7 @@ function NavigationLink({ label, route }: { label: string; route: string }) {
 			<motion.div
 				onHoverStart={() => setHover(true)}
 				onHoverEnd={() => setHover(false)}
-				className="min-w-14 min-h-6 flex flex-col items-center justify-center relative gap-0.5"
+				className="min-w-16 min-h-5 flex items-center justify-center relative gap-2"
 			>
 				<AnimatePresence mode="popLayout">
 					<motion.span layout className="text-xs font-bold">

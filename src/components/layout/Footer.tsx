@@ -9,7 +9,7 @@ export default function Footer() {
 				'absolute inset-x-0 bottom-0 flex h-11 px-4',
 			)}
 		>
-			<div className="flex w-full justify-center gap-1">
+			<div className="flex w-full font-bold justify-center gap-1">
 				<span>ⓒ{site.year}</span>
 				<span>{site.name}</span>
 			</div>
