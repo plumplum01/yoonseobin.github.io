@@ -16,7 +16,11 @@ export const mediaAssetProjection = `{
   "id": _id,
   title,
   type,
-  "alt": caption,
+  "url": select(
+    type == "image" => image.asset->url,
+    type == "video" => video.asset->url
+  ),
+  "alt": coalesce(image.alt, caption),
   caption,
   tags[]-> {
     "id": _id,
@@ -24,8 +28,6 @@ export const mediaAssetProjection = `{
     "slug": slug.current
   },
   durationSeconds,
-  "imageUrl": image.asset->url,
-  "videoUrl": video.asset->url,
   "createdAt": _createdAt,
   "updatedAt": _updatedAt
 }`
@@ -39,16 +41,41 @@ export const postBySlugQuery = `*[
   _type == "post" &&
   slug.current == $slug
 ][0] {
-  ...,
   "id": _id,
+  type,
   "slug": slug.current,
+  title,
+  subtitle,
+  summary,
   "thumbnailUrl": thumbnail.asset->url,
+  status,
+  publishedAt,
   "createdAt": _createdAt,
   "updatedAt": _updatedAt,
   blocks[] {
-    ...,
-    media-> ${mediaAssetProjection},
-    mediaItems[]-> ${mediaAssetProjection}
+    _type == "textBlock" => {
+      "type": "text",
+      body
+    },
+    _type == "headingBlock" => {
+      "type": "heading",
+      level,
+      text
+    },
+    _type == "imageBlock" => {
+      "type": "image",
+      "media": media-> ${mediaAssetProjection},
+      "aspectRatio": coalesce(aspectRatio, "video")
+    },
+    _type == "carouselBlock" => {
+      "type": "carousel",
+      "mediaItems": mediaItems[]-> ${mediaAssetProjection}
+    },
+    _type == "videoBlock" => {
+      "type": "video",
+      "media": media-> ${mediaAssetProjection},
+      "aspectRatio": coalesce(aspectRatio, "video")
+    }
   }
 }`
 
