@@ -12,9 +12,9 @@ export const postType = defineType({
 			options: {
 				layout: 'radio',
 				list: [
-					{ title: 'Blog', value: 'blog' },
-					{ title: 'Shorts', value: 'shorts' },
-					{ title: 'About', value: 'about' },
+					{ title: 'Project', value: 'project' },
+					{ title: 'Article', value: 'article' },
+					{ title: 'Reel', value: 'reel' },
 				],
 			},
 			validation: (rule) => rule.required(),

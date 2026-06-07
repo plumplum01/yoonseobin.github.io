@@ -50,7 +50,7 @@ function requireRecordArray(record: UnknownRecord, key: string, context: string)
 }
 
 function assertPostType(value: string, context: string): PostType {
-	if (value === 'blog' || value === 'shorts' || value === 'about') return value
+	if (value === 'project' || value === 'article' || value === 'reel') return value
 	throw new Error(`Invalid post payload: ${context}.type has unsupported value`)
 }
 

@@ -1,4 +1,4 @@
-export type PostType = 'blog' | 'shorts' | 'about'
+export type PostType = 'project' | 'article' | 'reel'
 
 export type PostStatus = 'draft' | 'published'
 

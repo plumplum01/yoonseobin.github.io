@@ -61,7 +61,7 @@ describe('route loaders', () => {
 		const posts = [
 			{
 				id: 'post-1',
-				type: 'blog' as const,
+				type: 'article' as const,
 				slug: 'test-post',
 				title: 'Test post',
 				status: 'published' as const,
@@ -75,7 +75,7 @@ describe('route loaders', () => {
 	it('loads a post detail by route slug', async () => {
 		const post = {
 			id: 'post-1',
-			type: 'blog' as const,
+			type: 'article' as const,
 			slug: 'test-post',
 			title: 'Test post',
 			status: 'published' as const,
