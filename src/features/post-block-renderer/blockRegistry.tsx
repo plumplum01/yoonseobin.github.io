@@ -4,7 +4,6 @@ import {
 	CarouselBlock,
 	HeadingBlock,
 	ImageBlock,
-	QuoteBlock,
 	TextBlock,
 	VideoBlock,
 } from '@/components/blocks/post'
@@ -18,7 +17,6 @@ export type BlockRegistry = {
 export const blockRegistry = {
 	text: TextBlock,
 	heading: HeadingBlock,
-	quote: QuoteBlock,
 	image: ImageBlock,
 	carousel: CarouselBlock,
 	video: VideoBlock,

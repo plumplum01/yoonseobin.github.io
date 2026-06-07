@@ -11,10 +11,6 @@ export function BlockRenderer({ block }: { block: PostBlock }) {
 			const Component = blockRegistry.heading
 			return <Component block={block} />
 		}
-		case 'quote': {
-			const Component = blockRegistry.quote
-			return <Component block={block} />
-		}
 		case 'image': {
 			const Component = blockRegistry.image
 			return <Component block={block} />

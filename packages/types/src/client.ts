@@ -71,12 +71,6 @@ export interface ClientHeadingPostBlock {
 	text: string
 }
 
-export interface ClientQuotePostBlock {
-	_type: 'quoteBlock'
-	text: string
-	attribution?: string
-}
-
 export interface ClientImagePostBlock {
 	_type: 'imageBlock'
 	media: ClientMediaAsset
@@ -97,7 +91,6 @@ export interface ClientVideoPostBlock {
 export type ClientPostBlock =
 	| ClientTextPostBlock
 	| ClientHeadingPostBlock
-	| ClientQuotePostBlock
 	| ClientImagePostBlock
 	| ClientCarouselPostBlock
 	| ClientVideoPostBlock

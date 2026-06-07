@@ -6,7 +6,6 @@ import type {
 	ClientMediaTag,
 	ClientPost,
 	ClientPostBlock,
-	ClientQuotePostBlock,
 	ClientTextPostBlock,
 	ClientVideoPostBlock,
 	MediaAspectRatio,
@@ -159,15 +158,6 @@ function assertClientHeadingBlock(raw: UnknownRecord): ClientHeadingPostBlock {
 	}
 }
 
-function assertClientQuoteBlock(raw: UnknownRecord): ClientQuotePostBlock {
-	const attribution = optionalString(raw, 'attribution')
-	return {
-		_type: 'quoteBlock',
-		text: requireString(raw, 'text', 'quoteBlock'),
-		...(attribution ? { attribution } : {}),
-	}
-}
-
 function assertClientImageBlock(raw: UnknownRecord): ClientImagePostBlock {
 	const context = 'imageBlock'
 	return {
@@ -202,8 +192,6 @@ function assertClientPostBlock(raw: UnknownRecord): ClientPostBlock {
 			return assertClientTextBlock(raw)
 		case 'headingBlock':
 			return assertClientHeadingBlock(raw)
-		case 'quoteBlock':
-			return assertClientQuoteBlock(raw)
 		case 'imageBlock':
 			return assertClientImageBlock(raw)
 		case 'carouselBlock':
@@ -254,12 +242,6 @@ function mapClientPostBlock(block: ClientPostBlock): PostBlock {
 			return { type: 'text', body: block.body }
 		case 'headingBlock':
 			return { type: 'heading', level: block.level, text: block.text }
-		case 'quoteBlock':
-			return {
-				type: 'quote',
-				text: block.text,
-				...(block.attribution ? { attribution: block.attribution } : {}),
-			}
 		case 'imageBlock':
 			return {
 				type: 'image',

@@ -62,24 +62,6 @@ export const blockContentType = defineType({
 			],
 		}),
 		defineArrayMember({
-			name: 'quoteBlock',
-			title: 'Quote',
-			type: 'object',
-			fields: [
-				defineField({
-					name: 'text',
-					title: 'Text',
-					type: 'text',
-					validation: (rule) => rule.required(),
-				}),
-				defineField({
-					name: 'attribution',
-					title: 'Attribution',
-					type: 'string',
-				}),
-			],
-		}),
-		defineArrayMember({
 			name: 'imageBlock',
 			title: 'Image',
 			type: 'object',
