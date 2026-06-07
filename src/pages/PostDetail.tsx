@@ -8,31 +8,46 @@ function formatPublishedDate(post: PostDetailModel): string | undefined {
 	return formatKoDate(post.publishedAt, 'long')
 }
 
+function PostHeader({ post }: { post: PostDetailModel }) {
+	const publishedDate = formatPublishedDate(post)
+	return (
+		<header className="absolute bottom-12 left-8 max-w-4xl flex flex-col items-start text-white mix-blend-difference">
+			{publishedDate && <p className="text-sm font-medium">{publishedDate}</p>}
+			<hgroup className="flex flex-col gap-16 items-start">
+				<h1 className="text-6xl font-medium text-start">{post.title}</h1>
+			</hgroup>
+		</header>
+	)
+}
+
+function PostThumbnail({ post }: { post: PostDetailModel }) {
+	return (
+		<div>
+			<img
+				src={post.thumbnailUrl}
+				alt={post.title}
+				decoding="async"
+				className="size-full object-contain"
+			/>
+		</div>
+	)
+}
+
 export default function PostDetail() {
 	const post = useLoaderData() as PostDetailModel
-	const publishedDate = formatPublishedDate(post)
 
 	return (
-		<main className="mx-auto box-border min-h-screen w-full max-w-3xl px-6 pt-28 pb-20">
-			<article>
-				<header className="mb-14">
-					{publishedDate && (
-						<p className="text-caption font-medium leading-tight tracking-caption text-[var(--caption-gray)]">
-							{publishedDate}
-						</p>
-					)}
-					<h1 className="mt-4 text-section-heading font-semibold leading-tight tracking-heading text-cjk text-text-primary">
-						{post.title}
-					</h1>
-					{post.summary && (
-						<p className="mt-5 text-body font-medium leading-loose tracking-tight text-cjk text-[var(--caption-gray)]">
-							{post.summary}
-						</p>
-					)}
-				</header>
-
-				<BlockList blocks={post.blocks} />
-			</article>
-		</main>
+		<>
+			<figure className="relative aspect-square w-fullgrid place-item-center overflow-hidden">
+				<PostHeader post={post} />
+				<PostThumbnail post={post} />
+			</figure>
+			<main className="mx-auto min-h-screen w-screen pt-28 pb-20">
+				<article className="flex flex-col items-center gap-4 md:gap-24">
+					<p className=" max-w-6xl px-8 text-left text-cjk pb-16">{post.summary}</p>
+					<BlockList blocks={post.blocks} />
+				</article>
+			</main>
+		</>
 	)
 }

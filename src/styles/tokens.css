@@ -82,7 +82,8 @@
 	--radius-full: 9999px;
 
 	/* ─── Typography ─────────────────────────────────────────────────────── */
-	--font-sans: "Hakgyoansim Bareondotum", sans-serif;
+	--font-sans: "Helvetica Neue", Arial, "Pretendard", sans-serif;
+	--font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 
 	--text-xs: 13px; /* Tailwind 기본 text-xs(12px) 오버라이드 */
 	--text-xxs: 11px; /* text-xxs 유틸 생성 */

@@ -1,5 +1,7 @@
 import type { MediaAspectRatio } from '@portfolio/types'
+import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
+import { useScrollPadding } from '@/hooks/useScrollPadding'
 import { cn } from '@/lib/cn'
 
 export const aspectRatioClassName: Record<MediaAspectRatio, string> = {
@@ -15,9 +17,14 @@ type MediaFrameProps = {
 }
 
 export function MediaFrame({ aspectRatio, children }: MediaFrameProps) {
+	const { reference, borderRadius, padding } = useScrollPadding(38, 24)
 	return (
-		<div className={cn('w-full overflow-hidden rounded-sm', aspectRatioClassName[aspectRatio])}>
+		<motion.div
+			className={cn('w-full overflow-hidden rounded', aspectRatioClassName[aspectRatio])}
+			ref={reference}
+			style={{ padding, borderRadius: borderRadius }}
+		>
 			{children}
-		</div>
+		</motion.div>
 	)
 }

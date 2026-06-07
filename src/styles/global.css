@@ -14,21 +14,18 @@
 
 /* ─── 폰트 페이스 ──────────────────────────────────────────────────────── */
 
-/* 본문 전역 → 학교안심 바른돋움 (한글·라틴 공통)
-   정적 폰트(R/B 2종)라 가변 weight가 없으므로,
-   Regular은 400–500, Bold는 600–700 범위로 등록해 중간 weight 합성을 피한다. */
 @font-face {
-	font-family: "Hakgyoansim Bareondotum";
-	src: url("/fonts/HakgyoansimBareondotumR.woff2") format("woff2");
-	font-weight: 400 500;
+	font-family: "Pretendard";
+	src: url("/fonts/PretendardVariable.woff2") format("woff2");
+	font-weight: 400 700;
 	font-style: normal;
 	font-display: swap;
 }
 
 @font-face {
-	font-family: "Hakgyoansim Bareondotum";
-	src: url("/fonts/HakgyoansimBareondotumB.woff2") format("woff2");
-	font-weight: 600 700;
+	font-family: "Geist Mono";
+	src: url("/fonts/GeistMonoVariable.woff2") format("woff2");
+	font-weight: 100 900;
 	font-style: normal;
 	font-display: swap;
 }
@@ -165,7 +162,8 @@ html {
 
 @theme inline {
 	--font-heading: var(--font-sans);
-	--font-sans: 'Hakgyoansim Bareondotum', sans-serif;
+	--font-sans: "Helvetica Neue", Arial, "Pretendard", sans-serif;
+	--font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
 	--color-sidebar-ring: var(--sidebar-ring);
 	--color-sidebar-border: var(--sidebar-border);
 	--color-sidebar-accent-foreground: var(--sidebar-accent-foreground);

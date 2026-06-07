@@ -1,27 +1,35 @@
 import type { PostBlock } from '@portfolio/types'
-import { blockRegistry } from '@/features/post-block-renderer/blockRegistry'
+import type { ReactElement } from 'react'
+import {
+	CarouselBlock,
+	HeadingBlock,
+	ImageBlock,
+	TextBlock,
+	VideoBlock,
+} from '@/components/blocks/post'
+
+export type BlockRegistry = {
+	[TType in PostBlock['type']]: (props: {
+		block: Extract<PostBlock, { type: TType }>
+	}) => ReactElement
+}
 
 export function BlockRenderer({ block }: { block: PostBlock }) {
 	switch (block.type) {
 		case 'text': {
-			const Component = blockRegistry.text
-			return <Component block={block} />
+			return <TextBlock block={block} />
 		}
 		case 'heading': {
-			const Component = blockRegistry.heading
-			return <Component block={block} />
+			return <HeadingBlock block={block} />
 		}
 		case 'image': {
-			const Component = blockRegistry.image
-			return <Component block={block} />
+			return <ImageBlock block={block} />
 		}
 		case 'carousel': {
-			const Component = blockRegistry.carousel
-			return <Component block={block} />
+			return <CarouselBlock block={block} />
 		}
 		case 'video': {
-			const Component = blockRegistry.video
-			return <Component block={block} />
+			return <VideoBlock block={block} />
 		}
 	}
 

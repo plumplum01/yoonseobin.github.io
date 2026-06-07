@@ -4,7 +4,7 @@ import type { PostBlock } from '@portfolio/types'
 const portableTextComponents: PortableTextComponents = {
 	block: {
 		normal: ({ children }) => (
-			<p className="text-body font-medium leading-loose tracking-tight text-cjk text-text-primary">
+			<p className="text-base leading-loose tracking-tight text-left text-cjk text-text-primary">
 				{children}
 			</p>
 		),
@@ -25,7 +25,7 @@ const portableTextComponents: PortableTextComponents = {
 
 export function TextBlock({ block }: { block: Extract<PostBlock, { type: 'text' }> }) {
 	return (
-		<div className="flex flex-col gap-5">
+		<div className="flex flex-col gap-5 max-w-4xl">
 			<PortableText value={block.body} components={portableTextComponents} />
 		</div>
 	)
