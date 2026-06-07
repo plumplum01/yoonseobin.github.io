@@ -1,4 +1,4 @@
-import { mapMediaAsset, mapPost } from '@/registry/mappers/mapPost'
+import { parseMediaAsset, parsePost } from '@/registry/mappers/parsePost'
 
 const imageMedia = {
 	id: 'media-1',
@@ -33,9 +33,9 @@ const postPayload = {
 	],
 }
 
-describe('mapMediaAsset', () => {
+describe('parseMediaAsset', () => {
 	it('projection된 image media를 앱 MediaAsset으로 확인한다', () => {
-		expect(mapMediaAsset(imageMedia)).toEqual({
+		expect(parseMediaAsset(imageMedia)).toEqual({
 			id: 'media-1',
 			title: 'Hero image',
 			type: 'image',
@@ -47,18 +47,31 @@ describe('mapMediaAsset', () => {
 	})
 
 	it('projection된 video media를 앱 MediaAsset으로 확인한다', () => {
-		expect(mapMediaAsset(videoMedia)).toMatchObject({
+		expect(parseMediaAsset(videoMedia)).toMatchObject({
 			id: 'media-2',
 			type: 'video',
 			url: 'https://cdn.sanity.io/video.mp4',
 			durationSeconds: 12,
 		})
 	})
+
+	it('지원하지 않는 media type은 실패한다', () => {
+		expect(() => parseMediaAsset({ ...imageMedia, type: 'audio' })).toThrow(
+			'media.type has unsupported media value',
+		)
+	})
+
+	it('select projection에서 url이 누락된 media는 실패한다', () => {
+		const { url: _url, ...withoutUrl } = imageMedia
+		expect(() => parseMediaAsset({ ...withoutUrl, url: null })).toThrow(
+			'media.url must be a non-empty string',
+		)
+	})
 })
 
-describe('mapPost', () => {
+describe('parsePost', () => {
 	it('Sanity post payload를 앱 PostDetail view model로 변환한다', () => {
-		const post = mapPost(postPayload)
+		const post = parsePost(postPayload)
 
 		expect(post).toMatchObject({
 			id: 'post-1',
@@ -82,7 +95,7 @@ describe('mapPost', () => {
 
 	it('지원하지 않는 media block aspectRatio는 실패한다', () => {
 		expect(() =>
-			mapPost({
+			parsePost({
 				...postPayload,
 				blocks: [{ type: 'image', media: imageMedia, aspectRatio: 'cinema' }],
 			}),
@@ -91,7 +104,7 @@ describe('mapPost', () => {
 
 	it('지원하지 않는 block type은 실패한다', () => {
 		expect(() =>
-			mapPost({
+			parsePost({
 				...postPayload,
 				blocks: [{ type: 'unknownBlock' }],
 			}),
@@ -100,7 +113,7 @@ describe('mapPost', () => {
 
 	it('media reference가 펼쳐지지 않은 block은 실패한다', () => {
 		expect(() =>
-			mapPost({
+			parsePost({
 				...postPayload,
 				blocks: [{ type: 'image', media: { _ref: 'media-1' }, aspectRatio: 'video' }],
 			}),

@@ -1,4 +1,4 @@
-export const postProjection = `{
+const postHeaderViewFields = `
   "id": _id,
   type,
   "slug": slug.current,
@@ -7,12 +7,12 @@ export const postProjection = `{
   summary,
   "thumbnailUrl": thumbnail.asset->url,
   status,
-  "publishedAt": publishedAt,
+  publishedAt,
   "createdAt": _createdAt,
   "updatedAt": _updatedAt
-}`
+`
 
-export const mediaAssetProjection = `{
+export const mediaAssetViewProjection = `{
   "id": _id,
   title,
   type,
@@ -35,23 +35,15 @@ export const mediaAssetProjection = `{
 export const publishedPostsQuery = `*[
   _type == "post" &&
   status == "published"
-] | order(publishedAt desc) ${postProjection}`
+] | order(publishedAt desc) {
+  ${postHeaderViewFields}
+}`
 
 export const postBySlugQuery = `*[
   _type == "post" &&
   slug.current == $slug
 ][0] {
-  "id": _id,
-  type,
-  "slug": slug.current,
-  title,
-  subtitle,
-  summary,
-  "thumbnailUrl": thumbnail.asset->url,
-  status,
-  publishedAt,
-  "createdAt": _createdAt,
-  "updatedAt": _updatedAt,
+  ${postHeaderViewFields},
   blocks[] {
     _type == "textBlock" => {
       "type": "text",
@@ -64,16 +56,16 @@ export const postBySlugQuery = `*[
     },
     _type == "imageBlock" => {
       "type": "image",
-      "media": media-> ${mediaAssetProjection},
+      "media": media-> ${mediaAssetViewProjection},
       "aspectRatio": coalesce(aspectRatio, "video")
     },
     _type == "carouselBlock" => {
       "type": "carousel",
-      "mediaItems": mediaItems[]-> ${mediaAssetProjection}
+      "mediaItems": mediaItems[]-> ${mediaAssetViewProjection}
     },
     _type == "videoBlock" => {
       "type": "video",
-      "media": media-> ${mediaAssetProjection},
+      "media": media-> ${mediaAssetViewProjection},
       "aspectRatio": coalesce(aspectRatio, "video")
     }
   }
