@@ -1,5 +1,6 @@
 import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { useLoaderData } from 'react-router-dom'
+import { PostText } from '@/components/blocks/PostText'
 import { BlockList } from '@/features/post-block-renderer'
 import { formatKoDate } from '@/lib/dateFormat'
 
@@ -44,7 +45,7 @@ export default function PostDetail() {
 			</figure>
 			<main className="mx-auto min-h-screen w-screen pt-28 pb-20">
 				<article className="flex flex-col items-center gap-4 md:gap-24">
-					<p className=" max-w-6xl px-8 text-left text-cjk pb-16">{post.summary}</p>
+					<PostText> {post.summary}</PostText>
 					<BlockList blocks={post.blocks} />
 				</article>
 			</main>

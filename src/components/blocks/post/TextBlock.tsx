@@ -1,13 +1,10 @@
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { PostBlock } from '@portfolio/types'
+import { PostText } from '@/components/blocks/PostText'
 
 const portableTextComponents: PortableTextComponents = {
 	block: {
-		normal: ({ children }) => (
-			<p className="text-base leading-loose tracking-tight text-left text-cjk text-text-primary">
-				{children}
-			</p>
-		),
+		normal: ({ children }) => <PostText className="">{children}</PostText>,
 	},
 	marks: {
 		link: ({ children, value }) => (
@@ -25,7 +22,7 @@ const portableTextComponents: PortableTextComponents = {
 
 export function TextBlock({ block }: { block: Extract<PostBlock, { type: 'text' }> }) {
 	return (
-		<div className="flex flex-col gap-5 max-w-4xl">
+		<div className="flex flex-col gap-5 max-w-3xl">
 			<PortableText value={block.body} components={portableTextComponents} />
 		</div>
 	)
