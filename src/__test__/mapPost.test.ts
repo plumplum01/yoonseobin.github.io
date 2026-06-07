@@ -1,4 +1,4 @@
-import { mapMediaAsset, mapPost } from '@/registry/mappers/postMapper'
+import { mapMediaAsset, mapPost } from '@/registry/mappers/mapPost'
 
 const imageMedia = {
 	id: 'media-1',

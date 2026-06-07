@@ -4,14 +4,12 @@
 
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/cn'
 import { NAVIGATION_ROUTES } from '@/app/routes/pageRoutes'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const NAVIGATION_BADGE_CLASS_BY_TONE = {
-	neutral: 'backdrop-blur-md bg-neutral-400/10',
-	accent: 'bg-orange-500',
-} as const
+const LINKS = Object.fromEntries(NAVIGATION_ROUTES.map(({ id, ...rest }) => [id, rest]))
 
 function NavigationLink({ label, route }: { label: string; route: string }) {
 	const [hover, setHover] = useState(false)
@@ -51,17 +49,19 @@ export default function GlobalNavigationBar() {
 	return (
 		<nav className="fixed top-10 inset-x-0 z-30 flex justify-center isolate">
 			<section className="flex items-center gap-1">
-				{NAVIGATION_ROUTES.map((route) => (
-					<div
-						key={route.id}
-						className={cn(
-							badge,
-							NAVIGATION_BADGE_CLASS_BY_TONE[route.navTone ?? 'neutral'],
-						)}
-					>
-						<NavigationLink label={route.navLabel ?? route.title} route={route.path} />
-					</div>
-				))}
+				<div className={cn(badge, 'backdrop-blur-md bg-neutral-400/10')}>
+					<NavigationLink label="Seobin" route={LINKS.home.path} />
+				</div>
+				<div className={cn(badge, 'gap-2.5 backdrop-blur-md bg-neutral-400/10')}>
+					<NavigationLink label="Articles" route={LINKS.posts.path} />
+					<Separator orientation="vertical" />
+					<NavigationLink label="Projects" route={LINKS.home.path} />
+					<Separator orientation="vertical" />
+					<NavigationLink label="Research" route={LINKS.home.path} />
+				</div>
+				<div className={cn(badge, 'bg-orange-500')}>
+					<NavigationLink label="About" route={LINKS.about.path} />
+				</div>
 			</section>
 		</nav>
 	)
