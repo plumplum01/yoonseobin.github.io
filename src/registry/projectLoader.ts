@@ -30,27 +30,45 @@ function parseScenePath(path: string): { projectId: string; filename: string } |
 	return { projectId: match[1], filename: match[2] }
 }
 
+type ProjectAssetPath = {
+	projectId: string
+	filename: string
+}
+
+type ProjectAssetEntry = ProjectAssetPath & {
+	url: string
+}
+
+function groupProjectAssets<TAsset>(
+	glob: Record<string, unknown>,
+	parsePath: (path: string) => ProjectAssetPath | null,
+	mapEntry: (entry: ProjectAssetEntry) => TAsset,
+): Record<string, TAsset[]> {
+	const groups: Record<string, ProjectAssetEntry[]> = {}
+
+	for (const [path, value] of Object.entries(glob)) {
+		const parsed = parsePath(path)
+		if (!parsed) continue
+		groups[parsed.projectId] ??= []
+		groups[parsed.projectId].push({ ...parsed, url: value as string })
+	}
+
+	return Object.fromEntries(
+		Object.entries(groups).map(([id, entries]) => [
+			id,
+			entries
+				.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true }))
+				.map(mapEntry),
+		]),
+	)
+}
+
 /**
  * 이미지 glob 결과를 프로젝트 id 기준으로 그룹화한다.
  * 각 그룹은 파일명 숫자 순으로 정렬된다.
  */
 export function groupImagesByProject(glob: Record<string, unknown>): Record<string, string[]> {
-	const groups: Record<string, Array<{ filename: string; url: string }>> = {}
-
-	for (const [path, value] of Object.entries(glob)) {
-		const parsed = parseProjectPath(path)
-		if (!parsed) continue
-		if (!groups[parsed.projectId]) groups[parsed.projectId] = []
-		groups[parsed.projectId].push({ filename: parsed.filename, url: value as string })
-	}
-
-	const result: Record<string, string[]> = {}
-	for (const [id, entries] of Object.entries(groups)) {
-		result[id] = entries
-			.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true }))
-			.map((e) => e.url)
-	}
-	return result
+	return groupProjectAssets(glob, parseProjectPath, (entry) => entry.url)
 }
 
 /**
@@ -60,22 +78,10 @@ export function groupImagesByProject(glob: Record<string, unknown>): Record<stri
 export function groupScenesByProject(
 	glob: Record<string, unknown>,
 ): Record<string, { name: string; image: string }[]> {
-	const groups: Record<string, Array<{ filename: string; url: string }>> = {}
-
-	for (const [path, value] of Object.entries(glob)) {
-		const parsed = parseScenePath(path)
-		if (!parsed) continue
-		if (!groups[parsed.projectId]) groups[parsed.projectId] = []
-		groups[parsed.projectId].push({ filename: parsed.filename, url: value as string })
-	}
-
-	const result: Record<string, { name: string; image: string }[]> = {}
-	for (const [id, entries] of Object.entries(groups)) {
-		result[id] = entries
-			.sort((a, b) => a.filename.localeCompare(b.filename, undefined, { numeric: true }))
-			.map((e) => ({ name: e.filename.replace(/\.webp$/, ''), image: e.url }))
-	}
-	return result
+	return groupProjectAssets(glob, parseScenePath, (entry) => ({
+		name: entry.filename.replace(/\.webp$/, ''),
+		image: entry.url,
+	}))
 }
 
 /**
