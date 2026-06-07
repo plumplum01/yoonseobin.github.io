@@ -8,45 +8,32 @@ import type {
 	ProfileEducation,
 	ProfileLink,
 } from '@portfolio/types'
+import {
+	mapRequiredRecordArray,
+	optionalBoolean as readOptionalBoolean,
+	optionalString as readOptionalString,
+	requirePayloadRecord,
+	requireString as readRequiredString,
+	requireStringArray as readRequiredStringArray,
+	type UnknownRecord,
+} from './payloadGuards'
 
-type UnknownRecord = Record<string, unknown>
-
-function isRecord(value: unknown): value is UnknownRecord {
-	return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
+const PAYLOAD_NAME = 'profile'
 
 function requireString(record: UnknownRecord, key: string, context: string): string {
-	const value = record[key]
-	if (typeof value !== 'string' || value.length === 0) {
-		throw new Error(`Invalid profile payload: ${context}.${key} must be a non-empty string`)
-	}
-	return value
+	return readRequiredString(record, key, context, PAYLOAD_NAME)
 }
 
 function requireStringArray(record: UnknownRecord, key: string, context: string): string[] {
-	const value = record[key]
-	if (!Array.isArray(value) || value.some((item) => typeof item !== 'string')) {
-		throw new Error(`Invalid profile payload: ${context}.${key} must be a string array`)
-	}
-	return value
+	return readRequiredStringArray(record, key, context, PAYLOAD_NAME)
 }
 
 function optionalString(record: UnknownRecord, key: string): string | undefined {
-	const value = record[key]
-	if (typeof value === 'undefined' || value === null) return undefined
-	if (typeof value !== 'string') {
-		throw new Error(`Invalid profile payload: ${key} must be a string when provided`)
-	}
-	return value
+	return readOptionalString(record, key, PAYLOAD_NAME)
 }
 
 function optionalBoolean(record: UnknownRecord, key: string): boolean {
-	const value = record[key]
-	if (typeof value === 'undefined' || value === null) return false
-	if (typeof value !== 'boolean') {
-		throw new Error(`Invalid profile payload: ${key} must be a boolean when provided`)
-	}
-	return value
+	return readOptionalBoolean(record, key, PAYLOAD_NAME)
 }
 
 function formatMonth(date: string): string {
@@ -57,32 +44,26 @@ function formatMonth(date: string): string {
 	return `${match[1].slice(2)}. ${match[2]}`
 }
 
-function requireObjectArray<T>(
-	record: UnknownRecord,
-	key: string,
-	context: string,
-	resolveItem: (item: UnknownRecord, index: number) => T,
-): T[] {
-	const value = record[key]
-	if (!Array.isArray(value) || value.some((item) => !isRecord(item))) {
-		throw new Error(`Invalid profile payload: ${context}.${key} must be an object array`)
-	}
-	return value.map((item, index) => resolveItem(item, index))
-}
-
-function validateEducationPayload(item: UnknownRecord, index: number): void {
+function assertClientEducation(item: UnknownRecord, index: number): ClientProfileEducation {
 	const context = `profile.education[${index}]`
 	const startDate = requireString(item, 'startDate', context)
 	const endDate = optionalString(item, 'endDate')
 	const isCurrent = optionalBoolean(item, 'isCurrent')
+	const title = requireString(item, 'title', context)
 
 	if (!isCurrent && !endDate) {
 		throw new Error(`Invalid profile payload: ${context}.endDate must be provided`)
 	}
 
-	requireString(item, 'title', context)
 	formatMonth(startDate)
 	if (endDate) formatMonth(endDate)
+
+	return {
+		title,
+		startDate,
+		...(endDate ? { endDate } : {}),
+		isCurrent,
+	}
 }
 
 function mapClientEducation(item: ClientProfileEducation): ProfileEducation {
@@ -103,12 +84,18 @@ function mapClientEducation(item: ClientProfileEducation): ProfileEducation {
 	}
 }
 
-function validateAwardPayload(item: UnknownRecord, index: number): void {
+function assertClientAward(item: UnknownRecord, index: number): ClientProfileAward {
 	const context = `profile.awards[${index}]`
 	const awardedAt = requireString(item, 'awardedAt', context)
-	requireString(item, 'title', context)
-	optionalString(item, 'desc')
+	const title = requireString(item, 'title', context)
+	const desc = optionalString(item, 'desc')
 	formatMonth(awardedAt)
+
+	return {
+		title,
+		...(desc ? { desc } : {}),
+		awardedAt,
+	}
 }
 
 function mapClientAward(item: ClientProfileAward): ProfileAward {
@@ -120,10 +107,12 @@ function mapClientAward(item: ClientProfileAward): ProfileAward {
 	}
 }
 
-function validateLinkPayload(item: UnknownRecord, index: number): void {
+function assertClientLink(item: UnknownRecord, index: number): ClientProfileLink {
 	const context = `profile.links[${index}]`
-	requireString(item, 'label', context)
-	requireString(item, 'href', context)
+	return {
+		label: requireString(item, 'label', context),
+		href: requireString(item, 'href', context),
+	}
 }
 
 function mapClientLink(item: ClientProfileLink): ProfileLink {
@@ -134,25 +123,26 @@ function mapClientLink(item: ClientProfileLink): ProfileLink {
 }
 
 export function assertClientProfile(raw: unknown): ClientProfile {
-	if (!isRecord(raw)) {
-		throw new Error('Invalid profile payload: profile document is missing')
-	}
+	const record = requirePayloadRecord(raw, PAYLOAD_NAME, 'profile document is missing')
 
 	return {
-		heading: requireString(raw, 'heading', 'profile'),
-		paragraphs: requireStringArray(raw, 'paragraphs', 'profile'),
-		education: requireObjectArray(raw, 'education', 'profile', (item, index) => {
-			validateEducationPayload(item, index)
-			return item as unknown as ClientProfileEducation
-		}),
-		awards: requireObjectArray(raw, 'awards', 'profile', (item, index) => {
-			validateAwardPayload(item, index)
-			return item as unknown as ClientProfileAward
-		}),
-		links: requireObjectArray(raw, 'links', 'profile', (item, index) => {
-			validateLinkPayload(item, index)
-			return item as unknown as ClientProfileLink
-		}),
+		heading: requireString(record, 'heading', 'profile'),
+		paragraphs: requireStringArray(record, 'paragraphs', 'profile'),
+		education: mapRequiredRecordArray(
+			record,
+			'education',
+			'profile',
+			PAYLOAD_NAME,
+			assertClientEducation,
+		),
+		awards: mapRequiredRecordArray(
+			record,
+			'awards',
+			'profile',
+			PAYLOAD_NAME,
+			assertClientAward,
+		),
+		links: mapRequiredRecordArray(record, 'links', 'profile', PAYLOAD_NAME, assertClientLink),
 	}
 }
 

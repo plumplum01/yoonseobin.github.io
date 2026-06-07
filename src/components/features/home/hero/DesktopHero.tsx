@@ -11,18 +11,14 @@
  */
 
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { AnimatePresence, motion, useMotionValue, useAnimationFrame } from 'framer-motion'
-import { X } from 'lucide-react'
+import { motion, useMotionValue, useAnimationFrame } from 'framer-motion'
 import { projects } from '@/registry/projects'
-import ContentContainer from '@/components/features/projects/ContentContainer'
 import Footer from '@/components/layout/Footer'
 import DesktopCard from '@/components/features/projects/DesktopCard'
-import { useScrollLock } from '@/hooks/useScrollLock'
 import { useMediaPreload } from '@/hooks/useMediaPreload'
 import { useSmoothScroll } from '@/hooks/useSmoothScroll'
+import ProjectOverlay from '@/components/features/home/hero/ProjectOverlay'
 
-const ICON_SIZE = 16
 import {
 	DESKTOP_ITEMS,
 	DESKTOP_ITEM_WIDTH_VW,
@@ -82,7 +78,8 @@ export default function DesktopHero({ smoothScrollEnabled }: Props) {
 
 	/** 현재 열려 있는 카드 정보 (null이면 닫힌 상태) */
 	const [selectedCard, setSelectedCard] = useState<SelectedCard | null>(null)
-	const { lock, unlock } = useScrollLock()
+	const selectedProject =
+		selectedCard === null ? null : projects[(selectedCard.n - 1) % projects.length]
 
 	/**
 	 * ref로도 selectedCard를 추적합니다.
@@ -156,23 +153,6 @@ export default function DesktopHero({ smoothScrollEnabled }: Props) {
 		x.set(next)
 	})
 
-	// ─── ESC 키로 오버레이 닫기 ───────────────────────────────────────────────
-
-	useEffect(() => {
-		const onKey = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') handleClose()
-		}
-		window.addEventListener('keydown', onKey)
-		return () => window.removeEventListener('keydown', onKey)
-	}, [handleClose])
-
-	// ─── 오버레이 열릴 때 body 스크롤 잠금 ───────────────────────────────────
-
-	useEffect(() => {
-		if (selectedCard) lock()
-		else unlock()
-	}, [selectedCard, lock, unlock])
-
 	// ─── 렌더 ─────────────────────────────────────────────────────────────────
 
 	return (
@@ -218,75 +198,31 @@ export default function DesktopHero({ smoothScrollEnabled }: Props) {
 			{/* 하단 Footer */}
 			<Footer variant="desktop" />
 
-			{/* 콘텐츠 오버레이 — body에 Portal로 렌더링 (z-index 스택 충돌 방지) */}
-			{createPortal(
-				<>
-					{/* 블러 배경 — 항상 DOM에 존재하여 GPU 레이어를 미리 확보, opacity만 전환 */}
-					<motion.div
-						className={styles.backdrop}
-						initial={false}
-						animate={{ opacity: selectedCard ? 1 : 0 }}
-						transition={{ duration: 0.3 }}
-						style={{
-							pointerEvents: selectedCard ? 'auto' : 'none',
-						}}
-						onClick={handleClose}
-					/>
-
-					{/* 콘텐츠 패널 */}
-					<AnimatePresence>
-						{selectedCard !== null && (
-							<motion.div
-								key="scroll-overlay"
-								className={styles.overlay}
-								initial={{ opacity: 0, y: 60 }}
-								animate={{
-									opacity: 1,
-									y: 0,
-									transition: {
-										duration: 0.3,
-										ease: [0.25, 0.1, 0.25, 1],
-									},
-								}}
-								exit={{
-									opacity: 0,
-									y: -30,
-									transition: {
-										duration: 0.2,
-										ease: [0.25, 0.1, 0.25, 1],
-									},
-								}}
-								onClick={handleClose}
-							>
-								<motion.div
-									className={styles.panel}
-									onClick={(e) => e.stopPropagation()}
-								>
-									<ContentContainer
-										key={projects[(selectedCard.n - 1) % projects.length].id}
-										project={projects[(selectedCard.n - 1) % projects.length]}
-										onClose={handleClose}
-									/>
-								</motion.div>
-
-								{/* 하단 닫기 버튼 — 블러 영역 */}
-								<div className={styles.closeWrapper}>
-									<button
-										className={styles.closeButton}
-										onClick={(e) => {
-											e.stopPropagation()
-											handleClose()
-										}}
-									>
-										<X size={ICON_SIZE} />
-									</button>
-								</div>
-							</motion.div>
-						)}
-					</AnimatePresence>
-				</>,
-				document.body,
-			)}
+			<ProjectOverlay
+				project={selectedProject}
+				onClose={handleClose}
+				overlayKey="scroll-overlay"
+				styles={styles}
+				motionProps={{
+					initial: { opacity: 0, y: 60 },
+					animate: {
+						opacity: 1,
+						y: 0,
+						transition: {
+							duration: 0.3,
+							ease: [0.25, 0.1, 0.25, 1],
+						},
+					},
+					exit: {
+						opacity: 0,
+						y: -30,
+						transition: {
+							duration: 0.2,
+							ease: [0.25, 0.1, 0.25, 1],
+						},
+					},
+				}}
+			/>
 		</section>
 	)
 }

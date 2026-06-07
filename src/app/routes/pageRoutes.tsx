@@ -22,6 +22,8 @@ type AppPageRoute = {
 	id: string
 	path: string
 	title: string
+	navLabel?: string
+	navTone?: 'neutral' | 'accent'
 	/** 전역 네비게이션 메뉴에 링크로 노출할지 여부 (동적 상세 라우트는 false) */
 	nav: boolean
 	smoothScroll: boolean
@@ -34,6 +36,8 @@ export const PAGE_ROUTES = [
 		id: 'home',
 		path: '/',
 		title: 'Home',
+		navLabel: 'Seobin',
+		navTone: 'neutral',
 		nav: true,
 		smoothScroll: true,
 		loader: undefined,
@@ -43,6 +47,7 @@ export const PAGE_ROUTES = [
 		id: 'about',
 		path: '/about',
 		title: 'About',
+		navTone: 'accent',
 		nav: true,
 		smoothScroll: false,
 		loader: profileLoader,
@@ -52,6 +57,8 @@ export const PAGE_ROUTES = [
 		id: 'posts',
 		path: '/posts',
 		title: 'Posts',
+		navLabel: 'Articles',
+		navTone: 'neutral',
 		nav: true,
 		smoothScroll: false,
 		loader: postsLoader,

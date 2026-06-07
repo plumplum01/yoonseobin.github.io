@@ -1,4 +1,4 @@
-import { mapMediaAsset, mapPost } from '@/registry/mappers/postMapper'
+import { mapMediaAsset, mapPost } from '@/registry/mappers/mapPost'
 
 const imageMedia = {
 	id: 'media-1',
@@ -21,7 +21,7 @@ const videoMedia = {
 
 const postPayload = {
 	id: 'post-1',
-	type: 'blog',
+	type: 'article',
 	slug: 'hello',
 	title: 'Hello',
 	status: 'published',
@@ -62,7 +62,7 @@ describe('mapPost', () => {
 
 		expect(post).toMatchObject({
 			id: 'post-1',
-			type: 'blog',
+			type: 'article',
 			slug: 'hello',
 			title: 'Hello',
 			status: 'published',

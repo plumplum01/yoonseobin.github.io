@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { AppRouteError } from '@/app/errors/AppRouteError'
-import { loadProfile } from '@/registry/profile'
-import { loadPost, loadPosts } from '@/registry/posts'
+import { resolveProfile } from '@/registry/resolveProfile'
+import { resolvePost, resolvePosts } from '@/registry/resolvePosts'
 
 function isMissingDocumentError(error: unknown): boolean {
 	return error instanceof Error && error.message.includes('document is missing')
@@ -21,7 +21,7 @@ function toContentRouteError(error: unknown, message: string): AppRouteError {
 
 export async function profileLoader() {
 	try {
-		return await loadProfile()
+		return await resolveProfile()
 	} catch (error) {
 		throw toContentRouteError(error, 'Profile failed to load')
 	}
@@ -29,7 +29,7 @@ export async function profileLoader() {
 
 export async function postsLoader() {
 	try {
-		return await loadPosts()
+		return await resolvePosts()
 	} catch (error) {
 		throw toContentRouteError(error, 'Posts failed to load')
 	}
@@ -41,7 +41,7 @@ export async function postDetailLoader({ params }: LoaderFunctionArgs) {
 	}
 
 	try {
-		return await loadPost(params.slug)
+		return await resolvePost(params.slug)
 	} catch (error) {
 		if (isMissingDocumentError(error)) {
 			throw new AppRouteError('notFound', 'Post document is missing', { cause: error })

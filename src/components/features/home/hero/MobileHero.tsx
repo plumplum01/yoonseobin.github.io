@@ -9,43 +9,20 @@
  * - 콘텐츠 오버레이: 카드를 탭하면 블러 배경 위로 상세 패널이 열립니다.
  */
 
-import { useCallback, useEffect, useState } from 'react'
-import { createPortal } from 'react-dom'
-import { AnimatePresence, motion } from 'framer-motion'
-import { X } from 'lucide-react'
-import { useScrollLock } from '@/hooks/useScrollLock'
+import { useCallback, useState } from 'react'
 import { projects } from '@/registry/projects'
-import ContentContainer from '@/components/features/projects/ContentContainer'
 import Footer from '@/components/layout/Footer'
 import MobileCard from '@/components/features/projects/MobileCard'
 import { ITEMS } from '@/components/features/home/hero/constants'
+import ProjectOverlay from '@/components/features/home/hero/ProjectOverlay'
 import styles from '@/components/features/home/hero/MobileHero.module.css'
-
-const ICON_SIZE = 16
 
 export default function MobileHero() {
 	/** 현재 열려 있는 카드 번호 (null이면 닫힌 상태) */
 	const [selectedN, setSelectedN] = useState<number | null>(null)
-	const { lock, unlock } = useScrollLock()
+	const selectedProject = selectedN === null ? null : projects[(selectedN - 1) % projects.length]
 
 	const handleClose = useCallback(() => setSelectedN(null), [])
-
-	// ─── ESC 키로 오버레이 닫기 ───────────────────────────────────────────────
-
-	useEffect(() => {
-		const onKey = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') handleClose()
-		}
-		window.addEventListener('keydown', onKey)
-		return () => window.removeEventListener('keydown', onKey)
-	}, [handleClose])
-
-	// ─── 오버레이 열릴 때 body 스크롤 잠금 ───────────────────────────────────
-
-	useEffect(() => {
-		if (selectedN !== null) lock()
-		else unlock()
-	}, [selectedN, lock, unlock])
 
 	// ─── 렌더 ─────────────────────────────────────────────────────────────────
 
@@ -63,67 +40,25 @@ export default function MobileHero() {
 
 			<div className={styles.spacer} />
 
-			{/* 콘텐츠 오버레이 — body에 Portal로 렌더링 (z-index 스택 충돌 방지) */}
-			{createPortal(
-				<>
-					{/* 블러 배경 */}
-					<motion.div
-						className={styles.backdrop}
-						initial={false}
-						animate={{ opacity: selectedN !== null ? 1 : 0 }}
-						transition={{ duration: 0.3 }}
-						style={{ pointerEvents: selectedN !== null ? 'auto' : 'none' }}
-						onClick={handleClose}
-					/>
-
-					{/* 콘텐츠 패널 */}
-					<AnimatePresence>
-						{selectedN !== null && (
-							<motion.div
-								key="mobile-scroll-overlay"
-								className={styles.overlay}
-								initial={{ opacity: 0, y: 20 }}
-								animate={{
-									opacity: 1,
-									y: 0,
-									transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
-								}}
-								exit={{
-									opacity: 0,
-									y: -80,
-									transition: { duration: 0.35, ease: [0.4, 0, 0.6, 1] },
-								}}
-								onClick={handleClose}
-							>
-								<motion.div
-									className={styles.panel}
-									onClick={(e) => e.stopPropagation()}
-								>
-									<ContentContainer
-										key={projects[(selectedN - 1) % projects.length].id}
-										project={projects[(selectedN - 1) % projects.length]}
-										onClose={handleClose}
-									/>
-								</motion.div>
-
-								{/* 하단 닫기 버튼 — 블러 영역 */}
-								<div className={styles.closeWrapper}>
-									<button
-										className={styles.closeButton}
-										onClick={(e) => {
-											e.stopPropagation()
-											handleClose()
-										}}
-									>
-										<X size={ICON_SIZE} />
-									</button>
-								</div>
-							</motion.div>
-						)}
-					</AnimatePresence>
-				</>,
-				document.body,
-			)}
+			<ProjectOverlay
+				project={selectedProject}
+				onClose={handleClose}
+				overlayKey="mobile-scroll-overlay"
+				styles={styles}
+				motionProps={{
+					initial: { opacity: 0, y: 20 },
+					animate: {
+						opacity: 1,
+						y: 0,
+						transition: { duration: 0.3, ease: [0.4, 0, 0.2, 1] },
+					},
+					exit: {
+						opacity: 0,
+						y: -80,
+						transition: { duration: 0.35, ease: [0.4, 0, 0.6, 1] },
+					},
+				}}
+			/>
 		</section>
 	)
 }

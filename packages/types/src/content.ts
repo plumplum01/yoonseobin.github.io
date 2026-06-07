@@ -1,8 +1,8 @@
-export type PostType = 'blog' | 'shorts' | 'about'
+export type PostType = 'project' | 'article' | 'reel'
 
 export type PostStatus = 'draft' | 'published'
 
-export type PostBlockType = 'text' | 'image' | 'carousel' | 'video' | 'heading' | 'quote'
+export type PostBlockType = 'text' | 'image' | 'carousel' | 'video' | 'heading'
 
 export type MediaAssetType = 'image' | 'video'
 
@@ -52,12 +52,6 @@ export interface HeadingPostBlock {
 	text: string
 }
 
-export interface QuotePostBlock {
-	type: 'quote'
-	text: string
-	attribution?: string
-}
-
 export interface ImagePostBlock {
 	type: 'image'
 	media: MediaAsset
@@ -78,7 +72,6 @@ export interface VideoPostBlock {
 export type PostBlock =
 	| TextPostBlock
 	| HeadingPostBlock
-	| QuotePostBlock
 	| ImagePostBlock
 	| CarouselPostBlock
 	| VideoPostBlock

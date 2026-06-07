@@ -1,32 +1,19 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion, AnimatePresence } from 'framer-motion'
 import { X } from 'lucide-react'
 import { site } from '@/registry/site'
-import type { Project, SceneVideo } from '@/registry/projects'
+import type { Project } from '@/registry/projects'
 import Toast from '@/components/features/feedback/Toast'
 import { useIsMobile } from '@/hooks/useIsMobile'
+import ProjectLightbox from '@/components/features/projects/ProjectLightbox'
+import SceneVideoPlayer from '@/components/features/projects/SceneVideoPlayer'
+import { useImageHintToast } from '@/components/features/projects/useImageHintToast'
 import styles from '@/components/features/projects/ContentContainer.module.css'
 
 const ICON_SIZE = 16
 
 export type { Project }
-
-function SceneVideoPlayer({ video }: { video: SceneVideo }) {
-	const videoRef = useRef<HTMLVideoElement>(null)
-
-	useEffect(() => {
-		const el = videoRef.current
-		if (!el || !video.delay) return
-		el.pause()
-		const timer = setTimeout(() => {
-			el.play()
-		}, video.delay)
-		return () => clearTimeout(timer)
-	}, [video.delay])
-
-	return <video ref={videoRef} src={video.src} autoPlay={!video.delay} loop muted playsInline />
-}
 
 interface Props {
 	project: Project
@@ -46,8 +33,7 @@ export default function ContentContainer({ project, onClose }: Props) {
 	const [activeTab, setActiveTab] = useState<TabType>('detail')
 	const [activeScene, setActiveScene] = useState(0)
 	const [lightboxIndex, setLightboxIndex] = useState<number | null>(null)
-	const [showToast, setShowToast] = useState(false)
-	const observerRef = useRef<IntersectionObserver | null>(null)
+	const { firstImageRef, showToast } = useImageHintToast()
 
 	const markLoaded = useCallback((el: HTMLImageElement | null) => {
 		if (!el) return
@@ -66,53 +52,14 @@ export default function ContentContainer({ project, onClose }: Props) {
 		}
 	}, [])
 
-	const firstImageRef = useCallback((el: HTMLDivElement | null) => {
-		if (observerRef.current) {
-			observerRef.current.disconnect()
-			observerRef.current = null
-		}
-		if (!el || sessionStorage.getItem('image-hint-shown')) return
-		const observer = new IntersectionObserver(
-			([entry]) => {
-				if (entry.isIntersecting) {
-					sessionStorage.setItem('image-hint-shown', '1')
-					setShowToast(true)
-					observer.disconnect()
-					observerRef.current = null
-					setTimeout(() => setShowToast(false), 3000)
-				}
-			},
-			{ threshold: 0.1 },
-		)
-		observer.observe(el)
-		observerRef.current = observer
-	}, [])
-
 	const lightboxImages =
 		activeTab === 'detail'
 			? project.images.slice(1)
 			: (project.scenes?.map((s) => s.image).filter((img): img is string => !!img) ?? [])
 
-	const closeLightbox = useCallback(() => setLightboxIndex(null), [])
-
 	const switchTab = (tab: TabType) => {
 		setActiveTab(tab)
 	}
-
-	// 라이트박스 키보드 핸들러
-	useEffect(() => {
-		if (lightboxIndex === null) return
-		const total = lightboxImages.length
-		const onKey = (e: KeyboardEvent) => {
-			if (e.key === 'Escape') closeLightbox()
-			if (e.key === 'ArrowLeft')
-				setLightboxIndex((i) => (i !== null ? (i - 1 + total) % total : null))
-			if (e.key === 'ArrowRight')
-				setLightboxIndex((i) => (i !== null ? (i + 1) % total : null))
-		}
-		window.addEventListener('keydown', onKey)
-		return () => window.removeEventListener('keydown', onKey)
-	}, [closeLightbox, lightboxIndex, lightboxImages.length])
 
 	const descriptionBodySizeClass = isMobile
 		? styles.descriptionBodyMobile
@@ -346,74 +293,11 @@ export default function ContentContainer({ project, onClose }: Props) {
 				document.body,
 			)}
 
-			{/* 라이트박스 */}
-			{createPortal(
-				<AnimatePresence>
-					{lightboxIndex !== null && (
-						<motion.div
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1, transition: { duration: 0.2 } }}
-							exit={{ opacity: 0, transition: { duration: 0.2 } }}
-							className={styles.lightbox}
-							onClick={closeLightbox}
-						>
-							{/* 이미지 */}
-							<img
-								key={lightboxIndex}
-								src={lightboxImages[lightboxIndex]}
-								alt=""
-								className={styles.lightboxImage}
-							/>
-
-							{/* 카운터 */}
-							{lightboxImages.length > 1 && (
-								<div className={styles.lightboxCounter}>
-									{lightboxIndex + 1} / {lightboxImages.length}
-								</div>
-							)}
-
-							{/* 닫기 버튼 */}
-							<button className={styles.lightboxClose} onClick={closeLightbox}>
-								close
-							</button>
-
-							{/* 이전 버튼 */}
-							{lightboxImages.length > 1 && (
-								<button
-									className={`${styles.lightboxNav} ${styles.lightboxPrev}`}
-									onClick={(e) => {
-										e.stopPropagation()
-										setLightboxIndex((i) =>
-											i !== null
-												? (i - 1 + lightboxImages.length) %
-													lightboxImages.length
-												: null,
-										)
-									}}
-								>
-									<span>‹</span>
-								</button>
-							)}
-
-							{/* 다음 버튼 */}
-							{lightboxImages.length > 1 && (
-								<button
-									className={`${styles.lightboxNav} ${styles.lightboxNext}`}
-									onClick={(e) => {
-										e.stopPropagation()
-										setLightboxIndex((i) =>
-											i !== null ? (i + 1) % lightboxImages.length : null,
-										)
-									}}
-								>
-									<span>›</span>
-								</button>
-							)}
-						</motion.div>
-					)}
-				</AnimatePresence>,
-				document.body,
-			)}
+			<ProjectLightbox
+				images={lightboxImages}
+				activeIndex={lightboxIndex}
+				onChangeIndex={setLightboxIndex}
+			/>
 		</>
 	)
 }

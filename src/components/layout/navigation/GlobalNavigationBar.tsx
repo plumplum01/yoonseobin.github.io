@@ -2,16 +2,14 @@
  * GlobalNavigationBar — 전역 네비게이션 최상위 컨테이너
  * */
 
-import { useState, useEffect } from 'react'
-import { useScrollLock } from '@/hooks/useScrollLock'
-import { useIsMobile } from '@/hooks/useIsMobile'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Separator } from '@/components/ui/separator'
 import { cn } from '@/lib/cn'
 import { NAVIGATION_ROUTES } from '@/app/routes/pageRoutes'
 import { AnimatePresence, motion } from 'framer-motion'
 
-const LINKS = Object.fromEntries(NAVIGATION_ROUTES.map(({ id, ...rest }) => ([id, rest])))
+const LINKS = Object.fromEntries(NAVIGATION_ROUTES.map(({ id, ...rest }) => [id, rest]))
 
 function NavigationLink({ label, route }: { label: string; route: string }) {
 	const [hover, setHover] = useState(false)
@@ -45,26 +43,12 @@ function NavigationLink({ label, route }: { label: string; route: string }) {
 	)
 }
 
-
 export default function GlobalNavigationBar() {
-	const [isOpen, setIsOpen] = useState(false)
-	const isMobile = useIsMobile()
-	const { lock, unlock } = useScrollLock()
-
-	// 메뉴 열릴 때 배경 스크롤 잠금
-	useEffect(() => {
-		if (isOpen) lock()
-		else unlock()
-	}, [isOpen, lock, unlock])
-
-	const badge = "px-5 py-1.5 pt-2 flex rounded-full"
-
+	const badge = 'px-5 py-1.5 pt-2 flex rounded-full'
 
 	return (
-		<nav
-			className="fixed top-10 inset-x-0 z-30 flex justify-center isolate"
-		>
-			<section className='flex items-center gap-1'>
+		<nav className="fixed top-10 inset-x-0 z-30 flex justify-center isolate">
+			<section className="flex items-center gap-1">
 				<div className={cn(badge, 'backdrop-blur-md bg-neutral-400/10')}>
 					<NavigationLink label="Seobin" route={LINKS.home.path} />
 				</div>

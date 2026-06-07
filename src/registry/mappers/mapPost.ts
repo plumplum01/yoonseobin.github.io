@@ -6,7 +6,6 @@ import type {
 	ClientMediaTag,
 	ClientPost,
 	ClientPostBlock,
-	ClientQuotePostBlock,
 	ClientTextPostBlock,
 	ClientVideoPostBlock,
 	MediaAspectRatio,
@@ -17,57 +16,40 @@ import type {
 	PostStatus,
 	PostType,
 } from '@portfolio/types'
+import {
+	optionalRecordArray as readOptionalRecordArray,
+	optionalString as readOptionalString,
+	requirePayloadRecord,
+	requireRecord as readRequiredRecord,
+	requireRecordArray as readRequiredRecordArray,
+	requireString as readRequiredString,
+	type UnknownRecord,
+} from './payloadGuards'
 
-type UnknownRecord = Record<string, unknown>
-
-function isRecord(value: unknown): value is UnknownRecord {
-	return typeof value === 'object' && value !== null && !Array.isArray(value)
-}
+const PAYLOAD_NAME = 'post'
 
 function requireString(record: UnknownRecord, key: string, context: string): string {
-	const value = record[key]
-	if (typeof value !== 'string' || value.length === 0) {
-		throw new Error(`Invalid post payload: ${context}.${key} must be a non-empty string`)
-	}
-	return value
+	return readRequiredString(record, key, context, PAYLOAD_NAME)
 }
 
 function optionalString(record: UnknownRecord, key: string): string | undefined {
-	const value = record[key]
-	if (value === undefined || value === null) return undefined
-	if (typeof value !== 'string') {
-		throw new Error(`Invalid post payload: ${key} must be a string when provided`)
-	}
-	return value
+	return readOptionalString(record, key, PAYLOAD_NAME)
 }
 
 function requireRecord(record: UnknownRecord, key: string, context: string): UnknownRecord {
-	const value = record[key]
-	if (!isRecord(value)) {
-		throw new Error(`Invalid post payload: ${context}.${key} must be an object`)
-	}
-	return value
+	return readRequiredRecord(record, key, context, PAYLOAD_NAME)
 }
 
 function optionalRecordArray(record: UnknownRecord, key: string, context: string): UnknownRecord[] {
-	const value = record[key]
-	if (value === undefined || value === null) return []
-	if (!Array.isArray(value) || value.some((item) => !isRecord(item))) {
-		throw new Error(`Invalid post payload: ${context}.${key} must be an object array`)
-	}
-	return value
+	return readOptionalRecordArray(record, key, context, PAYLOAD_NAME)
 }
 
 function requireRecordArray(record: UnknownRecord, key: string, context: string): UnknownRecord[] {
-	const value = record[key]
-	if (!Array.isArray(value) || value.some((item) => !isRecord(item))) {
-		throw new Error(`Invalid post payload: ${context}.${key} must be an object array`)
-	}
-	return value
+	return readRequiredRecordArray(record, key, context, PAYLOAD_NAME)
 }
 
 function assertPostType(value: string, context: string): PostType {
-	if (value === 'blog' || value === 'shorts' || value === 'about') return value
+	if (value === 'project' || value === 'article' || value === 'reel') return value
 	throw new Error(`Invalid post payload: ${context}.type has unsupported value`)
 }
 
@@ -99,33 +81,32 @@ function assertClientMediaTag(raw: UnknownRecord, index: number): ClientMediaTag
 }
 
 export function assertClientMediaAsset(raw: unknown): ClientMediaAsset {
-	if (!isRecord(raw)) {
-		throw new Error('Invalid post payload: media asset is missing')
-	}
-
+	const record = requirePayloadRecord(raw, PAYLOAD_NAME, 'media asset is missing')
 	const context = 'media'
-	const id = requireString(raw, 'id', context)
-	const type = assertMediaType(requireString(raw, 'type', context), context)
-	const tags = optionalRecordArray(raw, 'tags', context).map(assertClientMediaTag)
+	const id = requireString(record, 'id', context)
+	const type = assertMediaType(requireString(record, 'type', context), context)
+	const alt = optionalString(record, 'alt')
+	const caption = optionalString(record, 'caption')
+	const imageUrl = optionalString(record, 'imageUrl')
+	const videoUrl = optionalString(record, 'videoUrl')
+	const createdAt = optionalString(record, 'createdAt')
+	const updatedAt = optionalString(record, 'updatedAt')
+	const tags = optionalRecordArray(record, 'tags', context).map(assertClientMediaTag)
 
 	return {
 		id,
-		title: requireString(raw, 'title', context),
+		title: requireString(record, 'title', context),
 		type,
-		...(optionalString(raw, 'alt') ? { alt: optionalString(raw, 'alt') } : {}),
-		...(optionalString(raw, 'caption') ? { caption: optionalString(raw, 'caption') } : {}),
+		...(alt ? { alt } : {}),
+		...(caption ? { caption } : {}),
 		tags,
-		...(typeof raw.durationSeconds === 'number'
-			? { durationSeconds: raw.durationSeconds }
+		...(typeof record.durationSeconds === 'number'
+			? { durationSeconds: record.durationSeconds }
 			: {}),
-		...(optionalString(raw, 'imageUrl') ? { imageUrl: optionalString(raw, 'imageUrl') } : {}),
-		...(optionalString(raw, 'videoUrl') ? { videoUrl: optionalString(raw, 'videoUrl') } : {}),
-		...(optionalString(raw, 'createdAt')
-			? { createdAt: optionalString(raw, 'createdAt') }
-			: {}),
-		...(optionalString(raw, 'updatedAt')
-			? { updatedAt: optionalString(raw, 'updatedAt') }
-			: {}),
+		...(imageUrl ? { imageUrl } : {}),
+		...(videoUrl ? { videoUrl } : {}),
+		...(createdAt ? { createdAt } : {}),
+		...(updatedAt ? { updatedAt } : {}),
 	}
 }
 
@@ -177,16 +158,6 @@ function assertClientHeadingBlock(raw: UnknownRecord): ClientHeadingPostBlock {
 	}
 }
 
-function assertClientQuoteBlock(raw: UnknownRecord): ClientQuotePostBlock {
-	return {
-		_type: 'quoteBlock',
-		text: requireString(raw, 'text', 'quoteBlock'),
-		...(optionalString(raw, 'attribution')
-			? { attribution: optionalString(raw, 'attribution') }
-			: {}),
-	}
-}
-
 function assertClientImageBlock(raw: UnknownRecord): ClientImagePostBlock {
 	const context = 'imageBlock'
 	return {
@@ -221,8 +192,6 @@ function assertClientPostBlock(raw: UnknownRecord): ClientPostBlock {
 			return assertClientTextBlock(raw)
 		case 'headingBlock':
 			return assertClientHeadingBlock(raw)
-		case 'quoteBlock':
-			return assertClientQuoteBlock(raw)
 		case 'imageBlock':
 			return assertClientImageBlock(raw)
 		case 'carouselBlock':
@@ -236,37 +205,34 @@ function assertClientPostBlock(raw: UnknownRecord): ClientPostBlock {
 
 function assertClientPostBase(raw: UnknownRecord): Omit<ClientPost, 'blocks'> {
 	const context = 'post'
+	const subtitle = optionalString(raw, 'subtitle')
+	const summary = optionalString(raw, 'summary')
+	const thumbnailUrl = optionalString(raw, 'thumbnailUrl')
+	const publishedAt = optionalString(raw, 'publishedAt')
+	const createdAt = optionalString(raw, 'createdAt')
+	const updatedAt = optionalString(raw, 'updatedAt')
+
 	return {
 		id: requireString(raw, 'id', context),
 		type: assertPostType(requireString(raw, 'type', context), context),
 		slug: requireString(raw, 'slug', context),
 		title: requireString(raw, 'title', context),
-		...(optionalString(raw, 'subtitle') ? { subtitle: optionalString(raw, 'subtitle') } : {}),
-		...(optionalString(raw, 'summary') ? { summary: optionalString(raw, 'summary') } : {}),
-		...(optionalString(raw, 'thumbnailUrl')
-			? { thumbnailUrl: optionalString(raw, 'thumbnailUrl') }
-			: {}),
+		...(subtitle ? { subtitle } : {}),
+		...(summary ? { summary } : {}),
+		...(thumbnailUrl ? { thumbnailUrl } : {}),
 		status: assertPostStatus(requireString(raw, 'status', context), context),
-		...(optionalString(raw, 'publishedAt')
-			? { publishedAt: optionalString(raw, 'publishedAt') }
-			: {}),
-		...(optionalString(raw, 'createdAt')
-			? { createdAt: optionalString(raw, 'createdAt') }
-			: {}),
-		...(optionalString(raw, 'updatedAt')
-			? { updatedAt: optionalString(raw, 'updatedAt') }
-			: {}),
+		...(publishedAt ? { publishedAt } : {}),
+		...(createdAt ? { createdAt } : {}),
+		...(updatedAt ? { updatedAt } : {}),
 	}
 }
 
 export function assertClientPost(raw: unknown): ClientPost {
-	if (!isRecord(raw)) {
-		throw new Error('Invalid post payload: post document is missing')
-	}
+	const record = requirePayloadRecord(raw, PAYLOAD_NAME, 'post document is missing')
 
 	return {
-		...assertClientPostBase(raw),
-		blocks: optionalRecordArray(raw, 'blocks', 'post').map(assertClientPostBlock),
+		...assertClientPostBase(record),
+		blocks: optionalRecordArray(record, 'blocks', 'post').map(assertClientPostBlock),
 	}
 }
 
@@ -276,12 +242,6 @@ function mapClientPostBlock(block: ClientPostBlock): PostBlock {
 			return { type: 'text', body: block.body }
 		case 'headingBlock':
 			return { type: 'heading', level: block.level, text: block.text }
-		case 'quoteBlock':
-			return {
-				type: 'quote',
-				text: block.text,
-				...(block.attribution ? { attribution: block.attribution } : {}),
-			}
 		case 'imageBlock':
 			return {
 				type: 'image',

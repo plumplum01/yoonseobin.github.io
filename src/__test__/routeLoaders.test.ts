@@ -2,21 +2,21 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { AppRouteError } from '@/app/errors/AppRouteError'
 import { postDetailLoader, postsLoader, profileLoader } from '@/app/routes/routeLoaders'
-import { loadProfile } from '@/registry/profile'
-import { loadPost, loadPosts } from '@/registry/posts'
+import { resolveProfile } from '@/registry/resolveProfile'
+import { resolvePost, resolvePosts } from '@/registry/resolvePosts'
 
-vi.mock('../registry/profile', () => ({
-	loadProfile: vi.fn(),
+vi.mock('../registry/resolveProfile', () => ({
+	resolveProfile: vi.fn(),
 }))
 
-vi.mock('../registry/posts', () => ({
-	loadPost: vi.fn(),
-	loadPosts: vi.fn(),
+vi.mock('../registry/resolvePosts', () => ({
+	resolvePost: vi.fn(),
+	resolvePosts: vi.fn(),
 }))
 
-const mockedLoadProfile = vi.mocked(loadProfile)
-const mockedLoadPost = vi.mocked(loadPost)
-const mockedLoadPosts = vi.mocked(loadPosts)
+const mockedResolveProfile = vi.mocked(resolveProfile)
+const mockedResolvePost = vi.mocked(resolvePost)
+const mockedResolvePosts = vi.mocked(resolvePosts)
 
 function createLoaderArgs(slug?: string) {
 	return {
@@ -52,7 +52,7 @@ describe('route loaders', () => {
 			awards: [],
 			links: [],
 		}
-		mockedLoadProfile.mockResolvedValue(profile)
+		mockedResolveProfile.mockResolvedValue(profile)
 
 		await expect(profileLoader()).resolves.toBe(profile)
 	})
@@ -61,13 +61,13 @@ describe('route loaders', () => {
 		const posts = [
 			{
 				id: 'post-1',
-				type: 'blog' as const,
+				type: 'article' as const,
 				slug: 'test-post',
 				title: 'Test post',
 				status: 'published' as const,
 			},
 		]
-		mockedLoadPosts.mockResolvedValue(posts)
+		mockedResolvePosts.mockResolvedValue(posts)
 
 		await expect(postsLoader()).resolves.toBe(posts)
 	})
@@ -75,16 +75,16 @@ describe('route loaders', () => {
 	it('loads a post detail by route slug', async () => {
 		const post = {
 			id: 'post-1',
-			type: 'blog' as const,
+			type: 'article' as const,
 			slug: 'test-post',
 			title: 'Test post',
 			status: 'published' as const,
 			blocks: [],
 		}
-		mockedLoadPost.mockResolvedValue(post)
+		mockedResolvePost.mockResolvedValue(post)
 
 		await expect(postDetailLoader(createLoaderArgs('test-post'))).resolves.toBe(post)
-		expect(mockedLoadPost).toHaveBeenCalledWith('test-post')
+		expect(mockedResolvePost).toHaveBeenCalledWith('test-post')
 	})
 
 	it('throws notFound when a post route has no slug', async () => {
@@ -96,7 +96,7 @@ describe('route loaders', () => {
 	})
 
 	it('normalizes missing post documents into notFound errors', async () => {
-		mockedLoadPost.mockRejectedValue(
+		mockedResolvePost.mockRejectedValue(
 			new Error('Invalid post payload: post document is missing'),
 		)
 
@@ -108,7 +108,7 @@ describe('route loaders', () => {
 	})
 
 	it('normalizes invalid CMS payloads into contentInvalid errors', async () => {
-		mockedLoadPosts.mockRejectedValue(
+		mockedResolvePosts.mockRejectedValue(
 			new Error('Invalid post payload: post.title must be a string'),
 		)
 
@@ -120,7 +120,7 @@ describe('route loaders', () => {
 	})
 
 	it('normalizes unexpected registry failures into contentUnavailable errors', async () => {
-		mockedLoadProfile.mockRejectedValue(new Error('Network request failed'))
+		mockedResolveProfile.mockRejectedValue(new Error('Network request failed'))
 
 		await expectAppRouteError(() => profileLoader(), {
 			kind: 'contentUnavailable',
