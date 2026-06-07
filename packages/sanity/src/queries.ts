@@ -1,6 +1,6 @@
 const postHeaderViewFields = `
   "id": _id,
-  type,
+  "type": select(type == "blog" => "article", type),
   "slug": slug.current,
   title,
   subtitle,
@@ -34,14 +34,16 @@ export const mediaAssetViewProjection = `{
 
 export const publishedPostsQuery = `*[
   _type == "post" &&
-  status == "published"
+  status == "published" &&
+  type in ["project", "article", "reel", "blog"]
 ] | order(publishedAt desc) {
   ${postHeaderViewFields}
 }`
 
 export const postBySlugQuery = `*[
   _type == "post" &&
-  slug.current == $slug
+  slug.current == $slug &&
+  type in ["project", "article", "reel", "blog"]
 ][0] {
   ${postHeaderViewFields},
   blocks[] {
