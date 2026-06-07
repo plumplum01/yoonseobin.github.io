@@ -3,7 +3,13 @@ import { useRef } from 'react'
 
 const PROGRESS = [0, 0.4, 0.6, 1]
 
-export function useScrollPadding(maxPadding: number, maxRadius: number) {
+export function useScrollPadding({
+	maxPadding = 16,
+	maxRadius = 24,
+}: {
+	maxPadding?: number
+	maxRadius?: number
+} = {}) {
 	const reference = useRef<HTMLDivElement>(null)
 	const { scrollYProgress } = useScroll({ target: reference, offset: ['start end', 'end start'] })
 	const borderRadius = useTransform(scrollYProgress, PROGRESS, [maxRadius, 0, 0, maxRadius])

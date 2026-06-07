@@ -1,5 +1,6 @@
 export { CarouselBlock } from '@/components/blocks/post/CarouselBlock'
 export { HeadingBlock } from '@/components/blocks/post/HeadingBlock'
 export { ImageBlock } from '@/components/blocks/post/ImageBlock'
+export { ImageStackBlock } from '@/components/blocks/post/ImageStackBlock'
 export { TextBlock } from '@/components/blocks/post/TextBlock'
 export { VideoBlock } from '@/components/blocks/post/VideoBlock'

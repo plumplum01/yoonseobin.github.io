@@ -11,7 +11,7 @@ import { cn } from '@/lib/cn'
 
 const LINKS = Object.fromEntries(NAVIGATION_ROUTES.map(({ id, ...rest }) => [id, rest]))
 
-const TEXT_COLOR = 'text-neutral-400'
+const TEXT_COLOR = 'text-neutral-100'
 const TEXT_COLOR_PRIMARY = 'text-neutral-900'
 const SEPARATOR_COLOR = 'bg-neutral-400/20'
 const CONTAINER_COLOR = 'bg-neutral-400/10'
@@ -40,7 +40,7 @@ function NavigationLink({
 					<motion.span
 						layout
 						layoutDependency={hover}
-						className={cn(textColor, 'text-xs font-bold')}
+						className={cn(textColor, 'text-xs font-medium')}
 					>
 						{label}
 					</motion.span>
@@ -71,11 +71,17 @@ export default function GlobalNavigationBar() {
 
 	return (
 		<nav className="fixed top-10 inset-x-0 z-30 flex justify-center isolate">
-			<section className="flex items-center gap-1">
+			<section className="flex items-center gap-1 hover:gap-3 hover:scale-101 [--extra-transition:gap_400ms_ease-out,scale_200ms_ease]">
 				<div className={cn(badge, CONTAINER_COLOR, 'backdrop-blur-md')}>
 					<NavigationLink label="Seobin" route={LINKS.home.path} />
 				</div>
-				<div className={cn(badge, 'gap-2.5 backdrop-blur-md', CONTAINER_COLOR)}>
+				<div
+					className={cn(
+						badge,
+						'gap-2.5 backdrop-blur-md hover:scale-105 [--extra-transition:scale_200ms_ease-out] ',
+						CONTAINER_COLOR,
+					)}
+				>
 					<NavigationLink label="Articles" route={LINKS.posts.path} />
 					<NavigationSeparator />
 					<NavigationLink label="Projects" route={LINKS.home.path} />

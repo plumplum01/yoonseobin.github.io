@@ -2,6 +2,7 @@ import type {
 	CarouselPostBlock,
 	HeadingPostBlock,
 	ImagePostBlock,
+	ImageStackPostBlock,
 	MediaAspectRatio,
 	MediaAsset,
 	MediaAssetType,
@@ -110,11 +111,19 @@ function parseImageBlock(raw: UnknownRecord): ImagePostBlock {
 	}
 }
 
-function parseCarouselBlock(raw: UnknownRecord): CarouselPostBlock {
+function parseMediaItemsBlock<TType extends 'carousel' | 'imageStack'>(
+	raw: UnknownRecord,
+	type: TType,
+	context: string,
+): { type: TType; mediaItems: MediaAsset[] } {
 	return {
-		type: 'carousel',
-		mediaItems: requireRecordArray(raw, 'mediaItems', 'carouselBlock').map(parseMediaAsset),
+		type,
+		mediaItems: requireRecordArray(raw, 'mediaItems', context).map(parseMediaAsset),
 	}
+}
+
+function parseCarouselBlock(raw: UnknownRecord): CarouselPostBlock {
+	return parseMediaItemsBlock(raw, 'carousel', 'carouselBlock')
 }
 
 function parseVideoBlock(raw: UnknownRecord): VideoPostBlock {
@@ -126,22 +135,27 @@ function parseVideoBlock(raw: UnknownRecord): VideoPostBlock {
 	}
 }
 
+function parseImageStackBlock(raw: UnknownRecord): ImageStackPostBlock {
+	return parseMediaItemsBlock(raw, 'imageStack', 'imageStackBlock')
+}
+
+type PostBlockParser = (raw: UnknownRecord) => PostBlock
+
+const blockParsers = {
+	text: parseTextBlock,
+	heading: parseHeadingBlock,
+	image: parseImageBlock,
+	imageStack: parseImageStackBlock,
+	carousel: parseCarouselBlock,
+	video: parseVideoBlock,
+} satisfies Record<PostBlock['type'], PostBlockParser>
+
 function parsePostBlock(raw: UnknownRecord): PostBlock {
 	const type = requireString(raw, 'type', 'block')
-	switch (type) {
-		case 'text':
-			return parseTextBlock(raw)
-		case 'heading':
-			return parseHeadingBlock(raw)
-		case 'image':
-			return parseImageBlock(raw)
-		case 'carousel':
-			return parseCarouselBlock(raw)
-		case 'video':
-			return parseVideoBlock(raw)
-		default:
-			throw new Error(`Invalid payload: unsupported block type ${type}`)
+	if (!(type in blockParsers)) {
+		throw new Error(`Invalid payload: unsupported block type ${type}`)
 	}
+	return blockParsers[type as keyof typeof blockParsers](raw)
 }
 
 function parsePostHeader(record: UnknownRecord): Post {

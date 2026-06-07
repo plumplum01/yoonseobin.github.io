@@ -61,6 +61,10 @@ export const postBySlugQuery = `*[
       "media": media-> ${mediaAssetViewProjection},
       "aspectRatio": coalesce(aspectRatio, "video")
     },
+    _type == "imageStackBlock" => {
+      "type": "imageStack",
+      "mediaItems": mediaItems[]-> ${mediaAssetViewProjection}
+    },
     _type == "carouselBlock" => {
       "type": "carousel",
       "mediaItems": mediaItems[]-> ${mediaAssetViewProjection}

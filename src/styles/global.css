@@ -150,7 +150,8 @@ html {
 	transition:
 		background-color 200ms ease,
 		color 200ms ease,
-		border-color 200ms ease;
+		border-color 200ms ease,
+		var(--extra-transition, visibility 0s ease 0s);
 }
 
 /* ─── 커스텀 커서 (마우스 기기에서만) ───────────────────────────────────── */

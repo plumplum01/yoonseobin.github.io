@@ -2,7 +2,7 @@ export type PostType = 'project' | 'article' | 'reel'
 
 export type PostStatus = 'draft' | 'published'
 
-export type PostBlockType = 'text' | 'image' | 'carousel' | 'video' | 'heading'
+export type PostBlockType = 'text' | 'image' | 'imageStack' | 'carousel' | 'video' | 'heading'
 
 export type MediaAssetType = 'image' | 'video'
 
@@ -58,6 +58,11 @@ export interface ImagePostBlock {
 	aspectRatio: MediaAspectRatio
 }
 
+export interface ImageStackPostBlock {
+	type: 'imageStack'
+	mediaItems: MediaAsset[]
+}
+
 export interface CarouselPostBlock {
 	type: 'carousel'
 	mediaItems: MediaAsset[]
@@ -75,6 +80,7 @@ export type PostBlock =
 	| ImagePostBlock
 	| CarouselPostBlock
 	| VideoPostBlock
+	| ImageStackPostBlock
 
 export interface PostDetail extends Post {
 	blocks: PostBlock[]

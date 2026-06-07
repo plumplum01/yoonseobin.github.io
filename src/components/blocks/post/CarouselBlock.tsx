@@ -1,9 +1,6 @@
 import type { PostBlock } from '@portfolio/types'
 import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
-import {
-	type CarouselSlideModel,
-	toCarouselSlide,
-} from '@/features/post-block-renderer/helpers/carouselSlides'
+import { type CarouselSlideModel, toCarouselSlide } from '@/components/blocks/post/carouselSlides'
 
 type CarouselBlockProps = {
 	block: Extract<PostBlock, { type: 'carousel' }>
@@ -17,7 +14,7 @@ function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 	return (
 		<CarouselItem className="pl-3">
 			<figure className="flex flex-col gap-2">
-				<div className="aspect-video w-full overflow-hidden rounded-sm">
+				<div className="aspect-video w-full overflow-hidden">
 					{slide.kind === 'video' ? (
 						// biome-ignore lint/a11y/useMediaCaption: CMS media assets do not provide timed caption tracks yet.
 						<video
@@ -56,10 +53,6 @@ export function CarouselBlock({ block }: CarouselBlockProps) {
 			<CarouselContent className="-ml-3">{slideItems}</CarouselContent>
 			<div className="w-full justify-center flex items-center gap-3">
 				<CarouselDots />
-				{/*<div className="flex items-center gap-2">
-					<CarouselPrevious />
-					<CarouselNext />
-				</div>*/}
 			</div>
 		</Carousel>
 	)

@@ -6,7 +6,7 @@ export default function Article({ post }: { post: Post }) {
 	return (
 		<article key={post.id}>
 			<Link className="flex flex-col gap-1" to={`/posts/${post.slug}`}>
-				<div className="relative aspect-square lg:aspect-video border w-full grid place-item-center rounded-2xl overflow-hidden">
+				<div className="relative aspect-square w-full grid place-item-center rounded-2xl overflow-hidden">
 					<img
 						src={post.thumbnailUrl}
 						alt={post.title}

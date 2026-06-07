@@ -7,7 +7,7 @@ export default function Posts() {
 	console.log(posts)
 	return (
 		<main className="box-border min-h-screen w-full p-4 pt-28">
-			<div className="grid grid-cols-1 gap-8">
+			<div className="grid grid-cols-2 gap-4">
 				{posts.map((post) => (
 					<Article key={post.id} post={post} />
 				))}

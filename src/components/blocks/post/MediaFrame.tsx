@@ -17,7 +17,7 @@ type MediaFrameProps = {
 }
 
 export function MediaFrame({ aspectRatio, children }: MediaFrameProps) {
-	const { reference, borderRadius, padding } = useScrollPadding(38, 24)
+	const { reference, borderRadius, padding } = useScrollPadding({ maxPadding: 24, maxRadius: 32 })
 	return (
 		<motion.div
 			className={cn('w-full rounded', aspectRatioClassName[aspectRatio])}

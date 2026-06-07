@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { BlockList } from '@/features/post-block-renderer'
+import { BlockList } from '@/features/block-renderer'
 
 describe('block renderer', () => {
 	it('renders post blocks independently', () => {
@@ -103,5 +103,37 @@ describe('block renderer', () => {
 		expect(screen.getByRole('region', { name: 'Post media carousel' })).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'First caption' })).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'Second media' })).toBeInTheDocument()
+	})
+
+	it('renders image stack blocks as ordered media items', () => {
+		render(
+			<BlockList
+				blocks={[
+					{
+						type: 'imageStack',
+						mediaItems: [
+							{
+								id: 'stack-1',
+								title: 'Stack first',
+								type: 'image',
+								url: 'https://cdn.sanity.io/stack-first.webp',
+								caption: 'Stack first caption',
+								tags: [],
+							},
+							{
+								id: 'stack-2',
+								title: 'Stack second',
+								type: 'image',
+								url: 'https://cdn.sanity.io/stack-second.webp',
+								tags: [],
+							},
+						],
+					},
+				]}
+			/>,
+		)
+
+		expect(screen.getByRole('img', { name: 'Stack first caption' })).toBeInTheDocument()
+		expect(screen.getByRole('img', { name: 'Stack second' })).toBeInTheDocument()
 	})
 })

@@ -1,4 +1,5 @@
 import { defineArrayMember, defineField, defineType } from 'sanity'
+import type { ReactNode } from 'react'
 
 const mediaAspectRatioOptions = [
 	{ title: 'Square 1:1', value: 'square' },
@@ -19,6 +20,57 @@ function aspectRatioField() {
 		},
 		validation: (rule) => rule.required(),
 	})
+}
+
+function imageReferenceMember() {
+	return defineArrayMember({
+		type: 'reference',
+		to: [{ type: 'mediaAsset' }],
+		options: {
+			filter: 'type == $type',
+			filterParams: { type: 'image' },
+		},
+	})
+}
+
+function mediaItemsField(title: string) {
+	return defineField({
+		name: 'mediaItems',
+		title,
+		type: 'array',
+		of: [imageReferenceMember()],
+		validation: (rule) => rule.required().min(2),
+	})
+}
+
+function mediaItemsPreview(title: string) {
+	return {
+		select: {
+			firstImage: 'mediaItems.0.image',
+			firstTitle: 'mediaItems.0.title',
+			secondTitle: 'mediaItems.1.title',
+			thirdTitle: 'mediaItems.2.title',
+		},
+		prepare: ({
+			firstTitle,
+			secondTitle,
+			thirdTitle,
+			firstImage,
+		}: {
+			firstTitle?: string
+			secondTitle?: string
+			thirdTitle?: string
+			firstImage?: ReactNode
+		}) => {
+			const titles = [firstTitle, secondTitle, thirdTitle].filter(Boolean)
+
+			return {
+				title,
+				subtitle: titles.length > 0 ? titles.join(', ') : 'Select at least two media items',
+				media: firstImage,
+			}
+		},
+	}
 }
 
 export const blockContentType = defineType({
@@ -88,47 +140,18 @@ export const blockContentType = defineType({
 			},
 		}),
 		defineArrayMember({
+			name: 'imageStackBlock',
+			title: 'Image Stack',
+			type: 'object',
+			fields: [mediaItemsField('Images')],
+			preview: mediaItemsPreview('Image Stack'),
+		}),
+		defineArrayMember({
 			name: 'carouselBlock',
 			title: 'Carousel',
 			type: 'object',
-			fields: [
-				defineField({
-					name: 'mediaItems',
-					title: 'Media items',
-					type: 'array',
-					of: [
-						defineArrayMember({
-							type: 'reference',
-							to: [{ type: 'mediaAsset' }],
-							options: {
-								filter: 'type == $type',
-								filterParams: { type: 'image' },
-							},
-						}),
-					],
-					validation: (rule) => rule.required().min(2),
-				}),
-			],
-			preview: {
-				select: {
-					firstTitle: 'mediaItems.0.title',
-					secondTitle: 'mediaItems.1.title',
-					thirdTitle: 'mediaItems.2.title',
-					firstImage: 'mediaItems.0.image',
-				},
-				prepare: ({ firstTitle, secondTitle, thirdTitle, firstImage }) => {
-					const titles = [firstTitle, secondTitle, thirdTitle].filter(Boolean)
-
-					return {
-						title: 'Carousel',
-						subtitle:
-							titles.length > 0
-								? titles.join(', ')
-								: 'Select at least two media items',
-						media: firstImage,
-					}
-				},
-			},
+			fields: [mediaItemsField('Media items')],
+			preview: mediaItemsPreview('Carousel'),
 		}),
 		defineArrayMember({
 			name: 'videoBlock',

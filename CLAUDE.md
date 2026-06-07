@@ -44,6 +44,38 @@
 - Sanity 통합 시에는 `src/registry`의 데이터 소스만 Sanity query 기반으로 교체하고, 앱 타입은 `packages/types` 기준을 유지한다
 - Sanity asset CDN으로 전환되면 `src/data/media`는 점진적으로 축소하거나 제거한다
 
+## CMS 블록 추가 절차
+
+새 post block을 추가할 때는 Studio 입력, Sanity projection, 앱 view model, parser, renderer가 같은 block type 이름으로 끝까지 이어져야 한다.
+
+### 블록 경계
+
+- `packages/sanity/src/schemas/blockContent.ts`는 Sanity Studio 입력 schema만 정의한다.
+- `packages/sanity/src/queries.ts`는 Sanity 원본 block을 앱 payload shape로 projection한다.
+- `packages/types/src/content.ts`는 앱이 소비하는 최종 `PostBlock` view model의 SSOT이다.
+- `src/registry/mappers/parsePost.ts`는 projection payload를 검증하고 `packages/types` view model로 변환한다.
+- `src/features/block-renderer`는 `PostBlock` 배열을 block UI 컴포넌트로 라우팅하는 얇은 renderer 인프라이다.
+- `src/components/blocks/post`는 개별 post block UI와 해당 UI 전용 helper를 보관한다. 특정 block 하나에만 쓰는 helper는 `features/block-renderer`가 아니라 해당 block 컴포넌트 근처에 둔다.
+
+### 체크리스트
+
+1. `packages/sanity/src/schemas/blockContent.ts`에 Sanity block schema를 추가한다.
+   - 반복되는 media item 배열은 기존 helper를 우선 재사용한다.
+2. `packages/sanity/src/queries.ts`의 `postBySlugQuery` `blocks[]` projection에 `_type == "...Block"` 분기를 추가한다.
+   - projection 결과의 `"type"` 값은 앱 `PostBlock['type']`과 정확히 같아야 한다.
+   - reference는 query에서 펼쳐서 앱에 넘긴다.
+3. `packages/types/src/content.ts`에 block interface를 추가하고 `PostBlockType`, `PostBlock` union에 포함한다.
+4. `src/registry/mappers/parsePost.ts`에 parser를 추가하고 `blockParsers` registry에 등록한다.
+   - `mediaItems` 기반 block은 기존 `parseMediaItemsBlock` helper를 우선 사용한다.
+5. `src/components/blocks/post/<BlockName>Block.tsx`에 UI 컴포넌트를 추가하고 `src/components/blocks/post/index.ts`에서 export한다.
+6. `src/features/block-renderer/BlockRenderer.tsx`의 `blockComponents` registry에 새 block component를 등록한다.
+7. 테스트를 추가하거나 갱신한다.
+   - 순수 변환은 `src/__test__/parsePost.test.ts`에서 parser 결과를 확인한다.
+   - 렌더링은 `src/__test__/blockRenderer.test.tsx`에서 실제 block UI가 노출되는지 확인한다.
+8. 검증은 최소 `npm run test:run`과 `npx vite build`를 실행한다.
+   - 커밋 전에는 프로젝트 규칙에 따라 두 명령 모두 녹색이어야 한다.
+   - 전체 타입 경계를 확인할 때는 `npm run build`도 실행한다.
+
 ## 앱 구조 규칙
 
 - `src/app/router.tsx`에서 앱 페이지 모델(`pageRoutes`)과 React Router 변환 결과(`routes`)를 관리한다

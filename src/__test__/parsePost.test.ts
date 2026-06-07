@@ -28,6 +28,7 @@ const postPayload = {
 	blocks: [
 		{ type: 'heading', level: 2, text: 'Intro' },
 		{ type: 'image', media: imageMedia, aspectRatio: 'portrait' },
+		{ type: 'imageStack', mediaItems: [imageMedia] },
 		{ type: 'carousel', mediaItems: [imageMedia] },
 		{ type: 'video', media: videoMedia, aspectRatio: 'wide' },
 	],
@@ -80,13 +81,17 @@ describe('parsePost', () => {
 			title: 'Hello',
 			status: 'published',
 		})
-		expect(post.blocks).toHaveLength(4)
+		expect(post.blocks).toHaveLength(5)
 		expect(post.blocks[1]).toMatchObject({
 			type: 'image',
 			aspectRatio: 'portrait',
 			media: { id: 'media-1', url: 'https://cdn.sanity.io/image.webp' },
 		})
-		expect(post.blocks[3]).toMatchObject({
+		expect(post.blocks[2]).toMatchObject({
+			type: 'imageStack',
+			mediaItems: [{ id: 'media-1', url: 'https://cdn.sanity.io/image.webp' }],
+		})
+		expect(post.blocks[4]).toMatchObject({
 			type: 'video',
 			aspectRatio: 'wide',
 			media: { id: 'media-2', url: 'https://cdn.sanity.io/video.mp4' },
