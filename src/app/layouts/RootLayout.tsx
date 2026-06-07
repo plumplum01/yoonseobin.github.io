@@ -1,8 +1,9 @@
 import { Outlet, useNavigation } from 'react-router-dom'
-import Cursor from '@/components/layout/Cursor'
-import GlobalNavigationBar from '@/components/layout/navigation/GlobalNavigationBar'
 import PagePending from '@/app/boundaries/PagePending'
-import Footer from '@/components/layout/Footer'
+import GlobalBreadcrumb from '@/components/layouts/globals/GlobalBreadcrumb'
+import Cursor from '@/components/layouts/globals/GlobalCursor'
+import Footer from '@/components/layouts/globals/GlobalFooter'
+import GlobalNavigationBar from '@/components/layouts/globals/GlobalNavigation'
 
 export default function RootLayout() {
 	const navigation = useNavigation()
@@ -11,6 +12,7 @@ export default function RootLayout() {
 	return (
 		<>
 			<Cursor />
+			<GlobalBreadcrumb />
 			<GlobalNavigationBar />
 			{isPending && <PagePending />}
 			<Outlet />

@@ -10,25 +10,24 @@
  * - Footer: 화면 하단에 이름과 이메일을 표시합니다.
  */
 
+import { motion, useAnimationFrame, useMotionValue } from 'framer-motion'
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { motion, useMotionValue, useAnimationFrame } from 'framer-motion'
-import { projects } from '@/registry/projects'
-import Footer from '@/components/layout/Footer'
-import DesktopCard from '@/components/features/projects/DesktopCard'
-import { useMediaPreload } from '@/hooks/useMediaPreload'
-import { useSmoothScroll } from '@/hooks/useSmoothScroll'
-import ProjectOverlay from '@/components/features/home/hero/ProjectOverlay'
-
 import {
-	DESKTOP_ITEMS,
-	DESKTOP_ITEM_WIDTH_VW,
 	DESKTOP_ITEM_GAP,
+	DESKTOP_ITEM_WIDTH_VW,
+	DESKTOP_ITEMS,
 	ITEM_COUNT,
-	WHEEL_SENSITIVITY,
-	stepHeroFrame,
 	type SelectedCard,
+	stepHeroFrame,
+	WHEEL_SENSITIVITY,
 } from '@/components/features/home/hero/constants'
 import styles from '@/components/features/home/hero/DesktopHero.module.css'
+import ProjectOverlay from '@/components/features/home/hero/ProjectOverlay'
+import DesktopCard from '@/components/features/projects/DesktopCard'
+import Footer from '@/components/layouts/globals/GlobalFooter'
+import { useMediaPreload } from '@/hooks/useMediaPreload'
+import { useSmoothScroll } from '@/hooks/useSmoothScroll'
+import { projects } from '@/registry/projects'
 
 const projectThumbnailUrls = projects.map((project) => project.thumbnail)
 

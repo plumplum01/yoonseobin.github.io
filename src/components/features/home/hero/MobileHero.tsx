@@ -10,12 +10,12 @@
  */
 
 import { useCallback, useState } from 'react'
-import { projects } from '@/registry/projects'
-import Footer from '@/components/layout/Footer'
-import MobileCard from '@/components/features/projects/MobileCard'
 import { ITEMS } from '@/components/features/home/hero/constants'
-import ProjectOverlay from '@/components/features/home/hero/ProjectOverlay'
 import styles from '@/components/features/home/hero/MobileHero.module.css'
+import ProjectOverlay from '@/components/features/home/hero/ProjectOverlay'
+import MobileCard from '@/components/features/projects/MobileCard'
+import Footer from '@/components/layouts/globals/GlobalFooter'
+import { projects } from '@/registry/projects'
 
 export default function MobileHero() {
 	/** 현재 열려 있는 카드 번호 (null이면 닫힌 상태) */
