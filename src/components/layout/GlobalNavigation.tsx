@@ -71,7 +71,7 @@ export default function GlobalNavigationBar() {
 	const badge = 'px-5 py-1.5 pt-2 flex rounded-full'
 
 	return (
-		<nav className="fixed top-10 inset-x-0 z-30 flex justify-center isolate">
+		<nav className="fixed top-5 inset-x-0 z-30 flex justify-center isolate">
 			<section className="flex items-center gap-1 hover:gap-3 hover:scale-101 [--extra-transition:gap_400ms_ease-out,scale_200ms_ease]">
 				<div className={cn(badge, CONTAINER_COLOR, 'backdrop-blur-md')}>
 					<NavigationLink label="Seobin" route={LINKS.home.path} />

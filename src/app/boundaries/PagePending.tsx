@@ -1,7 +1,7 @@
 export default function PagePending() {
 	return (
-		<div className="pointer-events-none absolute inset-0 z-20 grid place-items-center">
-			<div>Loading...</div>
-		</div>
+		<main className="pointer-events-none absolute inset-0 z-20 flex items-center justify-center">
+			<p className="font-mono text-xxs uppercase">Loading...</p>
+		</main>
 	)
 }
