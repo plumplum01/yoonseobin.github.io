@@ -158,6 +158,30 @@ function parsePostBlock(raw: UnknownRecord): PostBlock {
 	return blockParsers[type as keyof typeof blockParsers](raw)
 }
 
+function isMissingMediaUrlError(error: unknown): boolean {
+	return error instanceof Error && error.message.includes('media.url must be a non-empty string')
+}
+
+function canOmitInvalidMediaBlock(raw: UnknownRecord, error: unknown): boolean {
+	if (!isMissingMediaUrlError(error)) return false
+	const type = raw.type
+	return type === 'image' || type === 'video' || type === 'imageStack' || type === 'carousel'
+}
+
+function parseRenderablePostBlocks(rawBlocks: UnknownRecord[]): PostBlock[] {
+	const blocks: PostBlock[] = []
+
+	for (const rawBlock of rawBlocks) {
+		try {
+			blocks.push(parsePostBlock(rawBlock))
+		} catch (error) {
+			if (!canOmitInvalidMediaBlock(rawBlock, error)) throw error
+		}
+	}
+
+	return blocks
+}
+
 function parsePostHeader(record: UnknownRecord): Post {
 	const context = 'post'
 	const subtitle = optionalString(record, 'subtitle', context)
@@ -190,6 +214,6 @@ export function parsePost(raw: unknown): PostDetail {
 	const record = requirePayloadRecord(raw, 'post document is missing')
 	return {
 		...parsePostHeader(record),
-		blocks: optionalRecordArray(record, 'blocks', 'post').map(parsePostBlock),
+		blocks: parseRenderablePostBlocks(optionalRecordArray(record, 'blocks', 'post')),
 	}
 }

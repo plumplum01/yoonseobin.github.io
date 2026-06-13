@@ -116,6 +116,25 @@ describe('parsePost', () => {
 		).toThrow('unsupported block type unknownBlock')
 	})
 
+	it('asset url이 비어있는 media block은 제외하고 나머지 block을 변환한다', () => {
+		const { url: _url, ...mediaWithoutUrl } = imageMedia
+		const post = parsePost({
+			...postPayload,
+			blocks: [
+				{ type: 'heading', level: 2, text: 'Intro' },
+				{ type: 'image', media: { ...mediaWithoutUrl, url: null }, aspectRatio: 'portrait' },
+				{ type: 'image', media: imageMedia, aspectRatio: 'wide' },
+			],
+		})
+
+		expect(post.blocks).toHaveLength(2)
+		expect(post.blocks[0]).toMatchObject({ type: 'heading', text: 'Intro' })
+		expect(post.blocks[1]).toMatchObject({
+			type: 'image',
+			media: { id: 'media-1', url: 'https://cdn.sanity.io/image.webp' },
+		})
+	})
+
 	it('media reference가 펼쳐지지 않은 block은 실패한다', () => {
 		expect(() =>
 			parsePost({
