@@ -11,6 +11,7 @@ export function VideoBlock({ block }: { block: Extract<PostBlock, { type: 'video
 					playsInline
 					autoPlay
 					muted
+					loop
 					preload="metadata"
 				>
 					<track kind="captions" />
