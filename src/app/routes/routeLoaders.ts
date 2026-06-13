@@ -1,7 +1,13 @@
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { AppRouteError } from '@/app/errors/AppRouteError'
 import { resolveProfile } from '@/registry/resolveProfile'
-import { resolveArticle, resolveArticles, resolveReels } from '@/registry/resolvePosts'
+import {
+	resolveArticle,
+	resolveArticles,
+	resolveProject,
+	resolveProjects,
+	resolveReels,
+} from '@/registry/resolvePosts'
 
 function isMissingDocumentError(error: unknown): boolean {
 	return error instanceof Error && error.message.includes('document is missing')
@@ -35,6 +41,14 @@ export async function articlesLoader() {
 	}
 }
 
+export async function projectsLoader() {
+	try {
+		return await resolveProjects()
+	} catch (error) {
+		throw toContentRouteError(error, 'Projects failed to load')
+	}
+}
+
 export async function reelsLoader() {
 	try {
 		return await resolveReels()
@@ -56,5 +70,21 @@ export async function articleDetailLoader({ params }: LoaderFunctionArgs) {
 		}
 
 		throw toContentRouteError(error, 'Article failed to load')
+	}
+}
+
+export async function projectDetailLoader({ params }: LoaderFunctionArgs) {
+	if (!params.slug) {
+		throw new AppRouteError('notFound', 'Project slug is missing')
+	}
+
+	try {
+		return await resolveProject(params.slug)
+	} catch (error) {
+		if (isMissingDocumentError(error)) {
+			throw new AppRouteError('notFound', 'Project document is missing', { cause: error })
+		}
+
+		throw toContentRouteError(error, 'Project failed to load')
 	}
 }

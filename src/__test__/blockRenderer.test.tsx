@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { BlockList } from '@/features/block-renderer'
+import { BlockInstance } from '@/features/block-renderer'
 
 describe('block renderer', () => {
 	it('renders article blocks independently', () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{ type: 'heading', level: 2, text: 'Heading' },
 					{
@@ -35,9 +35,9 @@ describe('block renderer', () => {
 		expect(screen.getByText('Body copy')).toBeInTheDocument()
 	})
 
-	it('renders image and video blocks', () => {
+	it('renders image and video blocks', async () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{
 						type: 'image',
@@ -65,16 +65,16 @@ describe('block renderer', () => {
 			/>,
 		)
 
-		const image = screen.getByRole('img', { name: 'Portrait image' })
+		const image = await screen.findByRole('img', { name: 'Portrait image' })
 		expect(image).toBeInTheDocument()
 
 		const video = document.querySelector('video')
 		expect(video).toBeInTheDocument()
 	})
 
-	it('renders carousel blocks through the shared carousel primitive', () => {
+	it('renders carousel blocks through the shared carousel primitive', async () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{
 						type: 'carousel',
@@ -100,14 +100,16 @@ describe('block renderer', () => {
 			/>,
 		)
 
-		expect(screen.getByRole('region', { name: 'Article media carousel' })).toBeInTheDocument()
+		expect(
+			await screen.findByRole('region', { name: 'Article media carousel' }),
+		).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'First caption' })).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'Second media' })).toBeInTheDocument()
 	})
 
-	it('renders image stack blocks as ordered media items', () => {
+	it('renders image stack blocks as ordered media items', async () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{
 						type: 'imageStack',
@@ -133,7 +135,7 @@ describe('block renderer', () => {
 			/>,
 		)
 
-		expect(screen.getByRole('img', { name: 'Stack first caption' })).toBeInTheDocument()
+		expect(await screen.findByRole('img', { name: 'Stack first caption' })).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'Stack second' })).toBeInTheDocument()
 	})
 })

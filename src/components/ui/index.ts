@@ -9,4 +9,5 @@ export {
 	CarouselPrevious,
 } from '@/components/ui/carousel'
 export { IconButton } from '@/components/ui/IconButton'
+export { Skeleton } from '@/components/ui/skeleton'
 export { Text, textVariants } from '@/components/ui/Text'

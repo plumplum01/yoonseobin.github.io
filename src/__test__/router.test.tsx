@@ -22,10 +22,16 @@ describe('router config', () => {
 				expect.objectContaining({ id: 'about', path: '/about', title: 'About' }),
 				expect.objectContaining({ id: 'articles', path: '/articles', title: 'Articles' }),
 				expect.objectContaining({ id: 'reels', path: '/reels', title: 'Reels' }),
+				expect.objectContaining({ id: 'projects', path: '/projects', title: 'Projects' }),
 				expect.objectContaining({
 					id: 'article-detail',
 					path: '/articles/:slug',
 					title: 'Article',
+				}),
+				expect.objectContaining({
+					id: 'project-detail',
+					path: '/projects/:slug',
+					title: 'Project',
 				}),
 			]),
 		)
@@ -34,13 +40,23 @@ describe('router config', () => {
 	it('controls smooth scroll per page route', () => {
 		expect(pageRoutes).toEqual(
 			expect.arrayContaining([
-				expect.objectContaining({ id: 'home', smoothScroll: true }),
+				expect.objectContaining({ id: 'home', smoothScroll: false }),
 				expect.objectContaining({ id: 'about', smoothScroll: false }),
 				expect.objectContaining({ id: 'articles', smoothScroll: false }),
 				expect.objectContaining({ id: 'reels', smoothScroll: false }),
+				expect.objectContaining({ id: 'projects', smoothScroll: false }),
 				expect.objectContaining({ id: 'article-detail', smoothScroll: false }),
+				expect.objectContaining({ id: 'project-detail', smoothScroll: false }),
 			]),
 		)
+	})
+
+	it('declares viewport layout only for the home route', () => {
+		const viewportRouteIds = pageRoutes
+			.filter((route) => route.layout === 'viewport')
+			.map((route) => route.id)
+
+		expect(viewportRouteIds).toEqual(['home'])
 	})
 
 	it('loads data at route level for CMS-backed pages', () => {
@@ -50,7 +66,9 @@ describe('router config', () => {
 				expect.objectContaining({ id: 'about', loader: expect.any(Function) }),
 				expect.objectContaining({ id: 'articles', loader: expect.any(Function) }),
 				expect.objectContaining({ id: 'reels', loader: expect.any(Function) }),
+				expect.objectContaining({ id: 'projects', loader: expect.any(Function) }),
 				expect.objectContaining({ id: 'article-detail', loader: expect.any(Function) }),
+				expect.objectContaining({ id: 'project-detail', loader: expect.any(Function) }),
 			]),
 		)
 	})

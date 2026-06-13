@@ -16,18 +16,23 @@ import {
 	articleDetailLoader,
 	articlesLoader,
 	profileLoader,
+	projectDetailLoader,
+	projectsLoader,
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
 import About from '@/pages/About'
 import ArticleDetail from '@/pages/ArticleDetail'
 import Articles from '@/pages/Articles'
 import Home from '@/pages/Home'
+import ProjectDetail from '@/pages/ProjectDetail'
+import Projects from '@/pages/Projects'
 import Reels from '@/pages/Reels'
 
 type AppPageRoute = {
 	id: string
 	path: string
 	title: string
+	layout?: 'default' | 'viewport'
 	navLabel?: string
 	navTone?: 'neutral' | 'accent'
 	/** 전역 네비게이션 메뉴에 링크로 노출할지 여부 (동적 상세 라우트는 false) */
@@ -42,12 +47,13 @@ export const PAGE_ROUTES = [
 		id: 'home',
 		path: '/',
 		title: 'Home',
+		layout: 'viewport',
 		navLabel: 'Seobin',
 		navTone: 'neutral',
 		nav: true,
-		smoothScroll: true,
+		smoothScroll: false,
 		loader: undefined,
-		render: ({ smoothScrollEnabled }) => <Home smoothScrollEnabled={smoothScrollEnabled} />,
+		render: () => <Home />,
 	},
 	{
 		id: 'about',
@@ -82,6 +88,17 @@ export const PAGE_ROUTES = [
 		render: () => <Reels />,
 	},
 	{
+		id: 'projects',
+		path: '/projects',
+		title: 'Projects',
+		navLabel: 'Projects',
+		navTone: 'neutral',
+		nav: true,
+		smoothScroll: false,
+		loader: projectsLoader,
+		render: () => <Projects />,
+	},
+	{
 		id: 'article-detail',
 		path: '/articles/:slug',
 		title: 'Article',
@@ -89,6 +106,15 @@ export const PAGE_ROUTES = [
 		smoothScroll: false,
 		loader: articleDetailLoader,
 		render: () => <ArticleDetail />,
+	},
+	{
+		id: 'project-detail',
+		path: '/projects/:slug',
+		title: 'Project',
+		nav: false,
+		smoothScroll: false,
+		loader: projectDetailLoader,
+		render: () => <ProjectDetail />,
 	},
 ] as const satisfies readonly AppPageRoute[]
 

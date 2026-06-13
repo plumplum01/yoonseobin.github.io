@@ -1,17 +1,13 @@
-import AboutSection from '@/components/features/home/AboutSection'
-import ContactSection from '@/components/features/home/ContactSection'
-import Hero from '@/components/features/home/hero'
-
-type Props = {
-	smoothScrollEnabled: boolean
-}
-
-export default function Home({ smoothScrollEnabled }: Props) {
+export default function Home() {
 	return (
-		<>
-			<Hero smoothScrollEnabled={smoothScrollEnabled} />
-			<AboutSection />
-			<ContactSection />
-		</>
+		<main className="grid h-full min-h-0 place-items-center">
+			<section className="px-4">
+				<hgroup className="flex flex-col items-center gap-6 mix-blend-difference text-white">
+					<h1 className="max-w-4xl text-6xl font-medium leading-none text-cjk md:text-8xl">
+						Digital product designer building clear, tactile interfaces.
+					</h1>
+				</hgroup>
+			</section>
+		</main>
 	)
 }

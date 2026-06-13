@@ -4,29 +4,29 @@ import { ArticleText } from '@/components/blocks/ArticleText'
 import { BlockInstance } from '@/features/block-renderer'
 import { formatKoDate } from '@/lib/dateFormat'
 
-function formatPublishedDate(article: PostDetailModel): string | undefined {
-	if (!article.publishedAt) return undefined
-	return formatKoDate(article.publishedAt, 'long')
+function formatPublishedDate(project: PostDetailModel): string | undefined {
+	if (!project.publishedAt) return undefined
+	return formatKoDate(project.publishedAt, 'long')
 }
 
-function ArticleHeader({ article }: { article: PostDetailModel }) {
-	const publishedDate = formatPublishedDate(article)
+function ProjectHeader({ project }: { project: PostDetailModel }) {
+	const publishedDate = formatPublishedDate(project)
 	return (
 		<header className="absolute bottom-12 left-8 max-w-4xl flex flex-col items-start text-white mix-blend-difference">
 			{publishedDate && <p className="text-sm font-medium">{publishedDate}</p>}
 			<hgroup className="flex flex-col gap-16 items-start">
-				<h1 className="text-6xl font-medium text-start">{article.title}</h1>
+				<h1 className="text-6xl font-medium text-start">{project.title}</h1>
 			</hgroup>
 		</header>
 	)
 }
 
-function ArticleThumbnail({ article }: { article: PostDetailModel }) {
+function ProjectThumbnail({ project }: { project: PostDetailModel }) {
 	return (
 		<div>
 			<img
-				src={article.thumbnailUrl}
-				alt={article.title}
+				src={project.thumbnailUrl}
+				alt={project.title}
 				decoding="async"
 				className="size-full object-contain"
 			/>
@@ -34,19 +34,19 @@ function ArticleThumbnail({ article }: { article: PostDetailModel }) {
 	)
 }
 
-export default function ArticleDetail() {
-	const article = useLoaderData() as PostDetailModel
+export default function ProjectDetail() {
+	const project = useLoaderData() as PostDetailModel
 
 	return (
 		<>
 			<figure className="relative aspect-square w-fullgrid place-item-center overflow-hidden">
-				<ArticleHeader article={article} />
-				<ArticleThumbnail article={article} />
+				<ProjectHeader project={project} />
+				<ProjectThumbnail project={project} />
 			</figure>
 			<main className="mx-auto min-h-screen w-screen pt-28 pb-20 bg-black">
 				<article className="flex flex-col items-center gap-4 md:gap-24">
-					<ArticleText> {article.summary}</ArticleText>
-					<BlockInstance blocks={article.blocks} />
+					<ArticleText> {project.summary}</ArticleText>
+					<BlockInstance blocks={project.blocks} />
 				</article>
 			</main>
 		</>

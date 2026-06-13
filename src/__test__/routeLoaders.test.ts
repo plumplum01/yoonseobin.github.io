@@ -5,10 +5,18 @@ import {
 	articleDetailLoader,
 	articlesLoader,
 	profileLoader,
+	projectDetailLoader,
+	projectsLoader,
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
 import { resolveProfile } from '@/registry/resolveProfile'
-import { resolveArticle, resolveArticles, resolveReels } from '@/registry/resolvePosts'
+import {
+	resolveArticle,
+	resolveArticles,
+	resolveProject,
+	resolveProjects,
+	resolveReels,
+} from '@/registry/resolvePosts'
 
 vi.mock('../registry/resolveProfile', () => ({
 	resolveProfile: vi.fn(),
@@ -17,12 +25,16 @@ vi.mock('../registry/resolveProfile', () => ({
 vi.mock('../registry/resolvePosts', () => ({
 	resolveArticle: vi.fn(),
 	resolveArticles: vi.fn(),
+	resolveProject: vi.fn(),
+	resolveProjects: vi.fn(),
 	resolveReels: vi.fn(),
 }))
 
 const mockedResolveProfile = vi.mocked(resolveProfile)
 const mockedResolveArticle = vi.mocked(resolveArticle)
 const mockedResolveArticles = vi.mocked(resolveArticles)
+const mockedResolveProject = vi.mocked(resolveProject)
+const mockedResolveProjects = vi.mocked(resolveProjects)
 const mockedResolveReels = vi.mocked(resolveReels)
 
 function createLoaderArgs(slug?: string) {
@@ -95,6 +107,21 @@ describe('route loaders', () => {
 		await expect(reelsLoader()).resolves.toBe(reels)
 	})
 
+	it('loads project list data through the projects registry', async () => {
+		const projects = [
+			{
+				id: 'project-1',
+				type: 'project' as const,
+				slug: 'test-project',
+				title: 'Test project',
+				status: 'published' as const,
+			},
+		]
+		mockedResolveProjects.mockResolvedValue(projects)
+
+		await expect(projectsLoader()).resolves.toBe(projects)
+	})
+
 	it('loads an article detail by route slug', async () => {
 		const article = {
 			id: 'post-1',
@@ -110,10 +137,33 @@ describe('route loaders', () => {
 		expect(mockedResolveArticle).toHaveBeenCalledWith('test-post')
 	})
 
+	it('loads a project detail by route slug', async () => {
+		const project = {
+			id: 'project-1',
+			type: 'project' as const,
+			slug: 'test-project',
+			title: 'Test project',
+			status: 'published' as const,
+			blocks: [],
+		}
+		mockedResolveProject.mockResolvedValue(project)
+
+		await expect(projectDetailLoader(createLoaderArgs('test-project'))).resolves.toBe(project)
+		expect(mockedResolveProject).toHaveBeenCalledWith('test-project')
+	})
+
 	it('throws notFound when an article route has no slug', async () => {
 		await expectAppRouteError(() => articleDetailLoader(createLoaderArgs()), {
 			kind: 'notFound',
 			message: 'Article slug is missing',
+			status: 404,
+		})
+	})
+
+	it('throws notFound when a project route has no slug', async () => {
+		await expectAppRouteError(() => projectDetailLoader(createLoaderArgs()), {
+			kind: 'notFound',
+			message: 'Project slug is missing',
 			status: 404,
 		})
 	})
@@ -126,6 +176,18 @@ describe('route loaders', () => {
 		await expectAppRouteError(() => articleDetailLoader(createLoaderArgs('missing-post')), {
 			kind: 'notFound',
 			message: 'Article document is missing',
+			status: 404,
+		})
+	})
+
+	it('normalizes missing project documents into notFound errors', async () => {
+		mockedResolveProject.mockRejectedValue(
+			new Error('Invalid post payload: post document is missing'),
+		)
+
+		await expectAppRouteError(() => projectDetailLoader(createLoaderArgs('missing-project')), {
+			kind: 'notFound',
+			message: 'Project document is missing',
 			status: 404,
 		})
 	})

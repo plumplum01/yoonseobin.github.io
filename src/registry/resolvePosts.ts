@@ -5,6 +5,7 @@ import { getSanityClient } from '@/registry/sanityClient'
 
 const publishedPostTypes = ['project', 'article', 'reel', 'blog'] as const
 const articlePostTypes = ['article', 'blog'] as const
+const projectPostTypes = ['project'] as const
 
 async function resolvePostSummaries(types: readonly string[]): Promise<Post[]> {
 	const rawPosts = await getSanityClient().fetch<unknown[]>(publishedPostsQuery(), { types })
@@ -23,6 +24,10 @@ export async function resolveArticles(): Promise<Post[]> {
 	return resolvePostSummaries(articlePostTypes)
 }
 
+export async function resolveProjects(): Promise<Post[]> {
+	return resolvePostSummaries(projectPostTypes)
+}
+
 export async function resolveReels(): Promise<PostDetail[]> {
 	return resolvePostDetails(['reel'])
 }
@@ -30,6 +35,12 @@ export async function resolveReels(): Promise<PostDetail[]> {
 export async function resolveArticle(slug: string): Promise<PostDetail> {
 	return parsePost(
 		await getSanityClient().fetch<unknown>(postBySlugQuery, { slug, types: articlePostTypes }),
+	)
+}
+
+export async function resolveProject(slug: string): Promise<PostDetail> {
+	return parsePost(
+		await getSanityClient().fetch<unknown>(postBySlugQuery, { slug, types: projectPostTypes }),
 	)
 }
 
