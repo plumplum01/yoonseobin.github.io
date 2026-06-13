@@ -5,7 +5,7 @@ import { ArticleText } from '@/components/blocks/ArticleText'
 import { Skeleton } from '@/components/ui'
 import { formatKoDate } from '@/lib/dateFormat'
 
-const ReelBlockList = lazy(() =>
+const ReelBlockInstance = lazy(() =>
 	import('@/pages/ReelBlocks'),
 )
 
@@ -41,7 +41,7 @@ function ReelItem({ reel }: { reel: PostDetail }) {
 		<article className="flex flex-col gap-1">
 			<div className="flex flex-col items-center gap-4 md:gap-12">
 				<Suspense fallback={<ReelBlockSkeleton />}>
-					<ReelBlockList blocks={reel.blocks} />
+					<ReelBlockInstance blocks={reel.blocks} />
 				</Suspense>
 			</div>
 			<ReelHeader reel={reel} />
