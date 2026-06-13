@@ -1,7 +1,7 @@
 import type { PostBlock } from '@portfolio/types'
 import { BlockRenderer } from '@/features/block-renderer/BlockRenderer'
 
-export function BlockList({ blocks }: { blocks: PostBlock[] }) {
+export function BlockInstance({ blocks }: { blocks: PostBlock[] }) {
 	return (
 		<>
 			{blocks.map((block, index) => (

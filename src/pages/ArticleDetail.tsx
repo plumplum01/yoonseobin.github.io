@@ -1,7 +1,7 @@
 import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { useLoaderData } from 'react-router-dom'
 import { ArticleText } from '@/components/blocks/ArticleText'
-import { BlockList } from '@/features/block-renderer'
+import { BlockInstance } from '@/features/block-renderer'
 import { formatKoDate } from '@/lib/dateFormat'
 
 function formatPublishedDate(article: PostDetailModel): string | undefined {
@@ -46,7 +46,7 @@ export default function ArticleDetail() {
 			<main className="mx-auto min-h-screen w-screen pt-28 pb-20 bg-black">
 				<article className="flex flex-col items-center gap-4 md:gap-24">
 					<ArticleText> {article.summary}</ArticleText>
-					<BlockList blocks={article.blocks} />
+					<BlockInstance blocks={article.blocks} />
 				</article>
 			</main>
 		</>

@@ -1,11 +1,11 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { BlockList } from '@/features/block-renderer'
+import { BlockInstance } from '@/features/block-renderer'
 
 describe('block renderer', () => {
 	it('renders article blocks independently', () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{ type: 'heading', level: 2, text: 'Heading' },
 					{
@@ -37,7 +37,7 @@ describe('block renderer', () => {
 
 	it('renders image and video blocks', async () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{
 						type: 'image',
@@ -74,7 +74,7 @@ describe('block renderer', () => {
 
 	it('renders carousel blocks through the shared carousel primitive', async () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{
 						type: 'carousel',
@@ -109,7 +109,7 @@ describe('block renderer', () => {
 
 	it('renders image stack blocks as ordered media items', async () => {
 		render(
-			<BlockList
+			<BlockInstance
 				blocks={[
 					{
 						type: 'imageStack',
