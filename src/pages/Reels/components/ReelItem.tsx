@@ -1,29 +1,12 @@
 import type { PostDetail } from '@portfolio/types'
-import type { Variants } from 'framer-motion'
 import { motion } from 'framer-motion'
 import { lazy, Suspense } from 'react'
 import { ArticleText } from '@/blocks/ArticleText'
 import { Skeleton } from '@/components/ui'
+import { staggerItemVariants } from '@/features/animation/staggerPresets'
 import { formatKoDate } from '@/lib/dateFormat'
 
 const ReelBlockInstance = lazy(() => import('@/pages/Reels/ReelBlocks'))
-
-export const reelItemVariants: Variants = {
-	hidden: {
-		opacity: 0,
-		y: 18,
-		scale: 0.98,
-	},
-	show: {
-		opacity: 1,
-		y: 0,
-		scale: 1,
-		transition: {
-			duration: 0.45,
-			ease: [0.22, 1, 0.36, 1],
-		},
-	},
-}
 
 function ReelHeader({ reel }: { reel: PostDetail }) {
 	const date = reel.publishedAt ? formatKoDate(reel.publishedAt, 'medium') : undefined
@@ -54,7 +37,7 @@ function ReelBlockSkeleton() {
 
 export function ReelItem({ reel }: { reel: PostDetail }) {
 	return (
-		<motion.article className="flex flex-col gap-1" variants={reelItemVariants}>
+		<motion.article className="flex flex-col gap-1" variants={staggerItemVariants}>
 			<div className="flex flex-col items-center gap-4 md:gap-12">
 				<Suspense fallback={<ReelBlockSkeleton />}>
 					<ReelBlockInstance blocks={reel.blocks} />

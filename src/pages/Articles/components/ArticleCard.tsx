@@ -1,11 +1,13 @@
 import type { HTMLAttributes } from 'react'
 import type { Post } from '@portfolio/types'
+import { motion } from 'framer-motion'
 import { Link } from 'react-router-dom'
+import { staggerItemVariants } from '@/features/animation/staggerPresets'
 import { formatKoDate } from '@/lib/dateFormat'
 
 export default function ArticleCard({ post }: { post: Post }) {
 	return (
-		<article key={post.id}>
+		<motion.article key={post.id} variants={staggerItemVariants}>
 			<Link className="flex flex-col gap-1" to={`/articles/${post.slug}`}>
 				<div className="relative aspect-square w-full grid place-item-center rounded-2xl overflow-hidden">
 					<img
@@ -18,7 +20,7 @@ export default function ArticleCard({ post }: { post: Post }) {
 					<ArticleHeader post={post} className="absolute top-0 left-0 p-6" />
 				</div>
 			</Link>
-		</article>
+		</motion.article>
 	)
 }
 

@@ -4,7 +4,7 @@
  * 커스텀 커서 + 컨텍스트 변형 인터랙션.
  * - pointer: fine 기기(마우스)에서만 렌더
  * - 기본: 작은 dot / 카드 위: "OPEN" 원형 확장 / 링크·버튼: 중간 dot
- * - 다크/라이트모드 색상 자동 전환 (CSS .dark 클래스 기반)
+ * - mix-blend-difference로 배경 대비 확보
  */
 
 import { useEffect, useRef, useState } from 'react'

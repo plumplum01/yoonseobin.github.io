@@ -1,13 +1,15 @@
-import type { HTMLAttributes } from 'react'
 import type { Post } from '@portfolio/types'
+import { motion } from 'framer-motion'
+import type { HTMLAttributes } from 'react'
 import { Link } from 'react-router-dom'
+import { staggerItemVariants } from '@/features/animation/staggerPresets'
 import { formatKoDate } from '@/lib/dateFormat'
 
 export default function ProjectCard({ post }: { post: Post }) {
 	return (
-		<article key={post.id}>
+		<motion.article key={post.id} variants={staggerItemVariants}>
 			<Link className="flex flex-col gap-1" to={`/projects/${post.slug}`}>
-				<div className="relative aspect-square w-full grid place-item-center rounded-2xl overflow-hidden">
+				<div className="relative aspect-video w-full grid place-item-center rounded-2xl overflow-hidden">
 					<img
 						src={post.thumbnailUrl}
 						alt={post.title}
@@ -18,14 +20,11 @@ export default function ProjectCard({ post }: { post: Post }) {
 					<ProjectHeader post={post} className="absolute top-0 left-0 p-6" />
 				</div>
 			</Link>
-		</article>
+		</motion.article>
 	)
 }
 
-function ProjectHeader({
-	post,
-	...props
-}: { post: Post } & HTMLAttributes<HTMLElement>) {
+function ProjectHeader({ post, ...props }: { post: Post } & HTMLAttributes<HTMLElement>) {
 	const date = post.publishedAt ? formatKoDate(post.publishedAt, 'medium') : undefined
 	const description = post.subtitle ?? post.summary
 
