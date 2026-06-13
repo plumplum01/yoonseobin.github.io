@@ -64,22 +64,19 @@ const postBlocksViewFields = `
   }
 `
 
-export const publishedPostsQuery = `*[
-  _type == "post" &&
-  status == "published" &&
-  type in ["project", "article", "reel", "blog"]
-] | order(publishedAt desc) {
-  ${postHeaderViewFields}
-}`
+type PublishedPostsQueryOptions = {
+	includeBlocks?: boolean
+}
 
-export const publishedReelsQuery = `*[
+export function publishedPostsQuery({ includeBlocks = false }: PublishedPostsQueryOptions = {}) {
+	return `*[
   _type == "post" &&
   status == "published" &&
-  type == "reel"
+  type in $types
 ] | order(publishedAt desc) {
-  ${postHeaderViewFields},
-  ${postBlocksViewFields}
+  ${postHeaderViewFields}${includeBlocks ? `,\n  ${postBlocksViewFields}` : ''}
 }`
+}
 
 export const postBySlugQuery = `*[
   _type == "post" &&
