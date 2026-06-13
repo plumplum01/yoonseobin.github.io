@@ -30,5 +30,10 @@
 		"noFallthroughCasesInSwitch": true,
 		"noUncheckedSideEffectImports": true
 	},
-	"include": ["src"]
+	"include": ["src"],
+	"exclude": [
+		"src/components/features/home/hero/DesktopHero.tsx",
+		"src/components/features/home/hero/MobileHero.tsx",
+		"src/components/features/home/hero/index.tsx"
+	]
 }

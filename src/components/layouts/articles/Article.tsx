@@ -1,3 +1,4 @@
+import type { HTMLAttributes } from 'react'
 import type { Post } from '@portfolio/types'
 import { Link } from 'react-router-dom'
 import { formatKoDate } from '@/lib/dateFormat'
@@ -21,8 +22,11 @@ export default function Article({ post }: { post: Post }) {
 	)
 }
 
-function ArticleHeader({ post, ...props }: { post: Post }) {
-	const date = formatKoDate(post.publishedAt, 'medium')
+function ArticleHeader({
+	post,
+	...props
+}: { post: Post } & HTMLAttributes<HTMLElement>) {
+	const date = post.publishedAt ? formatKoDate(post.publishedAt, 'medium') : undefined
 	const description = post.subtitle ?? post.summary
 
 	return (
@@ -31,9 +35,11 @@ function ArticleHeader({ post, ...props }: { post: Post }) {
 				<h2 className="font-bold text-base text-cjk">{post.title}</h2>
 				{description && <p>{description}</p>}
 			</hgroup>
-			<div className="flex">
-				<p className="text-body text-neutral-500">{date}</p>
-			</div>
+			{date && (
+				<div className="flex">
+					<p className="text-body text-neutral-500">{date}</p>
+				</div>
+			)}
 		</section>
 	)
 }
