@@ -16,12 +16,16 @@ import {
 	articleDetailLoader,
 	articlesLoader,
 	profileLoader,
+	projectDetailLoader,
+	projectsLoader,
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
 import About from '@/pages/About'
 import ArticleDetail from '@/pages/ArticleDetail'
 import Articles from '@/pages/Articles'
 import Home from '@/pages/Home'
+import ProjectDetail from '@/pages/ProjectDetail'
+import Projects from '@/pages/Projects'
 import Reels from '@/pages/Reels'
 
 type AppPageRoute = {
@@ -82,6 +86,17 @@ export const PAGE_ROUTES = [
 		render: () => <Reels />,
 	},
 	{
+		id: 'projects',
+		path: '/projects',
+		title: 'Projects',
+		navLabel: 'Projects',
+		navTone: 'neutral',
+		nav: true,
+		smoothScroll: false,
+		loader: projectsLoader,
+		render: () => <Projects />,
+	},
+	{
 		id: 'article-detail',
 		path: '/articles/:slug',
 		title: 'Article',
@@ -89,6 +104,15 @@ export const PAGE_ROUTES = [
 		smoothScroll: false,
 		loader: articleDetailLoader,
 		render: () => <ArticleDetail />,
+	},
+	{
+		id: 'project-detail',
+		path: '/projects/:slug',
+		title: 'Project',
+		nav: false,
+		smoothScroll: false,
+		loader: projectDetailLoader,
+		render: () => <ProjectDetail />,
 	},
 ] as const satisfies readonly AppPageRoute[]
 

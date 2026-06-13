@@ -86,7 +86,7 @@ export default function GlobalNavigationBar() {
 					<NavigationSeparator />
 					<NavigationLink label="Reels" route={LINKS.reels.path} />
 					<NavigationSeparator />
-					<NavigationLink label="Projects" route={LINKS.home.path} />
+					<NavigationLink label="Projects" route={LINKS.projects.path} />
 				</div>
 				<div className={cn(badge, 'bg-orange-500')}>
 					<NavigationLink variant="primary" label="About" route={LINKS.about.path} />
