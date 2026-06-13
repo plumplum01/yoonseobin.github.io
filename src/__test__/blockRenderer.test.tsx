@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, expect, it } from 'vitest'
-import { BlockInstance } from '@/features/block-renderer'
+import { BlockInstance } from '@/blocks'
 
 describe('block renderer', () => {
 	it('renders article blocks independently', () => {

@@ -20,13 +20,13 @@ import {
 	projectsLoader,
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
-import About from '@/pages/About'
-import ArticleDetail from '@/pages/ArticleDetail'
-import Articles from '@/pages/Articles'
-import Home from '@/pages/Home'
-import ProjectDetail from '@/pages/ProjectDetail'
-import Projects from '@/pages/Projects'
-import Reels from '@/pages/Reels'
+import About from '@/pages/About/About'
+import ArticleDetail from '@/pages/Articles/ArticleDetail'
+import Articles from '@/pages/Articles/Articles'
+import Home from '@/pages/Home/Home'
+import ProjectDetail from '@/pages/Projects/ProjectDetail'
+import Projects from '@/pages/Projects/Projects'
+import Reels from '@/pages/Reels/Reels'
 
 type AppPageRoute = {
 	id: string

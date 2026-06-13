@@ -31,9 +31,5 @@
 		"noUncheckedSideEffectImports": true
 	},
 	"include": ["src"],
-	"exclude": [
-		"src/components/features/home/hero/DesktopHero.tsx",
-		"src/components/features/home/hero/MobileHero.tsx",
-		"src/components/features/home/hero/index.tsx"
-	]
+	"exclude": ["src/deprecated/**"]
 }

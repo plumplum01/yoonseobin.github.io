@@ -1,10 +1,10 @@
 import { matchPath, Outlet, useLocation, useNavigation } from 'react-router-dom'
 import PagePending from '@/app/boundaries/PagePending'
 import { PAGE_ROUTES } from '@/app/routes/pageRoutes'
-import GlobalBreadcrumb from '@/components/layouts/globals/GlobalBreadcrumb'
-import Cursor from '@/components/layouts/globals/GlobalCursor'
-import Footer from '@/components/layouts/globals/GlobalFooter'
-import GlobalNavigationBar from '@/components/layouts/globals/GlobalNavigation'
+import GlobalBreadcrumb from '@/components/layout/GlobalBreadcrumb'
+import Cursor from '@/components/layout/GlobalCursor'
+import Footer from '@/components/layout/GlobalFooter'
+import GlobalNavigationBar from '@/components/layout/GlobalNavigation'
 
 function getCurrentPageLayout(pathname: string) {
 	const currentRoute = PAGE_ROUTES.find((route) =>
