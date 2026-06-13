@@ -1,11 +1,8 @@
-import AboutSection from '@/components/features/home/AboutSection'
-import ContactSection from '@/components/features/home/ContactSection'
-
 export default function Home() {
 	return (
-		<main className="min-h-screen min-w-screen">
+		<main className="grid h-full min-h-0 place-items-center bg-black">
 			<section className="px-4">
-				<hgroup className="flex flex-col gap-6">
+				<hgroup className="flex flex-col items-center gap-6 text-white">
 					<p className="font-mono text-caption uppercase tracking-caption text-neutral-500">
 						Seobin Yoon
 					</p>
@@ -14,8 +11,6 @@ export default function Home() {
 					</h1>
 				</hgroup>
 			</section>
-			<AboutSection />
-			<ContactSection />
 		</main>
 	)
 }

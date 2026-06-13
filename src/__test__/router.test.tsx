@@ -51,6 +51,14 @@ describe('router config', () => {
 		)
 	})
 
+	it('declares viewport layout only for the home route', () => {
+		const viewportRouteIds = pageRoutes
+			.filter((route) => route.layout === 'viewport')
+			.map((route) => route.id)
+
+		expect(viewportRouteIds).toEqual(['home'])
+	})
+
 	it('loads data at route level for CMS-backed pages', () => {
 		expect(pageRoutes).toEqual(
 			expect.arrayContaining([
