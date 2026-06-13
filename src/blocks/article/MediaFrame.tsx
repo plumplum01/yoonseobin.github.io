@@ -1,7 +1,7 @@
 import type { MediaAspectRatio } from '@portfolio/types'
 import { motion, useTransform } from 'framer-motion'
 import type { ReactNode } from 'react'
-import type { BlockSurface } from '@/blocks/BlockInstance'
+import { useSurface } from '@/context/SurfaceProvider'
 import { MEDIA_SCROLL_PROGRESS, useScrollMediaProgress } from '@/hooks/useScrollMediaProgress'
 import { cn } from '@/lib/cn'
 
@@ -17,7 +17,6 @@ type MediaFrameProps = {
 	children: ReactNode
 	maxPadding?: number
 	maxRadius?: number
-	surface?: BlockSurface
 }
 
 export function MediaFrame({
@@ -25,8 +24,8 @@ export function MediaFrame({
 	children,
 	maxPadding = 24,
 	maxRadius = 32,
-	surface,
 }: MediaFrameProps) {
+	const surface = useSurface()
 	const { reference, scrollYProgress } = useScrollMediaProgress()
 	const padding = useTransform(scrollYProgress, MEDIA_SCROLL_PROGRESS, [
 		maxPadding,

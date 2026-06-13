@@ -5,41 +5,40 @@ import GlobalBreadcrumb from '@/components/layout/GlobalBreadcrumb'
 import Cursor from '@/components/layout/GlobalCursor'
 import Footer from '@/components/layout/GlobalFooter'
 import GlobalNavigationBar from '@/components/layout/GlobalNavigation'
+import { SurfaceProvider } from '@/context/SurfaceProvider'
 
-function getCurrentPageLayout(pathname: string) {
-	const currentRoute = PAGE_ROUTES.find((route) =>
-		matchPath({ path: route.path, end: true }, pathname),
-	)
-
-	return currentRoute?.layout ?? 'default'
+function getCurrentPageRoute(pathname: string) {
+	return PAGE_ROUTES.find((route) => matchPath({ path: route.path, end: true }, pathname))
 }
 
 export default function RootLayout() {
 	const navigation = useNavigation()
 	const { pathname } = useLocation()
 	const isPending = navigation.state === 'loading'
-	const pageLayout = getCurrentPageLayout(pathname)
+	const pageRoute = getCurrentPageRoute(pathname)
+	const pageLayout = pageRoute?.layout ?? 'scroll'
+	const surface = pageRoute?.surface ?? 'scroll'
 	const content = isPending ? <PagePending /> : <Outlet />
 
-	if (pageLayout === 'viewport') {
-		return (
-			<div className="flex h-[100svh] flex-col overflow-hidden">
-				<Cursor />
-				<GlobalBreadcrumb />
-				<GlobalNavigationBar />
-				<div className="min-h-0 flex-1 overflow-hidden">{content}</div>
-				<Footer />
-			</div>
-		)
-	}
-
 	return (
-		<>
-			<Cursor />
-			<GlobalBreadcrumb />
-			<GlobalNavigationBar />
-			{content}
-			<Footer />
-		</>
+		<SurfaceProvider surface={surface}>
+			{pageLayout === 'viewport' ? (
+				<div className="flex h-svh flex-col overflow-hidden">
+					<Cursor />
+					<GlobalBreadcrumb />
+					<GlobalNavigationBar />
+					<div className="min-h-0 flex-1 overflow-hidden">{content}</div>
+					<Footer />
+				</div>
+			) : (
+				<>
+					<Cursor />
+					<GlobalBreadcrumb />
+					<GlobalNavigationBar />
+					{content}
+					<Footer />
+				</>
+			)}
+		</SurfaceProvider>
 	)
 }

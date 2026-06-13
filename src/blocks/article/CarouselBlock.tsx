@@ -1,11 +1,10 @@
 import type { PostBlock } from '@portfolio/types'
-import type { BlockSurface } from '@/blocks/BlockInstance'
 import { type CarouselSlideModel, toCarouselSlide } from '@/blocks/article/carouselSlides'
 import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
+import { useSurface } from '@/context/SurfaceProvider'
 
 type CarouselBlockProps = {
 	block: Extract<PostBlock, { type: 'carousel' }>
-	surface?: BlockSurface
 }
 
 function getCarouselSlides(block: CarouselBlockProps['block']): CarouselSlideModel[] {
@@ -45,7 +44,8 @@ function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 	)
 }
 
-export function CarouselBlock({ block, surface }: CarouselBlockProps) {
+export function CarouselBlock({ block }: CarouselBlockProps) {
+	const surface = useSurface()
 	const slideItems = getCarouselSlides(block).map((slide) => (
 		<CarouselSlide key={slide.id} slide={slide} />
 	))

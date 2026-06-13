@@ -1,19 +1,12 @@
 import type { PostBlock } from '@portfolio/types'
-import type { BlockSurface } from '@/blocks/BlockInstance'
 import { MediaFrame } from '@/blocks/article/MediaFrame'
 
-export function ImageStackBlock({
-	block,
-	surface,
-}: {
-	block: Extract<PostBlock, { type: 'imageStack' }>
-	surface?: BlockSurface
-}) {
+export function ImageStackBlock({ block }: { block: Extract<PostBlock, { type: 'imageStack' }> }) {
 	return (
 		<div className="flex w-full flex-col gap-4">
 			{block.mediaItems.map((media) => (
 				<figure key={media.id} className="w-full">
-					<MediaFrame aspectRatio="video" surface={surface}>
+					<MediaFrame aspectRatio="video">
 						<img
 							className="size-full object-cover"
 							src={media.url}

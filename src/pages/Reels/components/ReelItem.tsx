@@ -57,7 +57,7 @@ export function ReelItem({ reel }: { reel: PostDetail }) {
 		<motion.article className="flex flex-col gap-1" variants={reelItemVariants}>
 			<div className="flex flex-col items-center gap-4 md:gap-12">
 				<Suspense fallback={<ReelBlockSkeleton />}>
-					<ReelBlockInstance blocks={reel.blocks} surface="reels" />
+					<ReelBlockInstance blocks={reel.blocks} />
 				</Suspense>
 			</div>
 			<ReelHeader reel={reel} />

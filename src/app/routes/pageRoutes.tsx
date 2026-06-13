@@ -20,6 +20,7 @@ import {
 	projectsLoader,
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
+import type { Surface } from '@/context/SurfaceProvider'
 import About from '@/pages/About/About'
 import ArticleDetail from '@/pages/Articles/ArticleDetail'
 import Articles from '@/pages/Articles/Articles'
@@ -32,7 +33,8 @@ type AppPageRoute = {
 	id: string
 	path: string
 	title: string
-	layout: 'default' | 'viewport'
+	layout: 'scroll' | 'viewport'
+	surface: Surface
 	navLabel?: string
 	navTone?: 'neutral' | 'accent'
 	/** 전역 네비게이션 메뉴에 링크로 노출할지 여부 (동적 상세 라우트는 false) */
@@ -48,6 +50,7 @@ export const PAGE_ROUTES = [
 		path: '/',
 		title: 'Home',
 		layout: 'viewport',
+		surface: 'viewport',
 		navLabel: 'Seobin',
 		navTone: 'neutral',
 		nav: true,
@@ -59,7 +62,8 @@ export const PAGE_ROUTES = [
 		id: 'about',
 		path: '/about',
 		title: 'About',
-		layout: 'default',
+		layout: 'scroll',
+		surface: 'scroll',
 		navTone: 'accent',
 		nav: true,
 		smoothScroll: false,
@@ -70,7 +74,8 @@ export const PAGE_ROUTES = [
 		id: 'articles',
 		path: '/articles',
 		title: 'Articles',
-		layout: 'default',
+		layout: 'scroll',
+		surface: 'scroll',
 		navLabel: 'Articles',
 		navTone: 'neutral',
 		nav: true,
@@ -82,7 +87,8 @@ export const PAGE_ROUTES = [
 		id: 'reels',
 		path: '/reels',
 		title: 'Reels',
-		layout: 'default',
+		layout: 'scroll',
+		surface: 'scroll',
 		navLabel: 'Reels',
 		navTone: 'neutral',
 		nav: true,
@@ -94,7 +100,8 @@ export const PAGE_ROUTES = [
 		id: 'projects',
 		path: '/projects',
 		title: 'Projects',
-		layout: 'default',
+		layout: 'scroll',
+		surface: 'scroll',
 		navLabel: 'Projects',
 		navTone: 'neutral',
 		nav: true,
@@ -106,7 +113,8 @@ export const PAGE_ROUTES = [
 		id: 'article-detail',
 		path: '/articles/:slug',
 		title: 'Article',
-		layout: 'default',
+		layout: 'scroll',
+		surface: 'detail',
 		nav: false,
 		smoothScroll: false,
 		loader: articleDetailLoader,
@@ -116,7 +124,8 @@ export const PAGE_ROUTES = [
 		id: 'project-detail',
 		path: '/projects/:slug',
 		title: 'Project',
-		layout: 'default',
+		layout: 'scroll',
+		surface: 'detail',
 		nav: false,
 		smoothScroll: false,
 		loader: projectDetailLoader,
