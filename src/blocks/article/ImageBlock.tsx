@@ -1,10 +1,17 @@
 import type { PostBlock } from '@portfolio/types'
+import type { BlockSurface } from '@/blocks/BlockInstance'
 import { MediaFrame } from '@/blocks/article/MediaFrame'
 
-export function ImageBlock({ block }: { block: Extract<PostBlock, { type: 'image' }> }) {
+export function ImageBlock({
+	block,
+	surface,
+}: {
+	block: Extract<PostBlock, { type: 'image' }>
+	surface?: BlockSurface
+}) {
 	return (
 		<figure className="space-y-3">
-			<MediaFrame aspectRatio={block.aspectRatio}>
+			<MediaFrame aspectRatio={block.aspectRatio} surface={surface}>
 				<img
 					className="size-full object-cover"
 					src={block.media.url}

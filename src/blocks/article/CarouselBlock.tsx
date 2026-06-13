@@ -1,9 +1,11 @@
 import type { PostBlock } from '@portfolio/types'
-import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
+import type { BlockSurface } from '@/blocks/BlockInstance'
 import { type CarouselSlideModel, toCarouselSlide } from '@/blocks/article/carouselSlides'
+import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
 
 type CarouselBlockProps = {
 	block: Extract<PostBlock, { type: 'carousel' }>
+	surface?: BlockSurface
 }
 
 function getCarouselSlides(block: CarouselBlockProps['block']): CarouselSlideModel[] {
@@ -43,13 +45,17 @@ function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 	)
 }
 
-export function CarouselBlock({ block }: CarouselBlockProps) {
+export function CarouselBlock({ block, surface }: CarouselBlockProps) {
 	const slideItems = getCarouselSlides(block).map((slide) => (
 		<CarouselSlide key={slide.id} slide={slide} />
 	))
 
 	return (
-		<Carousel aria-label="Article media carousel" className="flex flex-col gap-1">
+		<Carousel
+			aria-label="Article media carousel"
+			className="flex flex-col gap-1"
+			data-surface={surface}
+		>
 			<CarouselContent className="-ml-3">{slideItems}</CarouselContent>
 			<div className="w-full justify-center flex items-center gap-3">
 				<CarouselDots />

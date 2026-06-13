@@ -1,5 +1,6 @@
 import type { PostBlock } from '@portfolio/types'
 import { lazy, Suspense, type ReactNode } from 'react'
+import type { BlockSurface } from '@/blocks/BlockInstance'
 import { HeadingBlock } from '@/blocks/article/HeadingBlock'
 import { aspectRatioClassName } from '@/blocks/article/MediaFrame'
 import { TextBlock } from '@/blocks/article/TextBlock'
@@ -30,6 +31,7 @@ const VideoBlock = lazy(() =>
 export type BlockRegistry = {
 	[TType in PostBlock['type']]: (props: {
 		block: Extract<PostBlock, { type: TType }>
+		surface?: BlockSurface
 	}) => ReactNode
 }
 
@@ -84,18 +86,25 @@ function isMediaBlock(block: PostBlock): boolean {
 	)
 }
 
-export function BlockRenderer({ block }: { block: PostBlock }) {
+export function BlockRenderer({
+	block,
+	surface,
+}: {
+	block: PostBlock
+	surface?: BlockSurface
+}) {
 	const Component = blockComponents[block.type] as (props: {
 		block: typeof block
+		surface?: BlockSurface
 	}) => ReactNode
 
 	if (!isMediaBlock(block)) {
-		return <Component block={block} />
+		return <Component block={block} surface={surface} />
 	}
 
 	return (
 		<Suspense fallback={<MediaBlockSkeleton block={block} />}>
-			<Component block={block} />
+			<Component block={block} surface={surface} />
 		</Suspense>
 	)
 }

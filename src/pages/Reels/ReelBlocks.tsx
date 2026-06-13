@@ -1,6 +1,12 @@
 import type { PostBlock } from '@portfolio/types'
-import { BlockInstance } from '@/blocks/BlockInstance'
+import { BlockInstance, type BlockSurface } from '@/blocks/BlockInstance'
 
-export default function ReelBlocks({ blocks }: { blocks: PostBlock[] }) {
-	return <BlockInstance blocks={blocks} />
+export default function ReelBlocks({
+	blocks,
+	surface,
+}: {
+	blocks: PostBlock[]
+	surface?: BlockSurface
+}) {
+	return <BlockInstance blocks={blocks} surface={surface} />
 }
