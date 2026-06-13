@@ -8,8 +8,9 @@ export function VideoBlock({ block }: { block: Extract<PostBlock, { type: 'video
 				<video
 					className="size-full object-cover"
 					src={block.media.url}
-					controls
 					playsInline
+					autoPlay
+					muted
 					preload="metadata"
 				>
 					<track kind="captions" />
