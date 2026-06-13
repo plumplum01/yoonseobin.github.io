@@ -11,10 +11,11 @@ import { cn } from '@/lib/cn'
 
 const LINKS = Object.fromEntries(NAVIGATION_ROUTES.map(({ id, ...rest }) => [id, rest]))
 
-const TEXT_COLOR = 'text-neutral-100'
+const TEXT_COLOR = 'text-neutral-700'
 const TEXT_COLOR_PRIMARY = 'text-neutral-900'
-const SEPARATOR_COLOR = 'bg-neutral-400/20'
-const CONTAINER_COLOR = 'bg-neutral-400/10'
+const SEPARATOR_COLOR = 'bg-neutral-400/30'
+const CONTAINER_COLOR = 'bg-neutral-200/50'
+const DOT_COLOR = 'bg-orange-400'
 
 function NavigationLink({
 	label,
@@ -53,7 +54,7 @@ function NavigationLink({
 							animate={{ opacity: 1, y: 0, scale: 1.2 }}
 							exit={{ opacity: 0, y: 6, scale: 0.8 }}
 							transition={{ type: 'spring', bounce: 0.3, duration: 0.35 }}
-							className={cn(SEPARATOR_COLOR, 'min-w-1 min-h-1 rounded-full')}
+							className={cn(DOT_COLOR, 'min-w-1 min-h-1 rounded-full')}
 						/>
 					)}
 				</AnimatePresence>
