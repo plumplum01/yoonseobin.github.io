@@ -6,18 +6,10 @@ export default function Footer() {
 
 	return (
 		<footer className="min-h-10 w-screen grid place-items-center mt-auto">
-			{surface === 'scroll' && <ScrollFooter />}
+			{surface === 'scroll' && <ViewportFooter />}
 			{surface === 'viewport' && <ViewportFooter />}
 			{surface === 'detail' && <DetailFooter />}
 		</footer>
-	)
-}
-
-function ScrollFooter() {
-	return (
-		<div className="min-h-10 bg-neutral-900 w-screen text-white grid place-items-center mt-auto">
-			<FooterContent />
-		</div>
 	)
 }
 
