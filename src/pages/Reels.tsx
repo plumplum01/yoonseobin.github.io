@@ -11,11 +11,9 @@ function ReelHeader({ reel }: { reel: PostDetail }) {
 		<header className="mx-auto flex w-full max-w-3xl flex-col gap-3 px-4">
 			<div className="flex flex-col gap-1">
 				{date && (
-					<p className="text-caption font-medium leading-tight tracking-caption text-[var(--caption-gray)]">
-						{date}
-					</p>
+					<p className="text-caption font-mono leading-tight tracking-caption">{date}</p>
 				)}
-				<h2 className="text-2xl font-semibold leading-tight text-cjk text-white">
+				<h2 className="text-caption font-mono leading-tight tracking-caption">
 					{reel.title}
 				</h2>
 			</div>
@@ -26,11 +24,11 @@ function ReelHeader({ reel }: { reel: PostDetail }) {
 
 function ReelItem({ reel }: { reel: PostDetail }) {
 	return (
-		<article className="flex flex-col gap-8 border-b border-neutral-800 py-16 last:border-b-0">
-			<ReelHeader reel={reel} />
+		<article className="flex flex-col gap-1">
 			<div className="flex flex-col items-center gap-4 md:gap-12">
 				<BlockList blocks={reel.blocks} />
 			</div>
+			<ReelHeader reel={reel} />
 		</article>
 	)
 }
@@ -39,8 +37,8 @@ export default function Reels() {
 	const reels = useLoaderData() as PostDetail[]
 
 	return (
-		<main className="min-h-screen bg-black pt-28 pb-20">
-			<section className="mx-auto flex w-full max-w-5xl flex-col">
+		<main className="min-h-screen pt-28 pb-20">
+			<section className="mx-auto grid grid-cols-2 w-screen flex-col">
 				{reels.map((reel) => (
 					<ReelItem key={reel.id} reel={reel} />
 				))}
