@@ -8,9 +8,9 @@ export async function resolvePosts(): Promise<Post[]> {
 	return rawPosts.map(parsePostSummary)
 }
 
-export async function resolveReels(): Promise<Post[]> {
+export async function resolveReels(): Promise<PostDetail[]> {
 	const rawPosts = await getSanityClient().fetch<unknown[]>(publishedReelsQuery)
-	return rawPosts.map(parsePostSummary)
+	return rawPosts.map(parsePost)
 }
 
 export async function resolvePost(slug: string): Promise<PostDetail> {

@@ -22,6 +22,7 @@ import About from '@/pages/About'
 import Home from '@/pages/Home'
 import PostDetail from '@/pages/PostDetail'
 import Posts from '@/pages/Posts'
+import Reels from '@/pages/Reels'
 
 type AppPageRoute = {
 	id: string
@@ -78,7 +79,7 @@ export const PAGE_ROUTES = [
 		nav: true,
 		smoothScroll: false,
 		loader: reelsLoader,
-		render: () => <Posts />,
+		render: () => <Reels />,
 	},
 	{
 		id: 'post-detail',

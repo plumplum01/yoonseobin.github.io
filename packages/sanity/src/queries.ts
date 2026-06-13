@@ -32,28 +32,7 @@ export const mediaAssetViewProjection = `{
   "updatedAt": _updatedAt
 }`
 
-export const publishedPostsQuery = `*[
-  _type == "post" &&
-  status == "published" &&
-  type in ["project", "article", "reel", "blog"]
-] | order(publishedAt desc) {
-  ${postHeaderViewFields}
-}`
-
-export const publishedReelsQuery = `*[
-  _type == "post" &&
-  status == "published" &&
-  type == "reel"
-] | order(publishedAt desc) {
-  ${postHeaderViewFields}
-}`
-
-export const postBySlugQuery = `*[
-  _type == "post" &&
-  slug.current == $slug &&
-  type in ["project", "article", "reel", "blog"]
-][0] {
-  ${postHeaderViewFields},
+const postBlocksViewFields = `
   blocks[] {
     _type == "textBlock" => {
       "type": "text",
@@ -83,6 +62,32 @@ export const postBySlugQuery = `*[
       "aspectRatio": coalesce(aspectRatio, "video")
     }
   }
+`
+
+export const publishedPostsQuery = `*[
+  _type == "post" &&
+  status == "published" &&
+  type in ["project", "article", "reel", "blog"]
+] | order(publishedAt desc) {
+  ${postHeaderViewFields}
+}`
+
+export const publishedReelsQuery = `*[
+  _type == "post" &&
+  status == "published" &&
+  type == "reel"
+] | order(publishedAt desc) {
+  ${postHeaderViewFields},
+  ${postBlocksViewFields}
+}`
+
+export const postBySlugQuery = `*[
+  _type == "post" &&
+  slug.current == $slug &&
+  type in ["project", "article", "reel", "blog"]
+][0] {
+  ${postHeaderViewFields},
+  ${postBlocksViewFields}
 }`
 
 export const profileQuery = `*[

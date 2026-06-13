@@ -87,6 +87,7 @@ describe('route loaders', () => {
 				slug: 'test-reel',
 				title: 'Test reel',
 				status: 'published' as const,
+				blocks: [],
 			},
 		]
 		mockedResolveReels.mockResolvedValue(reels)
