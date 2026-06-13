@@ -15,11 +15,11 @@ export const routes: RouteObject[] = [
 	{
 		element: <RootLayout />,
 		errorElement: <PageError />,
-		children: PAGE_ROUTES.map(({ path, smoothScroll, loader, render }) => ({
+		children: PAGE_ROUTES.map(({ path, loader, render }) => ({
 			path,
 			loader,
 			errorElement: <PageError />,
-			element: render({ smoothScrollEnabled: smoothScroll }),
+			element: render(),
 		})),
 	},
 ]
