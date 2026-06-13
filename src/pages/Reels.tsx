@@ -1,6 +1,6 @@
 import type { PostDetail } from '@portfolio/types'
 import { useLoaderData } from 'react-router-dom'
-import { PostText } from '@/components/blocks/PostText'
+import { ArticleText } from '@/components/blocks/ArticleText'
 import { BlockList } from '@/features/block-renderer'
 import { formatKoDate } from '@/lib/dateFormat'
 
@@ -19,7 +19,7 @@ function ReelHeader({ reel }: { reel: PostDetail }) {
 					{reel.title}
 				</h2>
 			</div>
-			{reel.summary && <PostText className="max-w-none">{reel.summary}</PostText>}
+			{reel.summary && <ArticleText className="max-w-none">{reel.summary}</ArticleText>}
 		</header>
 	)
 }

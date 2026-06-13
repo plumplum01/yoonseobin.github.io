@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { AppRouteError } from '@/app/errors/AppRouteError'
 import { resolveProfile } from '@/registry/resolveProfile'
-import { resolvePost, resolvePosts, resolveReels } from '@/registry/resolvePosts'
+import { resolveArticle, resolveArticles, resolveReels } from '@/registry/resolvePosts'
 
 function isMissingDocumentError(error: unknown): boolean {
 	return error instanceof Error && error.message.includes('document is missing')
@@ -27,11 +27,11 @@ export async function profileLoader() {
 	}
 }
 
-export async function postsLoader() {
+export async function articlesLoader() {
 	try {
-		return await resolvePosts()
+		return await resolveArticles()
 	} catch (error) {
-		throw toContentRouteError(error, 'Posts failed to load')
+		throw toContentRouteError(error, 'Articles failed to load')
 	}
 }
 
@@ -43,18 +43,18 @@ export async function reelsLoader() {
 	}
 }
 
-export async function postDetailLoader({ params }: LoaderFunctionArgs) {
+export async function articleDetailLoader({ params }: LoaderFunctionArgs) {
 	if (!params.slug) {
-		throw new AppRouteError('notFound', 'Post slug is missing')
+		throw new AppRouteError('notFound', 'Article slug is missing')
 	}
 
 	try {
-		return await resolvePost(params.slug)
+		return await resolveArticle(params.slug)
 	} catch (error) {
 		if (isMissingDocumentError(error)) {
-			throw new AppRouteError('notFound', 'Post document is missing', { cause: error })
+			throw new AppRouteError('notFound', 'Article document is missing', { cause: error })
 		}
 
-		throw toContentRouteError(error, 'Post failed to load')
+		throw toContentRouteError(error, 'Article failed to load')
 	}
 }

@@ -3,7 +3,8 @@ import type { Post, PostDetail } from '@portfolio/types'
 import { parsePost, parsePostSummary } from '@/registry/mappers/parsePost'
 import { getSanityClient } from '@/registry/sanityClient'
 
-const allPublishedPostTypes = ['project', 'article', 'reel', 'blog'] as const
+const publishedPostTypes = ['project', 'article', 'reel', 'blog'] as const
+const articlePostTypes = ['article', 'blog'] as const
 
 async function resolvePostSummaries(types: readonly string[]): Promise<Post[]> {
 	const rawPosts = await getSanityClient().fetch<unknown[]>(publishedPostsQuery(), { types })
@@ -18,14 +19,22 @@ async function resolvePostDetails(types: readonly string[]): Promise<PostDetail[
 	return rawPosts.map(parsePost)
 }
 
-export async function resolvePosts(): Promise<Post[]> {
-	return resolvePostSummaries(allPublishedPostTypes)
+export async function resolveArticles(): Promise<Post[]> {
+	return resolvePostSummaries(articlePostTypes)
 }
 
 export async function resolveReels(): Promise<PostDetail[]> {
 	return resolvePostDetails(['reel'])
 }
 
+export async function resolveArticle(slug: string): Promise<PostDetail> {
+	return parsePost(
+		await getSanityClient().fetch<unknown>(postBySlugQuery, { slug, types: articlePostTypes }),
+	)
+}
+
 export async function resolvePost(slug: string): Promise<PostDetail> {
-	return parsePost(await getSanityClient().fetch<unknown>(postBySlugQuery, { slug }))
+	return parsePost(
+		await getSanityClient().fetch<unknown>(postBySlugQuery, { slug, types: publishedPostTypes }),
+	)
 }

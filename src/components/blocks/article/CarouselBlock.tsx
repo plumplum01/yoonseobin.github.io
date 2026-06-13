@@ -1,6 +1,6 @@
 import type { PostBlock } from '@portfolio/types'
 import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
-import { type CarouselSlideModel, toCarouselSlide } from '@/components/blocks/post/carouselSlides'
+import { type CarouselSlideModel, toCarouselSlide } from '@/components/blocks/article/carouselSlides'
 
 type CarouselBlockProps = {
 	block: Extract<PostBlock, { type: 'carousel' }>
@@ -49,7 +49,7 @@ export function CarouselBlock({ block }: CarouselBlockProps) {
 	))
 
 	return (
-		<Carousel aria-label="Post media carousel" className="flex flex-col gap-1">
+		<Carousel aria-label="Article media carousel" className="flex flex-col gap-1">
 			<CarouselContent className="-ml-3">{slideItems}</CarouselContent>
 			<div className="w-full justify-center flex items-center gap-3">
 				<CarouselDots />

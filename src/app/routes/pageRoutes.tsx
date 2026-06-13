@@ -13,15 +13,15 @@
 import type { ReactNode } from 'react'
 import type { LoaderFunction } from 'react-router-dom'
 import {
-	postDetailLoader,
-	postsLoader,
+	articleDetailLoader,
+	articlesLoader,
 	profileLoader,
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
 import About from '@/pages/About'
+import ArticleDetail from '@/pages/ArticleDetail'
+import Articles from '@/pages/Articles'
 import Home from '@/pages/Home'
-import PostDetail from '@/pages/PostDetail'
-import Posts from '@/pages/Posts'
 import Reels from '@/pages/Reels'
 
 type AppPageRoute = {
@@ -60,15 +60,15 @@ export const PAGE_ROUTES = [
 		render: () => <About />,
 	},
 	{
-		id: 'posts',
-		path: '/posts',
-		title: 'Posts',
+		id: 'articles',
+		path: '/articles',
+		title: 'Articles',
 		navLabel: 'Articles',
 		navTone: 'neutral',
 		nav: true,
 		smoothScroll: false,
-		loader: postsLoader,
-		render: () => <Posts />,
+		loader: articlesLoader,
+		render: () => <Articles />,
 	},
 	{
 		id: 'reels',
@@ -82,13 +82,13 @@ export const PAGE_ROUTES = [
 		render: () => <Reels />,
 	},
 	{
-		id: 'post-detail',
-		path: '/posts/:slug',
-		title: 'Post',
+		id: 'article-detail',
+		path: '/articles/:slug',
+		title: 'Article',
 		nav: false,
 		smoothScroll: false,
-		loader: postDetailLoader,
-		render: () => <PostDetail />,
+		loader: articleDetailLoader,
+		render: () => <ArticleDetail />,
 	},
 ] as const satisfies readonly AppPageRoute[]
 

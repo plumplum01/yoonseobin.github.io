@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { BlockList } from '@/features/block-renderer'
 
 describe('block renderer', () => {
-	it('renders post blocks independently', () => {
+	it('renders article blocks independently', () => {
 		render(
 			<BlockList
 				blocks={[
@@ -100,7 +100,7 @@ describe('block renderer', () => {
 			/>,
 		)
 
-		expect(screen.getByRole('region', { name: 'Post media carousel' })).toBeInTheDocument()
+		expect(screen.getByRole('region', { name: 'Article media carousel' })).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'First caption' })).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'Second media' })).toBeInTheDocument()
 	})

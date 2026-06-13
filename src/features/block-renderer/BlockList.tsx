@@ -5,7 +5,7 @@ export function BlockList({ blocks }: { blocks: PostBlock[] }) {
 	return (
 		<>
 			{blocks.map((block, index) => (
-				<section key={`${block.type}-${index}`} data-post-block={block.type}>
+				<section key={`${block.type}-${index}`} data-article-block={block.type}>
 					<BlockRenderer block={block} />
 				</section>
 			))}

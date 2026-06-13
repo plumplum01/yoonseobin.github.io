@@ -2,33 +2,33 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { AppRouteError } from '@/app/errors/AppRouteError'
 import {
-	postDetailLoader,
-	postsLoader,
+	articleDetailLoader,
+	articlesLoader,
 	profileLoader,
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
 import { resolveProfile } from '@/registry/resolveProfile'
-import { resolvePost, resolvePosts, resolveReels } from '@/registry/resolvePosts'
+import { resolveArticle, resolveArticles, resolveReels } from '@/registry/resolvePosts'
 
 vi.mock('../registry/resolveProfile', () => ({
 	resolveProfile: vi.fn(),
 }))
 
 vi.mock('../registry/resolvePosts', () => ({
-	resolvePost: vi.fn(),
-	resolvePosts: vi.fn(),
+	resolveArticle: vi.fn(),
+	resolveArticles: vi.fn(),
 	resolveReels: vi.fn(),
 }))
 
 const mockedResolveProfile = vi.mocked(resolveProfile)
-const mockedResolvePost = vi.mocked(resolvePost)
-const mockedResolvePosts = vi.mocked(resolvePosts)
+const mockedResolveArticle = vi.mocked(resolveArticle)
+const mockedResolveArticles = vi.mocked(resolveArticles)
 const mockedResolveReels = vi.mocked(resolveReels)
 
 function createLoaderArgs(slug?: string) {
 	return {
 		params: slug ? { slug } : {},
-		request: new Request('http://localhost/posts/test-post'),
+		request: new Request('http://localhost/articles/test-post'),
 		context: {},
 	} as LoaderFunctionArgs
 }
@@ -64,8 +64,8 @@ describe('route loaders', () => {
 		await expect(profileLoader()).resolves.toBe(profile)
 	})
 
-	it('loads post list data through the posts registry', async () => {
-		const posts = [
+	it('loads article list data through the articles registry', async () => {
+		const articles = [
 			{
 				id: 'post-1',
 				type: 'article' as const,
@@ -74,9 +74,9 @@ describe('route loaders', () => {
 				status: 'published' as const,
 			},
 		]
-		mockedResolvePosts.mockResolvedValue(posts)
+		mockedResolveArticles.mockResolvedValue(articles)
 
-		await expect(postsLoader()).resolves.toBe(posts)
+		await expect(articlesLoader()).resolves.toBe(articles)
 	})
 
 	it('loads reel list data through the reels registry', async () => {
@@ -95,8 +95,8 @@ describe('route loaders', () => {
 		await expect(reelsLoader()).resolves.toBe(reels)
 	})
 
-	it('loads a post detail by route slug', async () => {
-		const post = {
+	it('loads an article detail by route slug', async () => {
+		const article = {
 			id: 'post-1',
 			type: 'article' as const,
 			slug: 'test-post',
@@ -104,40 +104,40 @@ describe('route loaders', () => {
 			status: 'published' as const,
 			blocks: [],
 		}
-		mockedResolvePost.mockResolvedValue(post)
+		mockedResolveArticle.mockResolvedValue(article)
 
-		await expect(postDetailLoader(createLoaderArgs('test-post'))).resolves.toBe(post)
-		expect(mockedResolvePost).toHaveBeenCalledWith('test-post')
+		await expect(articleDetailLoader(createLoaderArgs('test-post'))).resolves.toBe(article)
+		expect(mockedResolveArticle).toHaveBeenCalledWith('test-post')
 	})
 
-	it('throws notFound when a post route has no slug', async () => {
-		await expectAppRouteError(() => postDetailLoader(createLoaderArgs()), {
+	it('throws notFound when an article route has no slug', async () => {
+		await expectAppRouteError(() => articleDetailLoader(createLoaderArgs()), {
 			kind: 'notFound',
-			message: 'Post slug is missing',
+			message: 'Article slug is missing',
 			status: 404,
 		})
 	})
 
-	it('normalizes missing post documents into notFound errors', async () => {
-		mockedResolvePost.mockRejectedValue(
+	it('normalizes missing article documents into notFound errors', async () => {
+		mockedResolveArticle.mockRejectedValue(
 			new Error('Invalid post payload: post document is missing'),
 		)
 
-		await expectAppRouteError(() => postDetailLoader(createLoaderArgs('missing-post')), {
+		await expectAppRouteError(() => articleDetailLoader(createLoaderArgs('missing-post')), {
 			kind: 'notFound',
-			message: 'Post document is missing',
+			message: 'Article document is missing',
 			status: 404,
 		})
 	})
 
 	it('normalizes invalid CMS payloads into contentInvalid errors', async () => {
-		mockedResolvePosts.mockRejectedValue(
+		mockedResolveArticles.mockRejectedValue(
 			new Error('Invalid post payload: post.title must be a string'),
 		)
 
-		await expectAppRouteError(() => postsLoader(), {
+		await expectAppRouteError(() => articlesLoader(), {
 			kind: 'contentInvalid',
-			message: 'Posts failed to load',
+			message: 'Articles failed to load',
 			status: 500,
 		})
 	})

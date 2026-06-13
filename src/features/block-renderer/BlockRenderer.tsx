@@ -7,7 +7,7 @@ import {
 	ImageStackBlock,
 	TextBlock,
 	VideoBlock,
-} from '@/components/blocks/post'
+} from '@/components/blocks/article'
 
 export type BlockRegistry = {
 	[TType in PostBlock['type']]: (props: {

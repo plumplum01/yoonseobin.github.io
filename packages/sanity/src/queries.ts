@@ -81,7 +81,7 @@ export function publishedPostsQuery({ includeBlocks = false }: PublishedPostsQue
 export const postBySlugQuery = `*[
   _type == "post" &&
   slug.current == $slug &&
-  type in ["project", "article", "reel", "blog"]
+  type in $types
 ][0] {
   ${postHeaderViewFields},
   ${postBlocksViewFields}

@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest'
-import { aspectRatioClassName } from '@/components/blocks/post/MediaFrame'
-import { toCarouselSlide } from '@/components/blocks/post/carouselSlides'
+import { aspectRatioClassName } from '@/components/blocks/article/MediaFrame'
+import { toCarouselSlide } from '@/components/blocks/article/carouselSlides'
 
-describe('post block unit helpers', () => {
+describe('article block unit helpers', () => {
 	it('maps image media into a carousel slide with alt fallback', () => {
 		expect(
 			toCarouselSlide({

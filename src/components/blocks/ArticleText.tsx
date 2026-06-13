@@ -1,6 +1,6 @@
 import { cn } from '@/lib/cn'
 
-export function PostText({
+export function ArticleText({
 	children,
 	className,
 	...props

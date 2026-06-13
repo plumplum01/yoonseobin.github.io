@@ -1,0 +1,6 @@
+export { CarouselBlock } from '@/components/blocks/article/CarouselBlock'
+export { HeadingBlock } from '@/components/blocks/article/HeadingBlock'
+export { ImageBlock } from '@/components/blocks/article/ImageBlock'
+export { ImageStackBlock } from '@/components/blocks/article/ImageStackBlock'
+export { TextBlock } from '@/components/blocks/article/TextBlock'
+export { VideoBlock } from '@/components/blocks/article/VideoBlock'

@@ -1,10 +1,10 @@
 import { PortableText, type PortableTextComponents } from '@portabletext/react'
 import type { PostBlock } from '@portfolio/types'
-import { PostText } from '@/components/blocks/PostText'
+import { ArticleText } from '@/components/blocks/ArticleText'
 
 const portableTextComponents: PortableTextComponents = {
 	block: {
-		normal: ({ children }) => <PostText className="">{children}</PostText>,
+		normal: ({ children }) => <ArticleText className="">{children}</ArticleText>,
 	},
 	marks: {
 		link: ({ children, value }) => (

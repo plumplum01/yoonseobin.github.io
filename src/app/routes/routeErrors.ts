@@ -20,10 +20,10 @@ export function getRouteErrorView(error: unknown): RouteErrorView {
 		switch (error.kind) {
 			case 'notFound':
 				return {
-					title: 'Post not found',
-					message: 'The post may have been removed or is not published yet.',
-					backTo: '/posts',
-					backLabel: 'Back to posts',
+					title: 'Article not found',
+					message: 'The article may have been removed or is not published yet.',
+					backTo: '/articles',
+					backLabel: 'Back to articles',
 				}
 			case 'contentInvalid':
 				return {
