@@ -1,12 +1,9 @@
 import type { PostDetail } from '@portfolio/types'
 import { motion } from 'framer-motion'
-import { lazy, Suspense } from 'react'
+import { BlockInstance } from '@/blocks'
 import { ArticleText } from '@/blocks/ArticleText'
-import { Skeleton } from '@/components/ui'
 import { staggerItemVariants } from '@/features/animation/staggerPresets'
 import { formatKoDate } from '@/lib/dateFormat'
-
-const ReelBlockInstance = lazy(() => import('@/pages/Reels/ReelBlocks'))
 
 function ReelHeader({ reel }: { reel: PostDetail }) {
 	const date = reel.publishedAt ? formatKoDate(reel.publishedAt, 'medium') : undefined
@@ -26,22 +23,11 @@ function ReelHeader({ reel }: { reel: PostDetail }) {
 	)
 }
 
-function ReelBlockSkeleton() {
-	return (
-		<div className="flex w-full flex-col gap-4" aria-hidden="true">
-			<Skeleton className="aspect-video w-full rounded" />
-			<Skeleton className="h-3 w-3/5 rounded" />
-		</div>
-	)
-}
-
 export function ReelItem({ reel }: { reel: PostDetail }) {
 	return (
-		<motion.article className="flex flex-col gap-1" variants={staggerItemVariants}>
-			<div className="flex flex-col items-center gap-4 md:gap-12">
-				<Suspense fallback={<ReelBlockSkeleton />}>
-					<ReelBlockInstance blocks={reel.blocks} />
-				</Suspense>
+		<motion.article className="flex w-full flex-col gap-1" variants={staggerItemVariants}>
+			<div className="flex w-full flex-col items-center gap-4 md:gap-12">
+				<BlockInstance blocks={reel.blocks} />
 			</div>
 			<ReelHeader reel={reel} />
 		</motion.article>

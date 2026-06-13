@@ -5,7 +5,7 @@ export function BlockInstance({ blocks }: { blocks: PostBlock[] }) {
 	return (
 		<>
 			{blocks.map((block, index) => (
-				<section key={`${block.type}-${index}`} data-block={block.type}>
+				<section className="w-full" key={`${block.type}-${index}`} data-block={block.type}>
 					<BlockRenderer block={block} />
 				</section>
 			))}

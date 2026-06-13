@@ -1,5 +1,4 @@
-import { matchPath, Outlet, useLocation, useNavigation } from 'react-router-dom'
-import PagePending from '@/app/boundaries/PagePending'
+import { matchPath, Outlet, useLocation } from 'react-router-dom'
 import { PAGE_ROUTES } from '@/app/routes/pageRoutes'
 import GlobalBreadcrumb from '@/components/layout/GlobalBreadcrumb'
 import Cursor from '@/components/layout/GlobalCursor'
@@ -12,18 +11,16 @@ function getCurrentPageRoute(pathname: string) {
 }
 
 export default function RootLayout() {
-	const navigation = useNavigation()
 	const { pathname } = useLocation()
-	const isPending = navigation.state === 'loading'
 	const pageRoute = getCurrentPageRoute(pathname)
 	const pageLayout = pageRoute?.layout ?? 'scroll'
 	const surface = pageRoute?.surface ?? 'scroll'
-	const content = isPending ? <PagePending /> : <Outlet />
+	const content = <Outlet />
 
 	return (
 		<SurfaceProvider surface={surface}>
 			{pageLayout === 'viewport' ? (
-				<div className="flex h-svh flex-col overflow-hidden">
+				<div className="relative flex h-svh flex-col overflow-hidden">
 					<Cursor />
 					<GlobalBreadcrumb />
 					<GlobalNavigationBar />
@@ -31,13 +28,13 @@ export default function RootLayout() {
 					<Footer />
 				</div>
 			) : (
-				<>
+				<div className="relative min-h-screen">
 					<Cursor />
 					<GlobalBreadcrumb />
 					<GlobalNavigationBar />
 					{content}
 					<Footer />
-				</>
+				</div>
 			)}
 		</SurfaceProvider>
 	)

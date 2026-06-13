@@ -1,10 +1,9 @@
 import type { PostBlock } from '@portfolio/types'
 import { lazy, Suspense, type ReactNode } from 'react'
 import { HeadingBlock } from '@/blocks/article/HeadingBlock'
-import { aspectRatioClassName } from '@/blocks/article/MediaFrame'
+import { MediaFrame } from '@/blocks/article/MediaFrame'
 import { TextBlock } from '@/blocks/article/TextBlock'
 import { Skeleton } from '@/components/ui'
-import { cn } from '@/lib/cn'
 
 const ImageBlock = lazy(() =>
 	import('@/blocks/article/ImageBlock').then((module) => ({
@@ -44,13 +43,19 @@ const blockComponents = {
 
 function MediaBlockSkeleton({ block }: { block: PostBlock }) {
 	if (block.type === 'image' || block.type === 'video') {
-		return <Skeleton className={cn('w-full rounded', aspectRatioClassName[block.aspectRatio])} />
+		return (
+			<MediaFrame aspectRatio={block.aspectRatio}>
+				<Skeleton className="size-full rounded" />
+			</MediaFrame>
+		)
 	}
 
 	if (block.type === 'carousel') {
 		return (
 			<div className="flex flex-col gap-1" aria-hidden="true">
-				<Skeleton className="aspect-video w-full rounded" />
+				<MediaFrame aspectRatio="video">
+					<Skeleton className="size-full rounded" />
+				</MediaFrame>
 				<div className="flex w-full items-center justify-center gap-2 py-1">
 					<Skeleton className="size-1.5 rounded-full" />
 					<Skeleton className="size-1.5 rounded-full" />
@@ -66,7 +71,9 @@ function MediaBlockSkeleton({ block }: { block: PostBlock }) {
 		return (
 			<div className="flex w-full flex-col gap-4" aria-hidden="true">
 				{Array.from({ length: itemCount }).map((_, index) => (
-					<Skeleton key={index} className="aspect-video w-full rounded" />
+					<MediaFrame aspectRatio="video" key={index}>
+						<Skeleton className="size-full rounded" />
+					</MediaFrame>
 				))}
 			</div>
 		)

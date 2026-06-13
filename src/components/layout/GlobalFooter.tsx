@@ -39,7 +39,7 @@ function DetailFooter() {
 
 function FooterContent() {
 	return (
-		<div className="inline-flex font-mono uppercase text-xxs justify-center gap-1">
+		<div className="inline-flex font-mono uppercase text-xxs justify-center gap-1 mix-blend-difference text-white opacity-20">
 			<span>
 				ⓒ{site.year} All rights reserved, {site.name}. Busan, South Korea{' '}
 			</span>
