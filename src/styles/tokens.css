@@ -57,7 +57,7 @@
 
 :root {
 	/* ─── 페이지/표면 ─────────────────────────────────────────────────────── */
-	--bg-page: #f4f4f4;
+	--bg-page: #ffffff;
 	--bg-about: #fafafa;
 	--card-even: #efefef;
 	--card-odd: #e3e3e3;
