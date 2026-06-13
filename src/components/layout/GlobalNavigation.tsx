@@ -17,6 +17,24 @@ const SEPARATOR_COLOR = 'bg-neutral-400/30'
 const CONTAINER_COLOR = 'bg-neutral-200/50'
 const DOT_COLOR = 'bg-orange-400'
 
+function BrandLink({ route }: { route: string }) {
+	return (
+		<Link
+			aria-label="Go to home"
+			className="flex min-h-5 min-w-16 items-center justify-center"
+			to={route}
+		>
+			<img
+				alt=""
+				aria-hidden="true"
+				className="h-4 w-auto object-contain"
+				decoding="async"
+				src="/symbol.svg"
+			/>
+		</Link>
+	)
+}
+
 function NavigationLink({
 	label,
 	route,
@@ -74,7 +92,7 @@ export default function GlobalNavigationBar() {
 		<nav className="fixed top-5 inset-x-0 z-30 flex justify-center isolate">
 			<section className="flex items-center gap-1 hover:gap-3 hover:scale-101 [--extra-transition:gap_400ms_ease-out,scale_200ms_ease]">
 				<div className={cn(badge, CONTAINER_COLOR, 'backdrop-blur-md')}>
-					<NavigationLink label="Seobin" route={LINKS.home.path} />
+					<BrandLink route={LINKS.home.path} />
 				</div>
 				<div
 					className={cn(
