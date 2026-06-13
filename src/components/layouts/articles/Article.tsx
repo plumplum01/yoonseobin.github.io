@@ -23,15 +23,13 @@ export default function Article({ post }: { post: Post }) {
 
 function ArticleHeader({ post, ...props }: { post: Post }) {
 	const date = formatKoDate(post.publishedAt, 'medium')
+	const description = post.subtitle ?? post.summary
 
 	return (
 		<section {...props}>
 			<hgroup className="flex flex-col items-start  text-white mix-blend-difference">
-				<h2 className="font-bold text-base text-cjk">
-					Designing an intricate tool for technical use cases
-				</h2>
-				<p>The iterative process of structuring tools around real-world workflows</p>
-				{/*<h2 className="">{post.title}</h2>*/}
+				<h2 className="font-bold text-base text-cjk">{post.title}</h2>
+				{description && <p>{description}</p>}
 			</hgroup>
 			<div className="flex">
 				<p className="text-body text-neutral-500">{date}</p>
