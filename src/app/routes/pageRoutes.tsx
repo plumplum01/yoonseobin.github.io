@@ -49,9 +49,9 @@ export const PAGE_ROUTES = [
 		navLabel: 'Seobin',
 		navTone: 'neutral',
 		nav: true,
-		smoothScroll: true,
+		smoothScroll: false,
 		loader: undefined,
-		render: ({ smoothScrollEnabled }) => <Home smoothScrollEnabled={smoothScrollEnabled} />,
+		render: () => <Home />,
 	},
 	{
 		id: 'about',

@@ -40,7 +40,7 @@ describe('router config', () => {
 	it('controls smooth scroll per page route', () => {
 		expect(pageRoutes).toEqual(
 			expect.arrayContaining([
-				expect.objectContaining({ id: 'home', smoothScroll: true }),
+				expect.objectContaining({ id: 'home', smoothScroll: false }),
 				expect.objectContaining({ id: 'about', smoothScroll: false }),
 				expect.objectContaining({ id: 'articles', smoothScroll: false }),
 				expect.objectContaining({ id: 'reels', smoothScroll: false }),
