@@ -1,7 +1,7 @@
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { AppRouteError } from '@/app/errors/AppRouteError'
 import { resolveProfile } from '@/registry/resolveProfile'
-import { resolvePost, resolvePosts } from '@/registry/resolvePosts'
+import { resolvePost, resolvePosts, resolveReels } from '@/registry/resolvePosts'
 
 function isMissingDocumentError(error: unknown): boolean {
 	return error instanceof Error && error.message.includes('document is missing')
@@ -32,6 +32,14 @@ export async function postsLoader() {
 		return await resolvePosts()
 	} catch (error) {
 		throw toContentRouteError(error, 'Posts failed to load')
+	}
+}
+
+export async function reelsLoader() {
+	try {
+		return await resolveReels()
+	} catch (error) {
+		throw toContentRouteError(error, 'Reels failed to load')
 	}
 }
 

@@ -40,6 +40,14 @@ export const publishedPostsQuery = `*[
   ${postHeaderViewFields}
 }`
 
+export const publishedReelsQuery = `*[
+  _type == "post" &&
+  status == "published" &&
+  type == "reel"
+] | order(publishedAt desc) {
+  ${postHeaderViewFields}
+}`
+
 export const postBySlugQuery = `*[
   _type == "post" &&
   slug.current == $slug &&

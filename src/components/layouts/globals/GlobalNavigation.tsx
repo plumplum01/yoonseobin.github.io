@@ -84,6 +84,8 @@ export default function GlobalNavigationBar() {
 				>
 					<NavigationLink label="Articles" route={LINKS.posts.path} />
 					<NavigationSeparator />
+					<NavigationLink label="Reels" route={LINKS.reels.path} />
+					<NavigationSeparator />
 					<NavigationLink label="Projects" route={LINKS.home.path} />
 					<NavigationSeparator />
 					<NavigationLink label="Research" route={LINKS.home.path} />

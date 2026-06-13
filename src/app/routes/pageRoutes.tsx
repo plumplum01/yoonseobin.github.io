@@ -12,7 +12,12 @@
 
 import type { ReactNode } from 'react'
 import type { LoaderFunction } from 'react-router-dom'
-import { postDetailLoader, postsLoader, profileLoader } from '@/app/routes/routeLoaders'
+import {
+	postDetailLoader,
+	postsLoader,
+	profileLoader,
+	reelsLoader,
+} from '@/app/routes/routeLoaders'
 import About from '@/pages/About'
 import Home from '@/pages/Home'
 import PostDetail from '@/pages/PostDetail'
@@ -62,6 +67,17 @@ export const PAGE_ROUTES = [
 		nav: true,
 		smoothScroll: false,
 		loader: postsLoader,
+		render: () => <Posts />,
+	},
+	{
+		id: 'reels',
+		path: '/reels',
+		title: 'Reels',
+		navLabel: 'Reels',
+		navTone: 'neutral',
+		nav: true,
+		smoothScroll: false,
+		loader: reelsLoader,
 		render: () => <Posts />,
 	},
 	{

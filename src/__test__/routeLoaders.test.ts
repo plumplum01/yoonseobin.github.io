@@ -1,9 +1,14 @@
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import type { LoaderFunctionArgs } from 'react-router-dom'
 import { AppRouteError } from '@/app/errors/AppRouteError'
-import { postDetailLoader, postsLoader, profileLoader } from '@/app/routes/routeLoaders'
+import {
+	postDetailLoader,
+	postsLoader,
+	profileLoader,
+	reelsLoader,
+} from '@/app/routes/routeLoaders'
 import { resolveProfile } from '@/registry/resolveProfile'
-import { resolvePost, resolvePosts } from '@/registry/resolvePosts'
+import { resolvePost, resolvePosts, resolveReels } from '@/registry/resolvePosts'
 
 vi.mock('../registry/resolveProfile', () => ({
 	resolveProfile: vi.fn(),
@@ -12,11 +17,13 @@ vi.mock('../registry/resolveProfile', () => ({
 vi.mock('../registry/resolvePosts', () => ({
 	resolvePost: vi.fn(),
 	resolvePosts: vi.fn(),
+	resolveReels: vi.fn(),
 }))
 
 const mockedResolveProfile = vi.mocked(resolveProfile)
 const mockedResolvePost = vi.mocked(resolvePost)
 const mockedResolvePosts = vi.mocked(resolvePosts)
+const mockedResolveReels = vi.mocked(resolveReels)
 
 function createLoaderArgs(slug?: string) {
 	return {
@@ -72,6 +79,21 @@ describe('route loaders', () => {
 		await expect(postsLoader()).resolves.toBe(posts)
 	})
 
+	it('loads reel list data through the reels registry', async () => {
+		const reels = [
+			{
+				id: 'reel-1',
+				type: 'reel' as const,
+				slug: 'test-reel',
+				title: 'Test reel',
+				status: 'published' as const,
+			},
+		]
+		mockedResolveReels.mockResolvedValue(reels)
+
+		await expect(reelsLoader()).resolves.toBe(reels)
+	})
+
 	it('loads a post detail by route slug', async () => {
 		const post = {
 			id: 'post-1',
@@ -115,6 +137,18 @@ describe('route loaders', () => {
 		await expectAppRouteError(() => postsLoader(), {
 			kind: 'contentInvalid',
 			message: 'Posts failed to load',
+			status: 500,
+		})
+	})
+
+	it('normalizes invalid reel payloads into contentInvalid errors', async () => {
+		mockedResolveReels.mockRejectedValue(
+			new Error('Invalid post payload: post.title must be a string'),
+		)
+
+		await expectAppRouteError(() => reelsLoader(), {
+			kind: 'contentInvalid',
+			message: 'Reels failed to load',
 			status: 500,
 		})
 	})
