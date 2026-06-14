@@ -2,9 +2,10 @@ import type { Post } from '@portfolio/types'
 import { motion } from 'framer-motion'
 import type { HTMLAttributes } from 'react'
 import { Link } from 'react-router-dom'
+import { ContentHeading } from '@/components/ui'
 import { staggerItemVariants } from '@/features/animation/staggerPresets'
 
-export default function ArticleCard({ post }: { post: Post }) {
+export default function ArticleCard({ post, index }: { post: Post; index: number }) {
 	return (
 		<motion.article key={post.id} variants={staggerItemVariants}>
 			<Link className="flex flex-col gap-1" to={`/articles/${post.slug}`}>
@@ -20,7 +21,7 @@ export default function ArticleCard({ post }: { post: Post }) {
 					</div>
 
 					<div className="absolute inset-0 grid place-items-center">
-						<ArticleHeader post={post} />
+						<ArticleHeader post={post} index={index} />
 					</div>
 				</div>
 			</Link>
@@ -28,7 +29,11 @@ export default function ArticleCard({ post }: { post: Post }) {
 	)
 }
 
-function ArticleHeader({ post, ...props }: { post: Post } & HTMLAttributes<HTMLElement>) {
+function ArticleHeader({
+	post,
+	index,
+	...props
+}: { post: Post; index: number } & HTMLAttributes<HTMLElement>) {
 	const description = post.subtitle ?? post.summary
 
 	return (
@@ -36,17 +41,11 @@ function ArticleHeader({ post, ...props }: { post: Post } & HTMLAttributes<HTMLE
 			className="p-6 px-8 pb-9 max-w-80 rounded-4xl backdrop-blur-3xl bg-black/20"
 			{...props}
 		>
-			<p className="flex items-center gap-2 pb-4">
-				<span className="inline-block min-w-1 aspect-square bg-white" />
-				<span className="font-mono text-xxs text-white uppercase">article</span>
-			</p>
-
-			<hgroup className="flex flex-col gap-1 justify-start items-start  text-white">
-				<h2 className="text-base text-cjk text-start">{post.title}</h2>
-				{description && (
-					<p className="font-mono text-xs text-start text-white/40">{description}</p>
-				)}
-			</hgroup>
+			<ContentHeading
+				label={`POST ${index + 1}`}
+				title={post.title}
+				description={description}
+			/>
 		</section>
 	)
 }

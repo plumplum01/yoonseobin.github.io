@@ -12,6 +12,18 @@
 	text-wrap: pretty;
 }
 
+@keyframes label-dot-blink {
+	0%,
+	45% {
+		opacity: 1;
+	}
+
+	46%,
+	100% {
+		opacity: 0.2;
+	}
+}
+
 /* ─── 폰트 페이스 ──────────────────────────────────────────────────────── */
 
 @font-face {
@@ -130,7 +142,9 @@ html {
 @theme inline {
 	--font-heading: var(--font-sans);
 	--font-sans: "Helvetica Neue", Arial, "Pretendard", sans-serif;
-	--font-mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+	--font-mono:
+		"Geist Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+		monospace;
 	--color-ring: var(--ring);
 	--color-input: var(--input);
 	--color-border: var(--border);
