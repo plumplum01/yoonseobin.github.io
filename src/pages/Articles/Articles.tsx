@@ -10,14 +10,14 @@ export default function Articles() {
 	return (
 		<main className="box-border min-h-screen w-full p-4 pt-28">
 			<motion.div
-				className="grid grid-cols-2 gap-4"
+				className="grid grid-cols-1 md:grid-cols-2 gap-4"
 				variants={staggerListVariants}
 				initial="hidden"
 				animate="show"
 			>
 				{/*<article className="col-span-2 aspect-video">hello</article>*/}
 				<header className="flex flex-col items-center">
-					<section className="flex flex-col w-120 pt-20">
+					<section className="flex flex-col w-full md:w-120 pt-20">
 						<PageHeading
 							label="articles"
 							title={

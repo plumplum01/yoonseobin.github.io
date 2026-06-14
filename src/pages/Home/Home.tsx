@@ -26,7 +26,7 @@ export default function Home() {
 					<AnimatePresence mode="popLayout">
 						<motion.h1
 							key={titleIndex}
-							className="max-w-6xl text-6xl leading-25 md:text-8xl"
+							className="max-w-6xl text-5xl leading-tight md:leading-25 md:text-8xl"
 							initial="hidden"
 							animate="show"
 							exit="exit"
@@ -74,7 +74,11 @@ export default function Home() {
 			</section>
 			<div className="absolute inset-x-0 bottom-4 flex px-4 md:bottom-16">
 				<div className="mx-auto">
-					<HomeCard />
+					<HomeCard
+						initial={{ opacity: 0, filter: 'blur(6px)', y: 15 }}
+						animate={{ opacity: 1, filter: 'blur(0px)', y: 0 }}
+						transition={{ duration: 1.2, ease: 'easeOut', delay: 0.8 }}
+					/>
 				</div>
 			</div>
 		</main>

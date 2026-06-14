@@ -10,7 +10,7 @@ export default function Reels() {
 	return (
 		<main className="min-h-screen pt-28 pb-20">
 			<motion.section
-				className="mx-auto grid grid-cols-2 w-screen flex-col"
+				className="mx-auto gap-2 grid grid-cols-1 md:grid-cols-2 w-screen flex-col"
 				variants={staggerListVariants}
 				initial="hidden"
 				animate="show"

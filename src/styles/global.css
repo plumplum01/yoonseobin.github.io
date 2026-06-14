@@ -6,9 +6,11 @@
 @custom-variant dark (&:is(.dark *));
 
 @utility text-cjk {
-	word-break: keep-all;
-	overflow-wrap: break-word;
-	line-break: strict;
+	word-break: keep-all !important;
+	overflow-wrap: normal !important;
+	word-wrap: normal !important;
+	line-break: strict !important;
+	hyphens: manual !important;
 	text-wrap: pretty;
 }
 
