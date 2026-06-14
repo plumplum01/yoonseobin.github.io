@@ -11,7 +11,7 @@ export function ArticleText({
 	return (
 		<p
 			className={cn(
-				'text-cjk max-w-4xl leading-loose text-base text-left text-white',
+				'mx-auto text-cjk max-w-4xl leading-loose text-base text-left text-white',
 				className,
 			)}
 			{...props}

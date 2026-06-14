@@ -2,8 +2,8 @@ import type { PostDetail as PostDetailModel } from '@portfolio/types'
 import { motion } from 'framer-motion'
 import { useEffect } from 'react'
 import { useLoaderData } from 'react-router-dom'
-import { ArticleText } from '@/blocks/ArticleText'
 import { BlockInstance } from '@/blocks'
+import { ArticleText } from '@/blocks/ArticleText'
 import { detailHeaderVariants, detailThumbnailVariants } from '@/features/animation/staggerPresets'
 import { formatKoDate } from '@/lib/dateFormat'
 
@@ -59,7 +59,7 @@ export default function ArticleDetail() {
 				<ArticleThumbnail article={article} />
 			</motion.figure>
 			<main className="mx-auto min-h-screen w-screen pt-28 pb-20 bg-black">
-				<article className="flex flex-col items-center gap-4 md:gap-24">
+				<article className="flex flex-col items-center justify-center gap-4 md:gap-24">
 					<ArticleText> {article.summary}</ArticleText>
 					<BlockInstance blocks={article.blocks} />
 				</article>

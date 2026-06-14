@@ -44,9 +44,9 @@ describe('router config', () => {
 				expect.objectContaining({ id: 'about', smoothScroll: true }),
 				expect.objectContaining({ id: 'articles', smoothScroll: true }),
 				expect.objectContaining({ id: 'reels', smoothScroll: true }),
-				expect.objectContaining({ id: 'projects', smoothScroll: false }),
-				expect.objectContaining({ id: 'article-detail', smoothScroll: false }),
-				expect.objectContaining({ id: 'project-detail', smoothScroll: false }),
+				expect.objectContaining({ id: 'projects', smoothScroll: true }),
+				expect.objectContaining({ id: 'article-detail', smoothScroll: true }),
+				expect.objectContaining({ id: 'project-detail', smoothScroll: true }),
 			]),
 		)
 	})

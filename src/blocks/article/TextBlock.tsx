@@ -22,7 +22,7 @@ const portableTextComponents: PortableTextComponents = {
 
 export function TextBlock({ block }: { block: Extract<PostBlock, { type: 'text' }> }) {
 	return (
-		<div className="flex flex-col gap-5 max-w-3xl">
+		<div className="mx-auto flex flex-col gap-5 max-w-3xl">
 			<PortableText value={block.body} components={portableTextComponents} />
 		</div>
 	)
