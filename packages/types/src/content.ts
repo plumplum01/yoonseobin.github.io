@@ -7,6 +7,7 @@ export type PostBlockType = 'text' | 'image' | 'imageStack' | 'carousel' | 'vide
 export type MediaAssetType = 'image' | 'video'
 
 export type MediaAspectRatio = 'square' | 'video' | 'portrait' | 'wide'
+export type ImageAspectRatio = MediaAspectRatio | 'natural'
 
 export interface Post {
 	id: string
@@ -33,6 +34,11 @@ export interface MediaAsset {
 	type: MediaAssetType
 	title: string
 	url: string
+	dimensions?: {
+		width: number
+		height: number
+		aspectRatio: number
+	}
 	alt?: string
 	caption?: string
 	tags: MediaTag[]
@@ -55,7 +61,7 @@ export interface HeadingPostBlock {
 export interface ImagePostBlock {
 	type: 'image'
 	media: MediaAsset
-	aspectRatio: MediaAspectRatio
+	aspectRatio: ImageAspectRatio
 }
 
 export interface ImageStackPostBlock {

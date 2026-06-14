@@ -14,6 +14,10 @@ export default function Articles() {
 				initial="hidden"
 				animate="show"
 			>
+				<article className="col-span-2 aspect-video">hello</article>
+				<header className="">
+					<h1 className="text-3xl font-bold">Articles</h1>
+				</header>
 				{articles.map((article) => (
 					<ArticleCard key={article.id} post={article} />
 				))}

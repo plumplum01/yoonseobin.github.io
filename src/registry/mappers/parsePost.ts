@@ -1,6 +1,7 @@
 import type {
 	CarouselPostBlock,
 	HeadingPostBlock,
+	ImageAspectRatio,
 	ImagePostBlock,
 	ImageStackPostBlock,
 	MediaAspectRatio,
@@ -19,6 +20,7 @@ import {
 	optionalNumber,
 	optionalRecordArray,
 	optionalString,
+	isRecord,
 	requirePayloadRecord,
 	requireRecord,
 	requireRecordArray,
@@ -48,6 +50,11 @@ function assertMediaAspectRatio(value: string, context: string): MediaAspectRati
 	throw new Error(`Invalid payload: ${context}.aspectRatio has unsupported value`)
 }
 
+function assertImageAspectRatio(value: string, context: string): ImageAspectRatio {
+	if (value === 'natural') return value
+	return assertMediaAspectRatio(value, context)
+}
+
 function assertHeadingLevel(value: unknown, context: string): HeadingPostBlock['level'] {
 	if (value === 2 || value === 3 || value === 4) return value
 	throw new Error(`Invalid payload: ${context}.level must be 2, 3, or 4`)
@@ -62,6 +69,31 @@ function parseMediaTag(raw: UnknownRecord, index: number): MediaTag {
 	}
 }
 
+function parseMediaDimensions(raw: unknown, context: string): MediaAsset['dimensions'] {
+	if (!raw) return undefined
+	if (!isRecord(raw)) {
+		throw new Error(`Invalid payload: ${context}.dimensions must be an object when provided`)
+	}
+	const record = raw
+	const width = optionalNumber(record, 'width', `${context}.dimensions`)
+	const height = optionalNumber(record, 'height', `${context}.dimensions`)
+	const aspectRatio = optionalNumber(record, 'aspectRatio', `${context}.dimensions`)
+
+	if (
+		typeof width !== 'number' ||
+		typeof height !== 'number' ||
+		typeof aspectRatio !== 'number'
+	) {
+		return undefined
+	}
+
+	if (width <= 0 || height <= 0 || aspectRatio <= 0) {
+		return undefined
+	}
+
+	return { width, height, aspectRatio }
+}
+
 export function parseMediaAsset(raw: unknown): MediaAsset {
 	const record = requirePayloadRecord(raw, 'media asset is missing')
 	const context = 'media'
@@ -70,12 +102,14 @@ export function parseMediaAsset(raw: unknown): MediaAsset {
 	const durationSeconds = optionalNumber(record, 'durationSeconds', context)
 	const createdAt = optionalString(record, 'createdAt', context)
 	const updatedAt = optionalString(record, 'updatedAt', context)
+	const dimensions = parseMediaDimensions(record.dimensions, context)
 
 	return {
 		id: requireString(record, 'id', context),
 		title: requireString(record, 'title', context),
 		type: assertMediaType(requireString(record, 'type', context), context),
 		url: requireString(record, 'url', context),
+		...(dimensions ? { dimensions } : {}),
 		...(alt ? { alt } : {}),
 		...(caption ? { caption } : {}),
 		tags: optionalRecordArray(record, 'tags', context).map(parseMediaTag),
@@ -107,7 +141,7 @@ function parseImageBlock(raw: UnknownRecord): ImagePostBlock {
 	return {
 		type: 'image',
 		media: parseMediaAsset(requireRecord(raw, 'media', context)),
-		aspectRatio: assertMediaAspectRatio(requireString(raw, 'aspectRatio', context), context),
+		aspectRatio: assertImageAspectRatio(requireString(raw, 'aspectRatio', context), context),
 	}
 }
 

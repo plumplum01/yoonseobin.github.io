@@ -1,4 +1,4 @@
-import type { MediaAspectRatio } from '@portfolio/types'
+import type { ImageAspectRatio, MediaAspectRatio } from '@portfolio/types'
 import { motion, useTransform } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { useSurface } from '@/context/SurfaceProvider'
@@ -13,10 +13,11 @@ export const aspectRatioClassName: Record<MediaAspectRatio, string> = {
 }
 
 type MediaFrameProps = {
-	aspectRatio: MediaAspectRatio
+	aspectRatio: ImageAspectRatio
 	children: ReactNode
 	maxPadding?: number
 	maxRadius?: number
+	naturalAspectRatio?: number
 }
 
 export function MediaFrame({
@@ -24,6 +25,7 @@ export function MediaFrame({
 	children,
 	maxPadding = 24,
 	maxRadius = 32,
+	naturalAspectRatio,
 }: MediaFrameProps) {
 	const surface = useSurface()
 	const { reference, scrollYProgress } = useScrollMediaProgress()
@@ -39,13 +41,28 @@ export function MediaFrame({
 		0,
 		maxRadius,
 	])
+	const hasNaturalAspectRatio =
+		aspectRatio === 'natural' &&
+		typeof naturalAspectRatio === 'number' &&
+		Number.isFinite(naturalAspectRatio) &&
+		naturalAspectRatio > 0
+	const forcedAspectRatioClassName =
+		aspectRatio === 'natural'
+			? hasNaturalAspectRatio
+				? undefined
+				: aspectRatioClassName.video
+			: aspectRatioClassName[aspectRatio]
 
 	return (
 		<motion.div
-			className={cn('w-full rounded', aspectRatioClassName[aspectRatio])}
+			className={cn('w-full rounded', forcedAspectRatioClassName)}
+			data-aspect-ratio={aspectRatio}
 			data-surface={surface}
 			ref={reference}
-			style={{ padding }}
+			style={{
+				padding,
+				...(hasNaturalAspectRatio ? { aspectRatio: naturalAspectRatio } : {}),
+			}}
 		>
 			<motion.div className={cn('overflow-hidden size-full')} style={{ borderRadius }}>
 				{children}

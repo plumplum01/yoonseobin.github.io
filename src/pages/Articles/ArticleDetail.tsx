@@ -1,7 +1,10 @@
 import type { PostDetail as PostDetailModel } from '@portfolio/types'
+import { motion } from 'framer-motion'
+import { useEffect } from 'react'
 import { useLoaderData } from 'react-router-dom'
 import { ArticleText } from '@/blocks/ArticleText'
 import { BlockInstance } from '@/blocks'
+import { detailHeaderVariants, detailThumbnailVariants } from '@/features/animation/staggerPresets'
 import { formatKoDate } from '@/lib/dateFormat'
 
 function formatPublishedDate(article: PostDetailModel): string | undefined {
@@ -12,12 +15,15 @@ function formatPublishedDate(article: PostDetailModel): string | undefined {
 function ArticleHeader({ article }: { article: PostDetailModel }) {
 	const publishedDate = formatPublishedDate(article)
 	return (
-		<header className="absolute bottom-12 left-8 max-w-4xl flex flex-col items-start text-white mix-blend-difference">
+		<motion.header
+			className="absolute bottom-12 left-8 max-w-4xl flex flex-col items-start text-white mix-blend-difference"
+			variants={detailHeaderVariants}
+		>
 			{publishedDate && <p className="text-sm font-medium">{publishedDate}</p>}
 			<hgroup className="flex flex-col gap-16 items-start">
 				<h1 className="text-6xl font-medium text-start">{article.title}</h1>
 			</hgroup>
-		</header>
+		</motion.header>
 	)
 }
 
@@ -37,12 +43,21 @@ function ArticleThumbnail({ article }: { article: PostDetailModel }) {
 export default function ArticleDetail() {
 	const article = useLoaderData() as PostDetailModel
 
+	useEffect(() => {
+		window.scrollTo({ top: 0, left: 0 })
+	}, [])
+
 	return (
 		<>
-			<figure className="relative aspect-square w-fullgrid place-item-center overflow-hidden">
+			<motion.figure
+				className="relative aspect-square w-fullgrid place-item-center overflow-hidden"
+				initial="hidden"
+				animate="show"
+				variants={detailThumbnailVariants}
+			>
 				<ArticleHeader article={article} />
 				<ArticleThumbnail article={article} />
-			</figure>
+			</motion.figure>
 			<main className="mx-auto min-h-screen w-screen pt-28 pb-20 bg-black">
 				<article className="flex flex-col items-center gap-4 md:gap-24">
 					<ArticleText> {article.summary}</ArticleText>

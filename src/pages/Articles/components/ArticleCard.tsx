@@ -8,7 +8,7 @@ export default function ArticleCard({ post }: { post: Post }) {
 	return (
 		<motion.article key={post.id} variants={staggerItemVariants}>
 			<Link className="flex flex-col gap-1" to={`/articles/${post.slug}`}>
-				<div className="group relative aspect-square w-full grid place-items-center rounded-4xl overflow-hidden">
+				<div className="group relative aspect-portrait w-full grid place-items-center rounded-4xl overflow-hidden">
 					<div className="size-full group-hover:scale-[1.02] [--extra-transition:scale_150ms_ease-out]">
 						<img
 							src={post.thumbnailUrl}

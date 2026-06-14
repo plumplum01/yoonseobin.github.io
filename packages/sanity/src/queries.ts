@@ -20,6 +20,11 @@ export const mediaAssetViewProjection = `{
     type == "image" => image.asset->url,
     type == "video" => video.asset->url
   ),
+  "dimensions": image.asset->metadata.dimensions {
+    width,
+    height,
+    aspectRatio
+  },
   "alt": coalesce(image.alt, caption),
   caption,
   tags[]-> {

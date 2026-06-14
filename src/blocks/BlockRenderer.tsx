@@ -42,7 +42,18 @@ const blockComponents = {
 } satisfies BlockRegistry
 
 function MediaBlockSkeleton({ block }: { block: PostBlock }) {
-	if (block.type === 'image' || block.type === 'video') {
+	if (block.type === 'image') {
+		return (
+			<MediaFrame
+				aspectRatio={block.aspectRatio}
+				naturalAspectRatio={block.media.dimensions?.aspectRatio}
+			>
+				<Skeleton className="size-full rounded" />
+			</MediaFrame>
+		)
+	}
+
+	if (block.type === 'video') {
 		return (
 			<MediaFrame aspectRatio={block.aspectRatio}>
 				<Skeleton className="size-full rounded" />

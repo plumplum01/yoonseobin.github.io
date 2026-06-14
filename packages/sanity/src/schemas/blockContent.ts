@@ -8,7 +8,9 @@ const mediaAspectRatioOptions = [
 	{ title: 'Wide 21:9', value: 'wide' },
 ]
 
-function aspectRatioField() {
+const naturalImageAspectRatioOption = { title: 'Natural image ratio', value: 'natural' }
+
+function aspectRatioField({ allowNatural = false }: { allowNatural?: boolean } = {}) {
 	return defineField({
 		name: 'aspectRatio',
 		title: 'Aspect ratio',
@@ -16,7 +18,9 @@ function aspectRatioField() {
 		initialValue: 'video',
 		options: {
 			layout: 'radio',
-			list: mediaAspectRatioOptions,
+			list: allowNatural
+				? [...mediaAspectRatioOptions, naturalImageAspectRatioOption]
+				: mediaAspectRatioOptions,
 		},
 		validation: (rule) => rule.required(),
 	})
@@ -129,7 +133,7 @@ export const blockContentType = defineType({
 					},
 					validation: (rule) => rule.required(),
 				}),
-				aspectRatioField(),
+				aspectRatioField({ allowNatural: true }),
 			],
 			preview: {
 				select: {
