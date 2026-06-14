@@ -41,9 +41,9 @@ describe('router config', () => {
 		expect(pageRoutes).toEqual(
 			expect.arrayContaining([
 				expect.objectContaining({ id: 'home', smoothScroll: false }),
-				expect.objectContaining({ id: 'about', smoothScroll: false }),
-				expect.objectContaining({ id: 'articles', smoothScroll: false }),
-				expect.objectContaining({ id: 'reels', smoothScroll: false }),
+				expect.objectContaining({ id: 'about', smoothScroll: true }),
+				expect.objectContaining({ id: 'articles', smoothScroll: true }),
+				expect.objectContaining({ id: 'reels', smoothScroll: true }),
 				expect.objectContaining({ id: 'projects', smoothScroll: false }),
 				expect.objectContaining({ id: 'article-detail', smoothScroll: false }),
 				expect.objectContaining({ id: 'project-detail', smoothScroll: false }),
