@@ -13,7 +13,7 @@
 
 import DesktopHero from '@/components/features/home/hero/DesktopHero'
 import MobileHero from '@/components/features/home/hero/MobileHero'
-import { useIsMobile } from '@/deprecated/home-hero/hooks/useIsMobile'
+import { useIsMobile } from '@/hooks/useIsMobile'
 
 type Props = {
 	smoothScrollEnabled: boolean

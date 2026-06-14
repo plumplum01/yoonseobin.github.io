@@ -1,4 +1,5 @@
 import { useSurface } from '@/context/SurfaceProvider'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import { site } from '@/registry/site'
 
 export default function Footer() {
@@ -30,10 +31,20 @@ function DetailFooter() {
 }
 
 function FooterContent() {
+	const isMobile = useIsMobile()
 	return (
 		<div className="inline-flex font-mono uppercase text-xxs justify-center gap-1 mix-blend-difference text-white opacity-20">
 			<span>
-				ⓒ{site.year} All rights reserved, {site.name}. Busan, South Korea.
+				{!isMobile && (
+					<span>
+						ⓒ{site.year} All rights reserved, {site.name}. Busan, South Korea.
+					</span>
+				)}
+				{isMobile && (
+					<span>
+						ⓒ{site.year} All rights reserved, {site.name}.{' '}
+					</span>
+				)}
 			</span>
 		</div>
 	)
