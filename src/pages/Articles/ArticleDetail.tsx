@@ -16,12 +16,12 @@ function ArticleHeader({ article }: { article: PostDetailModel }) {
 	const publishedDate = formatPublishedDate(article)
 	return (
 		<motion.header
-			className="absolute bottom-12 left-8 max-w-4xl flex flex-col items-start text-white mix-blend-difference"
+			className="absolute bottom-12 left-8 max-w-4xl flex flex-col gap-4 items-start text-white mix-blend-difference"
 			variants={detailHeaderVariants}
 		>
 			{publishedDate && <p className="text-sm font-medium">{publishedDate}</p>}
 			<hgroup className="flex flex-col gap-16 items-start">
-				<h1 className="text-6xl font-medium text-start">{article.title}</h1>
+				<h1 className="text-6xl font-medium text-start text-cjk">{article.title}</h1>
 			</hgroup>
 		</motion.header>
 	)

@@ -11,7 +11,7 @@ function getCarouselSlides(block: CarouselBlockProps['block']): CarouselSlideMod
 	return block.mediaItems.map(toCarouselSlide)
 }
 
-function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
+function CarouselSlide({ isPriority, slide }: { isPriority: boolean; slide: CarouselSlideModel }) {
 	return (
 		<CarouselItem className="pl-3">
 			<figure className="flex flex-col gap-2">
@@ -29,7 +29,8 @@ function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 							className="size-full object-cover"
 							src={slide.src}
 							alt={slide.alt}
-							loading="lazy"
+							decoding="async"
+							loading={isPriority ? 'eager' : 'lazy'}
 						/>
 					)}
 				</div>
@@ -46,8 +47,8 @@ function CarouselSlide({ slide }: { slide: CarouselSlideModel }) {
 
 export function CarouselBlock({ block }: CarouselBlockProps) {
 	const surface = useSurface()
-	const slideItems = getCarouselSlides(block).map((slide) => (
-		<CarouselSlide key={slide.id} slide={slide} />
+	const slideItems = getCarouselSlides(block).map((slide, index) => (
+		<CarouselSlide isPriority={index === 0} key={slide.id} slide={slide} />
 	))
 
 	return (

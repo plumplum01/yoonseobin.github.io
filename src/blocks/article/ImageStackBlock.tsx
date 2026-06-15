@@ -4,14 +4,15 @@ import { MediaFrame } from '@/blocks/article/MediaFrame'
 export function ImageStackBlock({ block }: { block: Extract<PostBlock, { type: 'imageStack' }> }) {
 	return (
 		<div className="flex w-full flex-col gap-4">
-			{block.mediaItems.map((media) => (
+			{block.mediaItems.map((media, index) => (
 				<figure key={media.id} className="w-full">
 					<MediaFrame aspectRatio="video">
 						<img
 							className="size-full object-cover"
 							src={media.url}
 							alt={media.alt ?? media.caption ?? media.title}
-							loading="lazy"
+							decoding="async"
+							loading={index === 0 ? 'eager' : 'lazy'}
 						/>
 					</MediaFrame>
 					{media.caption && (

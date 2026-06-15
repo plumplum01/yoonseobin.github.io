@@ -67,6 +67,7 @@ describe('block renderer', () => {
 
 		const image = await screen.findByRole('img', { name: 'Portrait image' })
 		expect(image).toBeInTheDocument()
+		expect(image).toHaveAttribute('loading', 'eager')
 
 		const video = document.querySelector('video')
 		expect(video).toBeInTheDocument()
@@ -166,7 +167,12 @@ describe('block renderer', () => {
 			await screen.findByRole('region', { name: 'Article media carousel' }),
 		).toBeInTheDocument()
 		expect(screen.getByRole('img', { name: 'First caption' })).toBeInTheDocument()
+		expect(screen.getByRole('img', { name: 'First caption' })).toHaveAttribute(
+			'loading',
+			'eager',
+		)
 		expect(screen.getByRole('img', { name: 'Second media' })).toBeInTheDocument()
+		expect(screen.getByRole('img', { name: 'Second media' })).toHaveAttribute('loading', 'lazy')
 	})
 
 	it('renders image stack blocks as ordered media items', async () => {
@@ -198,6 +204,11 @@ describe('block renderer', () => {
 		)
 
 		expect(await screen.findByRole('img', { name: 'Stack first caption' })).toBeInTheDocument()
+		expect(screen.getByRole('img', { name: 'Stack first caption' })).toHaveAttribute(
+			'loading',
+			'eager',
+		)
 		expect(screen.getByRole('img', { name: 'Stack second' })).toBeInTheDocument()
+		expect(screen.getByRole('img', { name: 'Stack second' })).toHaveAttribute('loading', 'lazy')
 	})
 })

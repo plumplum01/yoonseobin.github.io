@@ -12,7 +12,8 @@ export function ImageBlock({ block }: { block: Extract<PostBlock, { type: 'image
 					className="size-full object-cover"
 					src={block.media.url}
 					alt={block.media.alt ?? block.media.caption ?? block.media.title}
-					loading="lazy"
+					decoding="async"
+					loading="eager"
 				/>
 			</MediaFrame>
 			{block.media.caption && (
