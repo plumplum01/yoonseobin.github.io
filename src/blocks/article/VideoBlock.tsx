@@ -4,7 +4,10 @@ import { MediaFrame } from '@/blocks/article/MediaFrame'
 export function VideoBlock({ block }: { block: Extract<PostBlock, { type: 'video' }> }) {
 	return (
 		<figure className="space-y-3">
-			<MediaFrame aspectRatio={block.aspectRatio}>
+			<MediaFrame
+				aspectRatio={block.aspectRatio}
+				naturalAspectRatio={block.media.dimensions?.aspectRatio}
+			>
 				<video
 					className="size-full object-cover"
 					src={block.media.url}

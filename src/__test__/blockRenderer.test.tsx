@@ -103,6 +103,37 @@ describe('block renderer', () => {
 		expect(frame.style.aspectRatio).toBe('1.5 / 1')
 	})
 
+	it('renders natural video blocks with source aspect ratio metadata', () => {
+		render(
+			<BlockInstance
+				blocks={[
+					{
+						type: 'video',
+						aspectRatio: 'natural',
+						media: {
+							id: 'video-natural',
+							title: 'Natural video',
+							type: 'video',
+							url: 'https://cdn.sanity.io/natural.mp4',
+							tags: [],
+							dimensions: {
+								width: 1080,
+								height: 1920,
+								aspectRatio: 0.5625,
+							},
+						},
+					},
+				]}
+			/>,
+		)
+
+		expect(document.querySelector('video')).toBeInTheDocument()
+
+		const frame = document.querySelector('[data-aspect-ratio="natural"]') as HTMLElement
+		expect(frame).toBeInTheDocument()
+		expect(frame.style.aspectRatio).toBe('0.5625 / 1')
+	})
+
 	it('renders carousel blocks through the shared carousel primitive', async () => {
 		render(
 			<BlockInstance

@@ -55,7 +55,10 @@ function MediaBlockSkeleton({ block }: { block: PostBlock }) {
 
 	if (block.type === 'video') {
 		return (
-			<MediaFrame aspectRatio={block.aspectRatio}>
+			<MediaFrame
+				aspectRatio={block.aspectRatio}
+				naturalAspectRatio={block.media.dimensions?.aspectRatio}
+			>
 				<Skeleton className="size-full rounded" />
 			</MediaFrame>
 		)
@@ -103,9 +106,7 @@ function isMediaBlock(block: PostBlock): boolean {
 }
 
 export function BlockRenderer({ block }: { block: PostBlock }) {
-	const Component = blockComponents[block.type] as (props: {
-		block: typeof block
-	}) => ReactNode
+	const Component = blockComponents[block.type] as (props: { block: typeof block }) => ReactNode
 
 	if (!isMediaBlock(block)) {
 		return <Component block={block} />

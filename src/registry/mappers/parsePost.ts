@@ -8,6 +8,7 @@ import type {
 	MediaAsset,
 	MediaAssetType,
 	MediaTag,
+	NaturalMediaAspectRatio,
 	Post,
 	PostBlock,
 	PostDetail,
@@ -51,6 +52,11 @@ function assertMediaAspectRatio(value: string, context: string): MediaAspectRati
 }
 
 function assertImageAspectRatio(value: string, context: string): ImageAspectRatio {
+	if (value === 'natural') return value
+	return assertMediaAspectRatio(value, context)
+}
+
+function assertNaturalMediaAspectRatio(value: string, context: string): NaturalMediaAspectRatio {
 	if (value === 'natural') return value
 	return assertMediaAspectRatio(value, context)
 }
@@ -165,7 +171,10 @@ function parseVideoBlock(raw: UnknownRecord): VideoPostBlock {
 	return {
 		type: 'video',
 		media: parseMediaAsset(requireRecord(raw, 'media', context)),
-		aspectRatio: assertMediaAspectRatio(requireString(raw, 'aspectRatio', context), context),
+		aspectRatio: assertNaturalMediaAspectRatio(
+			requireString(raw, 'aspectRatio', context),
+			context,
+		),
 	}
 }
 

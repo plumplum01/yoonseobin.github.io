@@ -22,6 +22,11 @@ const videoMedia = {
 	caption: 'A demo video',
 	durationSeconds: 12,
 	url: 'https://cdn.sanity.io/video.mp4',
+	dimensions: {
+		width: 1080,
+		height: 1920,
+		aspectRatio: 0.5625,
+	},
 }
 
 const postPayload = {
@@ -63,6 +68,11 @@ describe('parseMediaAsset', () => {
 			type: 'video',
 			url: 'https://cdn.sanity.io/video.mp4',
 			durationSeconds: 12,
+			dimensions: {
+				width: 1080,
+				height: 1920,
+				aspectRatio: 0.5625,
+			},
 		})
 	})
 
@@ -134,13 +144,21 @@ describe('parsePost', () => {
 		})
 	})
 
-	it('video block은 natural aspectRatio를 허용하지 않는다', () => {
-		expect(() =>
-			parsePost({
-				...postPayload,
-				blocks: [{ type: 'video', media: videoMedia, aspectRatio: 'natural' }],
-			}),
-		).toThrow('videoBlock.aspectRatio has unsupported value')
+	it('video block은 natural aspectRatio를 허용한다', () => {
+		const post = parsePost({
+			...postPayload,
+			blocks: [{ type: 'video', media: videoMedia, aspectRatio: 'natural' }],
+		})
+
+		expect(post.blocks[0]).toMatchObject({
+			type: 'video',
+			aspectRatio: 'natural',
+			media: {
+				dimensions: {
+					aspectRatio: 0.5625,
+				},
+			},
+		})
 	})
 
 	it('지원하지 않는 block type은 실패한다', () => {
@@ -158,7 +176,11 @@ describe('parsePost', () => {
 			...postPayload,
 			blocks: [
 				{ type: 'heading', level: 2, text: 'Intro' },
-				{ type: 'image', media: { ...mediaWithoutUrl, url: null }, aspectRatio: 'portrait' },
+				{
+					type: 'image',
+					media: { ...mediaWithoutUrl, url: null },
+					aspectRatio: 'portrait',
+				},
 				{ type: 'image', media: imageMedia, aspectRatio: 'wide' },
 			],
 		})
