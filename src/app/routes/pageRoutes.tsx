@@ -10,7 +10,7 @@
  * (createBrowserRouter)에 의존하지 않는다.
  */
 
-import type { ReactNode } from 'react'
+import { lazy, Suspense, type ReactNode } from 'react'
 import type { LoaderFunction } from 'react-router-dom'
 import {
 	articleDetailLoader,
@@ -21,13 +21,22 @@ import {
 	reelsLoader,
 } from '@/app/routes/routeLoaders'
 import type { Surface } from '@/context/SurfaceProvider'
-import About from '@/pages/About/About'
-import ArticleDetail from '@/pages/Articles/ArticleDetail'
-import Articles from '@/pages/Articles/Articles'
-import Home from '@/pages/Home/Home'
-import ProjectDetail from '@/pages/Projects/ProjectDetail'
-import Projects from '@/pages/Projects/Projects'
-import Reels from '@/pages/Reels/Reels'
+
+const Home = lazy(() => import('@/pages/Home/Home'))
+const About = lazy(() => import('@/pages/About/About'))
+const Articles = lazy(() => import('@/pages/Articles/Articles'))
+const Reels = lazy(() => import('@/pages/Reels/Reels'))
+const Projects = lazy(() => import('@/pages/Projects/Projects'))
+const ArticleDetail = lazy(() => import('@/pages/Articles/ArticleDetail'))
+const ProjectDetail = lazy(() => import('@/pages/Projects/ProjectDetail'))
+
+function PageFallback() {
+	return <div className="min-h-screen bg-background" aria-hidden="true" />
+}
+
+function renderPage(page: ReactNode) {
+	return <Suspense fallback={<PageFallback />}>{page}</Suspense>
+}
 
 type AppPageRoute = {
 	id: string
@@ -56,7 +65,7 @@ export const PAGE_ROUTES = [
 		nav: true,
 		smoothScroll: false,
 		loader: undefined,
-		render: () => <Home />,
+		render: () => renderPage(<Home />),
 	},
 	{
 		id: 'about',
@@ -68,7 +77,7 @@ export const PAGE_ROUTES = [
 		nav: true,
 		smoothScroll: true,
 		loader: profileLoader,
-		render: () => <About />,
+		render: () => renderPage(<About />),
 	},
 	{
 		id: 'articles',
@@ -81,7 +90,7 @@ export const PAGE_ROUTES = [
 		nav: true,
 		smoothScroll: true,
 		loader: articlesLoader,
-		render: () => <Articles />,
+		render: () => renderPage(<Articles />),
 	},
 	{
 		id: 'reels',
@@ -94,7 +103,7 @@ export const PAGE_ROUTES = [
 		nav: true,
 		smoothScroll: true,
 		loader: reelsLoader,
-		render: () => <Reels />,
+		render: () => renderPage(<Reels />),
 	},
 	{
 		id: 'projects',
@@ -107,7 +116,7 @@ export const PAGE_ROUTES = [
 		nav: true,
 		smoothScroll: true,
 		loader: projectsLoader,
-		render: () => <Projects />,
+		render: () => renderPage(<Projects />),
 	},
 	{
 		id: 'article-detail',
@@ -118,7 +127,7 @@ export const PAGE_ROUTES = [
 		nav: false,
 		smoothScroll: true,
 		loader: articleDetailLoader,
-		render: () => <ArticleDetail />,
+		render: () => renderPage(<ArticleDetail />),
 	},
 	{
 		id: 'project-detail',
@@ -129,7 +138,7 @@ export const PAGE_ROUTES = [
 		nav: false,
 		smoothScroll: true,
 		loader: projectDetailLoader,
-		render: () => <ProjectDetail />,
+		render: () => renderPage(<ProjectDetail />),
 	},
 ] as const satisfies readonly AppPageRoute[]
 
