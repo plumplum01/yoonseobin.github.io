@@ -71,6 +71,43 @@ describe('block renderer', () => {
 
 		const video = document.querySelector('video')
 		expect(video).toBeInTheDocument()
+		expect(video).toHaveAttribute('preload', 'metadata')
+	})
+
+	it('marks the first block as priority when requested', () => {
+		render(
+			<BlockInstance
+				priority
+				blocks={[
+					{
+						type: 'video',
+						aspectRatio: 'wide',
+						media: {
+							id: 'video-1',
+							title: 'Wide video',
+							type: 'video',
+							url: 'https://cdn.sanity.io/wide.mp4',
+							tags: [],
+						},
+					},
+					{
+						type: 'video',
+						aspectRatio: 'wide',
+						media: {
+							id: 'video-2',
+							title: 'Second video',
+							type: 'video',
+							url: 'https://cdn.sanity.io/second.mp4',
+							tags: [],
+						},
+					},
+				]}
+			/>,
+		)
+
+		const videos = document.querySelectorAll('video')
+		expect(videos[0]).toHaveAttribute('preload', 'auto')
+		expect(videos[1]).toHaveAttribute('preload', 'metadata')
 	})
 
 	it('renders natural image blocks with source aspect ratio metadata', async () => {

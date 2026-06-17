@@ -10,6 +10,7 @@ import { VideoBlock } from '@/blocks/article/VideoBlock'
 export type BlockRegistry = {
 	[TType in PostBlock['type']]: (props: {
 		block: Extract<PostBlock, { type: TType }>
+		priority?: boolean
 	}) => ReactNode
 }
 
@@ -22,8 +23,11 @@ const blockComponents = {
 	video: VideoBlock,
 } satisfies BlockRegistry
 
-export function BlockRenderer({ block }: { block: PostBlock }) {
-	const Component = blockComponents[block.type] as (props: { block: typeof block }) => ReactNode
+export function BlockRenderer({ block, priority = false }: { block: PostBlock; priority?: boolean }) {
+	const Component = blockComponents[block.type] as (props: {
+		block: typeof block
+		priority?: boolean
+	}) => ReactNode
 
-	return <Component block={block} />
+	return <Component block={block} priority={priority} />
 }

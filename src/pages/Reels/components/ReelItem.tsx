@@ -23,11 +23,11 @@ function ReelHeader({ reel }: { reel: PostDetail }) {
 	)
 }
 
-export function ReelItem({ reel }: { reel: PostDetail }) {
+export function ReelItem({ reel, priority = false }: { reel: PostDetail; priority?: boolean }) {
 	return (
 		<motion.article className="flex w-full flex-col gap-1" variants={staggerItemVariants}>
 			<div className="flex w-full flex-col items-center gap-4 md:gap-12">
-				<BlockInstance blocks={reel.blocks} />
+				<BlockInstance blocks={reel.blocks} priority={priority} />
 			</div>
 			<ReelHeader reel={reel} />
 		</motion.article>
