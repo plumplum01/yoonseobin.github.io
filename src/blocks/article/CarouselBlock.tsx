@@ -10,8 +10,26 @@ type CarouselBlockProps = {
 	block: Extract<PostBlock, { type: 'carousel' }>
 }
 
+const CAROUSEL_AUTOPLAY_DELAY = 5000
+
 function getCarouselSlides(block: CarouselBlockProps['block']): CarouselSlideModel[] {
 	return block.mediaItems.map(toCarouselSlide)
+}
+
+function shouldUseAutoplay(slides: CarouselSlideModel[]) {
+	return slides.length > 1
+}
+
+function createCarouselPlugins(shouldAutoPlay: boolean) {
+	if (!shouldAutoPlay) return undefined
+
+	return [
+		Autoplay({
+			delay: CAROUSEL_AUTOPLAY_DELAY,
+			stopOnInteraction: true,
+			stopOnMouseEnter: false,
+		}),
+	]
 }
 
 function CarouselSlide({ isPriority, slide }: { isPriority: boolean; slide: CarouselSlideModel }) {
@@ -53,20 +71,8 @@ function CarouselSlide({ isPriority, slide }: { isPriority: boolean; slide: Caro
 export function CarouselBlock({ block }: CarouselBlockProps) {
 	const surface = useSurface()
 	const slides = getCarouselSlides(block)
-	const shouldAutoPlay = slides.length > 1 && slides.every((slide) => slide.kind === 'image')
-	const plugins = useMemo(
-		() =>
-			shouldAutoPlay
-				? [
-						Autoplay({
-							delay: 6000,
-							stopOnInteraction: true,
-							stopOnMouseEnter: true,
-						}),
-					]
-				: undefined,
-		[shouldAutoPlay],
-	)
+	const shouldAutoPlay = shouldUseAutoplay(slides)
+	const plugins = useMemo(() => createCarouselPlugins(shouldAutoPlay), [shouldAutoPlay])
 	const slideItems = slides.map((slide, index) => (
 		<CarouselSlide isPriority={index === 0} key={slide.id} slide={slide} />
 	))
@@ -76,6 +82,7 @@ export function CarouselBlock({ block }: CarouselBlockProps) {
 			aria-label="Article media carousel"
 			className="flex flex-col gap-1"
 			data-surface={surface}
+			opts={{ loop: shouldAutoPlay }}
 			plugins={plugins}
 		>
 			<CarouselContent className="-ml-3">{slideItems}</CarouselContent>

@@ -1,6 +1,11 @@
 import type { PostBlock } from '@portfolio/types'
 import { MediaFrame } from '@/blocks/article/MediaFrame'
 import { ViewportVideo } from '@/blocks/article/ViewportVideo'
+import { cn } from '@/lib/cn'
+
+function getVideoObjectFitClassName(block: Extract<PostBlock, { type: 'video' }>) {
+	return block.aspectRatio === 'natural' ? 'object-contain' : 'object-cover'
+}
 
 export function VideoBlock({
 	block,
@@ -16,7 +21,7 @@ export function VideoBlock({
 				naturalAspectRatio={block.media.dimensions?.aspectRatio}
 			>
 				<ViewportVideo
-					className="size-full object-cover"
+					className={cn('size-full', getVideoObjectFitClassName(block))}
 					src={block.media.url}
 					loop
 					preload={priority ? 'auto' : 'metadata'}
