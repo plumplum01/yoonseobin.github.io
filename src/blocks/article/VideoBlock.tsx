@@ -2,14 +2,25 @@ import type { PostBlock } from '@portfolio/types'
 import { MediaFrame } from '@/blocks/article/MediaFrame'
 import { ViewportVideo } from '@/blocks/article/ViewportVideo'
 
-export function VideoBlock({ block }: { block: Extract<PostBlock, { type: 'video' }> }) {
+export function VideoBlock({
+	block,
+	priority = false,
+}: {
+	block: Extract<PostBlock, { type: 'video' }>
+	priority?: boolean
+}) {
 	return (
 		<figure className="space-y-3">
 			<MediaFrame
 				aspectRatio={block.aspectRatio}
 				naturalAspectRatio={block.media.dimensions?.aspectRatio}
 			>
-				<ViewportVideo className="size-full object-cover" src={block.media.url} loop>
+				<ViewportVideo
+					className="size-full object-cover"
+					src={block.media.url}
+					loop
+					preload={priority ? 'auto' : 'metadata'}
+				>
 					<track kind="captions" />
 				</ViewportVideo>
 			</MediaFrame>

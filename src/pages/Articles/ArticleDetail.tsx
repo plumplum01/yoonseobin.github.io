@@ -33,7 +33,9 @@ function ArticleThumbnail({ article }: { article: PostDetailModel }) {
 			<img
 				src={article.thumbnailUrl}
 				alt={article.title}
+				loading="eager"
 				decoding="async"
+				fetchPriority="high"
 				className="size-full object-contain"
 			/>
 		</div>
