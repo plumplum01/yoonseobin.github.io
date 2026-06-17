@@ -1,7 +1,13 @@
 import type { PostBlock } from '@portfolio/types'
 import { MediaFrame } from '@/blocks/article/MediaFrame'
 
-export function VideoBlock({ block }: { block: Extract<PostBlock, { type: 'video' }> }) {
+export function VideoBlock({
+	block,
+	priority = false,
+}: {
+	block: Extract<PostBlock, { type: 'video' }>
+	priority?: boolean
+}) {
 	return (
 		<figure className="space-y-3">
 			<MediaFrame
@@ -15,7 +21,7 @@ export function VideoBlock({ block }: { block: Extract<PostBlock, { type: 'video
 					autoPlay
 					muted
 					loop
-					preload="metadata"
+					preload={priority ? 'auto' : 'metadata'}
 				>
 					<track kind="captions" />
 				</video>

@@ -15,8 +15,8 @@ export default function Reels() {
 				initial="hidden"
 				animate="show"
 			>
-				{reels.map((reel) => (
-					<ReelItem key={reel.id} reel={reel} />
+				{reels.map((reel, index) => (
+					<ReelItem key={reel.id} reel={reel} priority={index < 2} />
 				))}
 			</motion.section>
 		</main>

@@ -6,6 +6,8 @@ import { ContentHeading } from '@/components/ui'
 import { staggerItemVariants } from '@/features/animation/staggerPresets'
 
 export default function ArticleCard({ post, index }: { post: Post; index: number }) {
+	const isPriority = index < 2
+
 	return (
 		<motion.article key={post.id} variants={staggerItemVariants}>
 			<Link className="flex flex-col gap-1" to={`/articles/${post.slug}`}>
@@ -14,8 +16,9 @@ export default function ArticleCard({ post, index }: { post: Post; index: number
 						<img
 							src={post.thumbnailUrl}
 							alt={post.title}
-							loading="lazy"
+							loading={isPriority ? 'eager' : 'lazy'}
 							decoding="async"
+							fetchPriority={isPriority ? 'high' : 'auto'}
 							className="size-full object-cover"
 						/>
 					</div>
