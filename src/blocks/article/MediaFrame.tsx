@@ -61,7 +61,7 @@ export function MediaFrame({
 			ref={reference}
 			style={{
 				padding,
-				...(hasNaturalAspectRatio ? { aspectRatio: naturalAspectRatio } : {}),
+				...(hasNaturalAspectRatio ? { aspectRatio: `${naturalAspectRatio} / 1` } : {}),
 			}}
 		>
 			<motion.div className={cn('overflow-hidden size-full')} style={{ borderRadius }}>

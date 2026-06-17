@@ -1,4 +1,6 @@
 import type { PostBlock } from '@portfolio/types'
+import Autoplay from 'embla-carousel-autoplay'
+import { useMemo } from 'react'
 import { type CarouselSlideModel, toCarouselSlide } from '@/blocks/article/carouselSlides'
 import { ViewportVideo } from '@/blocks/article/ViewportVideo'
 import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
@@ -50,7 +52,22 @@ function CarouselSlide({ isPriority, slide }: { isPriority: boolean; slide: Caro
 
 export function CarouselBlock({ block }: CarouselBlockProps) {
 	const surface = useSurface()
-	const slideItems = getCarouselSlides(block).map((slide, index) => (
+	const slides = getCarouselSlides(block)
+	const shouldAutoPlay = slides.length > 1 && slides.every((slide) => slide.kind === 'image')
+	const plugins = useMemo(
+		() =>
+			shouldAutoPlay
+				? [
+						Autoplay({
+							delay: 6000,
+							stopOnInteraction: true,
+							stopOnMouseEnter: true,
+						}),
+					]
+				: undefined,
+		[shouldAutoPlay],
+	)
+	const slideItems = slides.map((slide, index) => (
 		<CarouselSlide isPriority={index === 0} key={slide.id} slide={slide} />
 	))
 
@@ -59,6 +76,7 @@ export function CarouselBlock({ block }: CarouselBlockProps) {
 			aria-label="Article media carousel"
 			className="flex flex-col gap-1"
 			data-surface={surface}
+			plugins={plugins}
 		>
 			<CarouselContent className="-ml-3">{slideItems}</CarouselContent>
 			<div className="w-full justify-center flex items-center gap-3">
