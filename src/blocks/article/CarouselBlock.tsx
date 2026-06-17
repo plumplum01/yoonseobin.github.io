@@ -1,5 +1,6 @@
 import type { PostBlock } from '@portfolio/types'
 import { type CarouselSlideModel, toCarouselSlide } from '@/blocks/article/carouselSlides'
+import { ViewportVideo } from '@/blocks/article/ViewportVideo'
 import { Carousel, CarouselContent, CarouselDots, CarouselItem } from '@/components/ui/carousel'
 import { useSurface } from '@/context/SurfaceProvider'
 
@@ -17,13 +18,15 @@ function CarouselSlide({ isPriority, slide }: { isPriority: boolean; slide: Caro
 			<figure className="flex flex-col gap-2">
 				<div className="aspect-video w-full overflow-hidden">
 					{slide.kind === 'video' ? (
-						// biome-ignore lint/a11y/useMediaCaption: CMS media assets do not provide timed caption tracks yet.
-						<video
+						<ViewportVideo
 							className="size-full object-cover"
 							controls
+							loop
 							src={slide.src}
 							title={slide.title}
-						/>
+						>
+							<track kind="captions" />
+						</ViewportVideo>
 					) : (
 						<img
 							className="size-full object-cover"
