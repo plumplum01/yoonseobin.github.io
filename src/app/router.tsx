@@ -11,10 +11,15 @@ import PageError from '@/app/boundaries/PageError'
 import RootLayout from '@/app/layouts/RootLayout'
 import { PAGE_ROUTES } from '@/app/routes/pageRoutes'
 
+function AppHydrateFallback() {
+	return <div className="min-h-screen bg-background" aria-hidden="true" />
+}
+
 export const routes: RouteObject[] = [
 	{
 		element: <RootLayout />,
 		errorElement: <PageError />,
+		hydrateFallbackElement: <AppHydrateFallback />,
 		children: PAGE_ROUTES.map(({ path, loader, render }) => ({
 			path,
 			loader,
