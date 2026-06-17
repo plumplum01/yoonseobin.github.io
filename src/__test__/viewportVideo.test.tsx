@@ -5,8 +5,8 @@ import { ViewportVideo } from '@/blocks/article/ViewportVideo'
 type ObserverCallback = IntersectionObserverCallback
 
 let observerCallback: ObserverCallback | undefined
-let observeMock: ReturnType<typeof vi.fn>
-let disconnectMock: ReturnType<typeof vi.fn>
+let disconnectMock: ReturnType<typeof vi.fn<() => void>>
+let observeMock: ReturnType<typeof vi.fn<(target: Element) => void>>
 
 class TestIntersectionObserver implements IntersectionObserver {
 	readonly root = null
@@ -17,10 +17,17 @@ class TestIntersectionObserver implements IntersectionObserver {
 		observerCallback = callback
 	}
 
-	disconnect = disconnectMock
-	observe = observeMock
+	disconnect(): void {
+		disconnectMock()
+	}
+
+	observe(target: Element): void {
+		observeMock(target)
+	}
+
 	takeRecords = vi.fn(() => [])
-	unobserve = vi.fn()
+
+	unobserve(): void {}
 }
 
 describe('ViewportVideo', () => {
